@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Tên Trang Mặc Định{% endblock %}</title>
+       <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+    {% include 'layout/header.html' %}
+
+    <div class="content-body">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </div>
+
+    {% include 'layout/footer.html' %}
+
+</body>
+</html>

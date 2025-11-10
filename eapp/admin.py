@@ -1,0 +1,1 @@
+#Cấu trúc route của các trang web admin
