@@ -5,11 +5,11 @@ from flask import Flask, render_template
 # from eapp.dao.Product import get_product
 from eapp import app
 
-@app.context_processor
-def global_data():
-    return dict(
-        primary_color='#fcf9eb'
-    )
+# @app.context_processor
+# def global_data():
+#     return dict(
+#         primary_color='#'
+#     )
 
 @app.route('/')
 def home():

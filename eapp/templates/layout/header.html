@@ -1,24 +1,35 @@
-<nav class="w-full bg-[#f5f1ed] py-3 border-b">
+<nav class="w-full bg-[#f5f1ed] py-5 border-b">
   <div class="container mx-auto flex items-center justify-between">
 
     <!-- Logo -->
-    <div class="font-bold text-lg">
+    <div class="font-bold text-5xl tracking-wide">
       THE COFFEE
     </div>
+    <!-- Menu + Icons -->
+    <div class="flex items-center gap-36">
+      <!-- Menu -->
+      <ul class="flex items-center gap-16 !mb-0">
+        <li><a href="#" class="text-black hover:!text-blue-600 transition text-3xl no-underline font-medium">Trang chủ</a></li>
+        <li><a href="#" class="text-black hover:!text-blue-600 transition text-3xl no-underline font-medium">Sản phẩm</a></li>
+        <li><a href="#" class="text-black hover:!text-blue-600 transition text-3xl no-underline font-medium">Về chúng tôi</a></li>
+      </ul>
 
-    <!-- Menu items (Bootstrap d-flex + Tailwind gap) -->
-    <ul class="d-flex items-center gap-6">
-      <li><a href="#" class="text-black hover:text-gray-500">Trang chủ</a></li>
-      <li><a href="#" class="text-black hover:text-gray-500">Sản phẩm</a></li>
-      <li><a href="#" class="text-black hover:text-gray-500">Về chúng tôi</a></li>
-    </ul>
+      <!-- Icons -->
+      <div class="flex items-end gap-16 text-4xl">
 
-    <!-- Icons -->
-    <div class="d-flex items-center gap-5 text-xl">
-      <i class="bi bi-search cursor-pointer"></i>
-      <i class="bi bi-person cursor-pointer"></i>
-      <i class="bi bi-cart cursor-pointer"></i>
+        <!-- Search icon -->
+        <i class="fa-solid fa-magnifying-glass cursor-pointer transition-transform duration-200 hover:scale-[1.1] hover:text-blue-600"></i>
+
+        <!-- User icon + username -->
+        <div class="flex flex-col items-center leading-[1.2] relative">
+          <i class="fa-regular fa-user cursor-pointer transition-transform duration-200 hover:scale-[1.1] hover:text-blue-600"></i>
+          <p class="text-2xl absolute top-[100%] pt-[4px]">username</p>
+        </div>
+
+        <!-- Basket icon -->
+        <i class="fa-solid fa-basket-shopping cursor-pointer transition-transform duration-200 hover:scale-[1.1] hover:text-red-600"></i>
+
+      </div>
     </div>
-
   </div>
 </nav>

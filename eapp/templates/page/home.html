@@ -8,16 +8,10 @@
   {% extends 'layout/base.html' %}
 
 {% block title %}Trang Chủ Webcoffe{% endblock %}
-
 {% block content %}
-   <h1 class="text-3xl font-bold ">Website của tôi</h1>
-  {% for p in products %}
     <div>
-        <h3>{{ p.name }}</h3>
-        <p>Giá: {{ p.price }} VND</p>
-        <p>Mô tả: {{ p.description }}</p>
+        <img src="{{ url_for('static', filename='image/bgr_banner.png') }}" alt="anh1" class="position top-[0]git "/>
     </div>
-{% endfor %}
 {% endblock %}
 </body>
 </html>
