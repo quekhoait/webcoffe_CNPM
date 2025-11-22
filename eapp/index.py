@@ -5,7 +5,6 @@ from eapp import app
 # from eapp.dao.Product import add_product
 
 
-print("Demo")
 
 if __name__ == '__main__':
     # Tạo Application Context để Flask biết nó đang chạy trong môi trường ứng dụng nào

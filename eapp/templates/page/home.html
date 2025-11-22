@@ -9,9 +9,24 @@
 
 {% block title %}Trang Chủ Webcoffe{% endblock %}
 {% block content %}
-    <div>
-        <img src="{{ url_for('static', filename='image/bgr_banner.png') }}" alt="anh1" class="position top-[0]git "/>
+    <div class="absolute w-full top-[0] z-[-1] relative">
+        <img src="{{ url_for('static', filename='image/bgr_banner.png') }}" alt="anh1" class="position top-[0]git w-full "/>
+        <div class="absolute">
+            <h2>HƯƠNG VỊ CÀ PHÊ THƠM NGON</h2>
+            <p>
+                Khám phá sự tinh tế trong từng hạt cà phê
+                được lựa chọn cẩn thận và hòa mình vào để đắm
+                chìm trong những giọt cafe
+            </p>
+            <button class="btn-discover btn-discover-outline" type="button" aria-label="Khám phá ngay">
+                Khám phá ngay
+            </button>
+            <button class="btn-discover btn-discover-outline" type="button" aria-label="Khám phá ngay">
+                Khám phá ngay
+            </button>
+        </div>
     </div>
+
 {% endblock %}
 </body>
 </html>
