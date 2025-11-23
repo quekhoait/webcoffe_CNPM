@@ -209,6 +209,6 @@ __marimo__/
 
 # Node / Tailwind
 node_modules/
-eapp/static/css/output.css
+#eapp/static/css/output.css
 package-lock.json
 package.json
