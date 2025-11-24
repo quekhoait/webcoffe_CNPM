@@ -1,0 +1,105 @@
+<div class="h-dvh">
+    <div class="bg-amber-50 p-5">
+        <!--        order header-->
+        <div class="flex justify-between">
+            <h2 class="text-xl font-bold text-gray-800">Đơn hàng - Bàn 12</h2>
+            <div>
+                <span class="text-lg font-semibold text-gray-600">Số bàn:</span>
+                <input
+                        type="text"
+                        value="12"
+                        class="w-12 h-8 text-center px-1 py-1 bg-amber-100 text-gray-800 font-semibold rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 border border-transparent"
+                >
+            </div>
+        </div>
+
+        <!--        order item label-->
+        <div class="grid grid-cols-6 text-lg font-semibold p-2 mt-3 bg-white shadow">
+            <div class="col-span-3">Sản Phẩm</div>
+            <div class="col-span-2 text-center">Số Lượng</div>
+            <div class="col-span-1 text-right">Thành Tiền</div>
+        </div>
+
+        <!--        order -item-->
+        <div class="grid grid-cols-6 mt-3 p-2 items-center border-b border-gray-400">
+            <div class="col-span-3">
+                <p class="font-semibold text-gray-800">Cà phê đen</p>
+                <span class="text-sm text-gray-600">23.000đ</span>
+            </div>
+
+            <div class="col-span-2 flex items-center justify-center">
+                <button class="bg-gray-200 w-6 h-6 rounded-full flex justify-center items-center"><span class="text-xl">-</span>
+                </button>
+                <input
+                        type="text"
+                        value="12"
+                        class="w-16 h-8 text-center font-semibold text-sm border-none focus:ring-0 bg-transparent text-gray-800 "
+                >
+                <button class="bg-gray-200 w-6 h-6 rounded-full flex justify-center items-center"><span>+</span>
+                </button>
+            </div>
+
+            <div class="col-span-1 text-right">
+                <span>50.000đ</span>
+                <button class="text-red-500 hover:text-red-700">
+                    <i class="fas fa-trash-alt text-lg"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-6 mt-3 p-2 items-center border-b border-gray-400">
+            <div class="col-span-3">
+                <p class="font-semibold text-gray-800">Cà phê đen</p>
+                <span class="text-sm text-gray-600">23.000đ</span>
+            </div>
+
+            <div class="col-span-2 flex items-center justify-center">
+                <button class="bg-gray-200 w-6 h-6 rounded-full flex justify-center items-center"><span class="text-xl">-</span>
+                </button>
+                <input
+                        type="text"
+                        value="12"
+                        class="w-16 h-8 text-center font-semibold text-sm border-none focus:ring-0 bg-transparent text-gray-800 "
+                >
+                <button class="bg-gray-200 w-6 h-6 rounded-full flex justify-center items-center"><span>+</span>
+                </button>
+            </div>
+
+            <div class="col-span-1 text-right">
+                <span>50.000đ</span>
+                <button class="text-red-500 hover:text-red-700">
+                    <i class="fas fa-trash-alt text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!--order bill-->
+        <div class="bg-white pt-2 mt-3 border-t border-gray-400">
+            <div class="flex justify-between text-gray-600">
+                <span>Tạm tính</span>
+                <span>100.000đ</span>
+            </div>
+
+            <div class="flex justify-between text-gray-600">
+                <span>Giảm giá</span>
+                <span>100.000đ</span>
+            </div>
+
+            <div class="flex justify-between border-t mt-3 border-gray-400 pt-2 text-lg font-semibold text-gray-800">
+                <span>Tổng cộng</span>
+                <span>100.000đ</span>
+            </div>
+        </div>
+
+        <!--        order button-->
+        <button class="mt-6 w-full py-3 bg-amber-800 text-white font-bold rounded-xl shadow-lg hover:bg-amber-900 transition duration-200 flex justify-center items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                <path fill-rule="evenodd"
+                      d="M4 5a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4v-4H6a2 2 0 01-2-2V5zm3 1h6v6H7V6z"
+                      clip-rule="evenodd"/>
+            </svg>
+            <span>Tạo Đơn Hàng</span>
+        </button>
+    </div>

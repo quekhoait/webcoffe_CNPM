@@ -1,62 +1,23 @@
 {% extends "layout/base.html" %}
 
 {% block content %}
+<div class="flex gap-3 mt-3 mx-3 bg-[#F4F0FF] ">
+    <!--    section trái-->
+    <div class="flex gap-3 flex-col w-1/3">
 
-<div class="p-4 bg-white rounded-xl shadow-lg w-full mx-auto">
-    <h2 class="text-2xl font-semibold text-stone-800 mb-4">Menu</h2>
+        <!--        menu-->
+        {% include 'staff/menu_filter.html' %}
 
-    <div class="relative mb-4">
-        <form class="max-w-md mx-auto">
-            <label for="search" class="block mb-2.5 text-sm font-medium text-heading sr-only ">Search</label>
-            <div class="relative">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                         height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                              d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
-                    </svg>
-                </div>
-                <input type="search" id="search"
-                       class="block w-full p-3 ps-9 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
-                       placeholder="Search" required/>
-                <button type="button"
-                        class="absolute end-1.5 bottom-1.5 text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded text-xs px-3 py-1.5 focus:outline-none">
-                    Search
-                </button>
-            </div>
-        </form>
+        <!--        list item-->
+        <div class="grid grid-cols-3 gap-2 p-2 bg-white">
+            {% include 'staff/dish_item.html' %}
+        </div>
     </div>
 
-    <div class="flex space-x-2 overflow-x-auto pb-1">
-        <button
-                class="flex-shrink-0 px-4 py-2 text-sm font-medium text-white bg-amber-800 rounded-full shadow-md transition duration-150 hover:bg-amber-900 focus:outline-none"
-        >
-            Tất cả
-        </button>
-
-        <button
-                class="flex-shrink-0 px-4 py-2 text-sm font-medium text-stone-800 bg-stone-200 rounded-full transition duration-150 hover:bg-stone-300 focus:outline-none"
-        >
-            Cà phê
-        </button>
-
-        <button
-                class="flex-shrink-0 px-4 py-2 text-sm font-medium text-stone-800 bg-stone-200 rounded-full transition duration-150 hover:bg-stone-300 focus:outline-none"
-        >
-            Trà sữa
-        </button>
-
-        <button
-                class="flex-shrink-0 px-4 py-2 text-sm font-medium text-stone-800 bg-stone-200 rounded-full transition duration-150 hover:bg-stone-300 focus:outline-none"
-        >
-            Nước ép
-        </button>
-
-        <button
-                class="flex-shrink-0 px-4 py-2 text-sm font-medium text-stone-800 bg-stone-200 rounded-full transition duration-150 hover:bg-stone-300 focus:outline-none"
-        >
-            Bánh ngọt
-        </button>
+    <!--    section phải-->
+    <div class="w-2/3 ">
+        {% include 'staff/create_order.html' %}
     </div>
 </div>
+
 {% endblock %}
