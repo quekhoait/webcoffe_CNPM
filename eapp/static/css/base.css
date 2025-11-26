@@ -1,9 +1,19 @@
 :root{
     --primary-color: #fcf9eb;
+    --primary-h2: #1d511c;
 }
 p{
     margin: 0;
 }
 html{
     font-size: 62.5%;
+}
+
+#header.scrolled-header {
+    background: white !important;
+    padding: 24px 0 !important;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
 }
