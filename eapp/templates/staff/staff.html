@@ -9,8 +9,8 @@
         {% include 'staff/menu_filter.html' %}
 
         <!--        list item-->
-        <div class="grid grid-cols-3 gap-2 p-2 bg-white">
-            {% include 'staff/dish_item.html' %}
+        <div id="dish-list" class="grid grid-cols-3 gap-2 p-2 bg-white">
+            <!-- {% include 'staff/dish_item.html' %} -->
         </div>
     </div>
 
@@ -19,5 +19,8 @@
         {% include 'staff/create_order.html' %}
     </div>
 </div>
+{% endblock %}
 
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/staff/invoice.js') }}"></script>
 {% endblock %}
