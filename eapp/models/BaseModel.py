@@ -1,11 +1,13 @@
 # #Model chung
 #
 # # Import đối tượng db từ eapp/__init__.py
+from sqlalchemy_serializer import SerializerMixin
 from eapp import db
 from datetime import datetime
 
 
-class BaseModel(db.Model):
+
+class BaseModel(db.Model, SerializerMixin):
     __abstract__ = True
 #
     # Định nghĩa các cột chung

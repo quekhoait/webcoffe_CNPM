@@ -1,10 +1,6 @@
-from flask import Flask, render_template
+from flask import render_template
 
-app = Flask(__name__)
-
-# 1. BIẾN DỮ LIỆU SẢN PHẨM PYTHON
-# Đây là list các dictionary (tương đương với mảng các object trong JS)
-# coffeeProducts = [
+#coffeeProducts = [
 #     {
 #         'idMon': 1,
 #         'TenMon': "Cà Phê Đen Đá Truyền Thống",
@@ -78,15 +74,9 @@ app = Flask(__name__)
 # ]
 
 
-def home():
-    return render_template('page/home.html')
+
+def loadHome():
+    return render_template('staff/staff.html')
 
 def aboutUs():
     return render_template('page/about_us.html')
-
-
-
-
-
-
-

@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  /* Các màu Brand đã có (giữ lại) */
+  --color-brand: #FFD700;
+  --color-brand-dark: #2f8f12;
+
+  /* --- CÁC MÀU TÙY CHỈNH CHO GIAO DIỆN MENU --- */
+
+  /* Màu nền tổng thể (Gần giống #f5f0f9) -> Dùng: bg-coffee-background */
+  --color-coffee-background: #f5f0f9;
+
+  /* Màu tiêu đề/icon/chữ thường (Nâu đậm, Gần giống #7c5c56) -> Dùng: text-coffee-primary */
+  --color-coffee-primary: #7c5c56;
+
+  /* Màu nền khung tìm kiếm (Be nhạt, Gần giống #efe7d6) -> Dùng: bg-coffee-search-bg */
+  --color-coffee-search-bg: #efe7d6;
+
+  /* Màu nền nút thường (Xám/Be, Gần giống #d5c8b2) -> Dùng: bg-coffee-button-normal */
+  --color-coffee-button-normal: #d5c8b2;
+
+  /* Màu nền nút active (Nâu vừa, Gần giống #8b6e68) -> Dùng: bg-coffee-button-active */
+  --color-coffee-button-active: #8b6e68;
+}

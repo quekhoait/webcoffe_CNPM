@@ -1,5 +1,5 @@
 from eapp import app
-# from eapp.models.ProductModel import Product
+# from eapp.models. import Product
 # from eapp.models.BaseModel import BaseModel
 # from eapp.models.CategoryModel import Categories
 # from eapp.dao.Product import add_product
