@@ -35,7 +35,7 @@ function renderAlert(){
     <div id="alert-small-1" class="col-span-3 text-xl w-auto inline-flex items-center p-2 pe-3 mb-4 mt-4 text-fg-brand-strong rounded-full bg-brand-softer border border-brand-subtle" role="alert">
         <span class="bg-brand-soft text-fg-brand-strong py-0.5 px-2 rounded-full">Thông Báo</span>
         <div class="ms-2">
-            Không có món này 
+            Không có món này
         </div>
     </div>
     `
@@ -89,7 +89,7 @@ function loadDishes(params = {}) {
                 dishList.innerHTML = renderAlert()
                 return;
             }
-            
+
             dishList.innerHTML = data.map(d => renderDish(d)).join('')
             // data.forEach(d => container.innerHTML += renderDish(d));
         })
@@ -115,7 +115,7 @@ document.getElementById('search-input').addEventListener('change',(e) => {
 // })
 
 function addToOrder(id, name, price){
-    
+
     fetch('/api/order',{
         method : 'post',
         body : JSON.stringify({
@@ -135,7 +135,7 @@ function addToOrder(id, name, price){
         orderItem = document.querySelector('.order-item')
         orderItem.innerHTML += renderItem(data)
         console.log(data);
-        
+
     })
 }
 

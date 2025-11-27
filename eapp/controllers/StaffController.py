@@ -2,14 +2,14 @@
 from operator import ge
 from flask import json, jsonify, render_template, request, session
 
-from eapp.dao import DishCategoryDAO, DishDAO
+from eapp.dao import CategoryDao, ProductDao
 
 
 
 
 def load_staff():
-    category = DishCategoryDAO.list()
-    dishes = DishDAO.list()
+    category = CategoryDao.list()
+    dishes = ProductDao.list()
     return render_template('/staff/staff.html', category=category,dishes=dishes)
 
 

@@ -1,7 +1,7 @@
 #nhận request từ giao diện post, get
 from flask import app, jsonify, request
 
-from eapp.dao import DishDAO
+from eapp.dao import ProductDao
 
 
 
@@ -14,8 +14,8 @@ def list():
         name
     """
     params = request.args.to_dict()
-    re2=DishDAO.list(params)
-    result = [d.to_dict() for d in DishDAO.list(params)]
+    re2=ProductDao.list(params)
+    result = [d.to_dict() for d in ProductDao.list(params)]
     
     import pdb
     pdb.set_trace
