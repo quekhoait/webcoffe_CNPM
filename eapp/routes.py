@@ -16,3 +16,6 @@ app.add_url_rule('/staff','staff',StaffController.load_staff)
 app.add_url_rule('/api/order','add_order',StaffController.addToOrder, methods=['post'])
 app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice, methods=['post'])
 
+#thanh toan
+app.add_url_rule('/login-test', 'login_test', index.login_test)
+app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])

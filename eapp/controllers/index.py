@@ -1,4 +1,9 @@
 from flask import render_template
+from flask import render_template, session, request, redirect, url_for
+from eapp import db
+from eapp.models.Order import Order, OrderDetail
+from datetime import datetime
+
 
 #coffeeProducts = [
 #     {
@@ -80,3 +85,82 @@ def loadHome():
 
 def aboutUs():
     return render_template('page/about_us.html')
+
+
+def checkout_page():
+    # kiểm tra đăng nhập
+    if 'user' not in session:
+        return redirect('/login-test')
+
+    current_user = session['user']
+
+    # xử lý giỏ hàng
+    cart = session.get('cart', {})
+    if not cart:
+        cart = {
+            '1': {'id': 1, 'name': 'Cafe Demo', 'price': 25000, 'quantity': 2, 'image': ''}
+        }
+
+    total_price = sum(item['price'] * item['quantity'] for item in cart.values())
+
+    # đặt hàng
+    if request.method == 'POST':
+        try:
+            fullname = request.form.get('fullname')
+            phone = request.form.get('phone')
+            payment_method = request.form.get('payment_method')
+
+            fixed_address = "Nhận tại quán"
+
+            new_order = Order(
+                user_id=current_user['id'],
+                receiver_name=fullname,
+                receiver_phone=phone,
+                address=fixed_address,
+                payment_method=payment_method,
+                total_amount=total_price,
+                created_date=datetime.now()
+            )
+            db.session.add(new_order)
+            db.session.flush()
+
+            # lưu chi tiết đơn hàng
+            for item in cart.values():
+                detail = OrderDetail(
+                    order_id=new_order.id,
+                    dish_id=item['id'],
+                    quantity=item['quantity'],
+                    price=item['price'],
+                    total_price=item['price'] * item['quantity']
+                )
+                db.session.add(detail)
+
+            db.session.commit()
+
+            if session.get('cart'): session.pop('cart', None)
+            return redirect('/')
+
+        except Exception as ex:
+            db.session.rollback()
+            print(f"Lỗi: {ex}")
+            return "Lỗi xử lý đơn hàng", 500
+
+    user_info = {
+        'fullname': current_user.get('name', ''),
+        'phone': current_user.get('phone', '')
+    }
+
+    return render_template('page/checkout.html',
+                           cart_items=cart.values(),
+                           total_price=total_price,
+                           user_info=user_info)
+
+def login_test():
+    # Giả lập 1 user đã đăng nhập thành công
+    session['user'] = {
+        'id': 1,
+        'name': 'Khách hàng Test',
+        'phone': '0909123456'
+    }
+    # Sau khi login giả xong thì chuyển ngay sang trang thanh toán
+    return redirect('/checkout')
