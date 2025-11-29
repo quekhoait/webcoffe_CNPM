@@ -1,5 +1,5 @@
 <div class="h-dvh">
-    <div class="bg-amber-50 p-5">
+    <div class="bg-amber-50 p-5 h-screen flex flex-col">
         <!--        order header-->
         <div class="flex justify-between text-4xl">
             <h2 class="font-bold text-gray-800">Đơn hàng - Bàn 12</h2>
@@ -17,7 +17,7 @@
         </div>
 
         <!--        order -item-->
-        <div class="list-order-item">
+        <div class="list-order-item overflow-auto-y flex-1">
             {% if session['order'] %}
             {% for dish in session['order'].values() %}
                 {% include 'staff/order_item.html' %}

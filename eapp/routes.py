@@ -8,7 +8,9 @@ from eapp.controllers import ProductController, StaffController, index
 
 
 app.add_url_rule('/about-us','about-us',index.aboutUs)
-app.add_url_rule('/','index',index.loadHome)
+# app.add_url_rule('/','index',index.loadHome)
+app.add_url_rule('/','index',StaffController.load_staff)
+
 
 app.add_url_rule('/api/dish','dish',ProductController.list)
 # staff

@@ -1,5 +1,5 @@
 from eapp import db, app
-from eapp.models import DishCategory, Dish, DishStatus
+from eapp.models import Category as DishCategory, Product as Dish, DishStatus
 import random
 
 DEFAULT_IMAGE = "https://picsum.photos/seed/picsum/200/300"

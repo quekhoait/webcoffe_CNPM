@@ -115,7 +115,7 @@ document.getElementById('search-input').addEventListener('change', (e) => {
 //     loadDishes();
 // })
 
-function addToOrder(id, name, price, bonusQuantity = 1) {
+function addToOrder(id, name, price, bonusQuantity = 1, setQuantity = false) {
 
     fetch('/api/order', {
         method: 'post',
@@ -123,7 +123,8 @@ function addToOrder(id, name, price, bonusQuantity = 1) {
             "id": id,
             "name": name,
             "price": price,
-            "bonus_quantity": bonusQuantity
+            "bonus_quantity": bonusQuantity,
+            "is_set_quantity" : setQuantity
             // "quantity" : parseInt(input?.value ?? 1)
         }),
         headers: {
@@ -143,11 +144,12 @@ function addToOrder(id, name, price, bonusQuantity = 1) {
         }
 
         console.log(document.getElementById("total-price"));
-        
+
         document.getElementById("total-price").innerText = data.total_price + ' đ';
         document.getElementById("total-price-tmp").innerText = data.total_price + ' đ';
     })
 }
+
 
 function submitInvoice() {
     fetch('/api/invoice', {
@@ -159,8 +161,13 @@ function submitInvoice() {
     }).then(res => res.json()).then(data => {
         orderItem = document.querySelector('.list-order-item')
         orderItem.innerHTML = ""
+        document.getElementById("total-price").innerText = 0;
+        document.getElementById("total-price-tmp").innerText = 0;
         // location.reload()
         alert("OKK")
     })
 }
 
+function inputQuantity(id,name,price,element){
+    addToOrder(id,name,price,element.value,true)
+}

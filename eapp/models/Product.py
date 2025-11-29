@@ -3,14 +3,14 @@ from enum import Enum
 from sqlalchemy import Column, String, Float, Enum as SQLEnum, Integer, ForeignKey
 
 from eapp.models.BaseModel import BaseModel
-from eapp.models.Category import DishCategory
+from sqlalchemy.orm import relationship
 
 
 class DishStatus(Enum):
     ACTIVE = "active"
     INACTIVE = "inactive"
 
-class Dish(BaseModel):
+class Product(BaseModel):
     name = Column(String(100), nullable=False)
     unit = Column(String(20), nullable=True)
     price = Column(Float)
@@ -20,7 +20,7 @@ class Dish(BaseModel):
     rating_score = Column(Float, default=5)
     rating_count = Column(Integer, default=0)
 
-    dish_category_id = Column(Integer, ForeignKey(DishCategory.id), nullable=False)
-
+    dish_category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
+    ingredients = relationship('ProductRecipe', backref='product', lazy=True)
     def __str__(self):
         return self.name

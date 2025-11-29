@@ -8,11 +8,11 @@ from eapp.dao import CategoryDao, ProductDao
 
 
 def load_staff():
-    category = DishCategoryDAO.list()
-    dishes = DishDAO.list()
+    category = CategoryDao.list()
+    dishes = ProductDao.list()
     order = session.get('order', {})
     total = sum(item['quantity'] * item['price'] for item in order.values())
-    return render_template('/staff/staff.html', category=category,dishes=dishes, total=total)
+    return render_template('/staff/staff.html', category=category, dishes=dishes, total=total)
 
 
 def addToOrder():
@@ -22,14 +22,17 @@ def addToOrder():
             name
             price
             bonus_quantity
+            is_set_quantity
     """
     order = session.get('order',{})
     data = request.json
     id = str(data.get('id'))
     # is_change_quantity = False
     bonus_quantity = int(data.get('bonus_quantity',1))
-
-    if id in order:
+    
+    if id in order and data.get('is_set_quantity'):
+        order[id]['quantity'] = bonus_quantity
+    elif id in order:
         order[id]['quantity'] += bonus_quantity
         # is_change_quantity = True
         print("OKK bro")
