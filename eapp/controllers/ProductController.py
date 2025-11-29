@@ -1,7 +1,7 @@
 #nhận request từ giao diện post, get
 from flask import app, jsonify, render_template, request
 
-from eapp.dao import DishDAO
+from eapp.dao import ProductDao
 
 
 

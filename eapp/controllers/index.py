@@ -76,7 +76,7 @@ from flask import render_template
 
 
 def loadHome():
-    return render_template('staff/staff.html')
+    return render_template('page/home.html')
 
 def aboutUs():
     return render_template('page/about_us.html')

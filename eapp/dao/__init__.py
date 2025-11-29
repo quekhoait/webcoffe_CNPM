@@ -1,3 +1,3 @@
-from eapp.dao import DishCategoryDAO, DishDAO
+from eapp.dao import CategoryDao, ProductDao
 
 

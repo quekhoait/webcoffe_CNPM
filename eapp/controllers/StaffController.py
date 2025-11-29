@@ -2,7 +2,7 @@
 from operator import ge
 from flask import json, jsonify, render_template, request, session
 
-from eapp.dao import DishCategoryDAO, DishDAO
+from eapp.dao import CategoryDao, ProductDao
 
 
 
