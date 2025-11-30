@@ -1,3 +1,3 @@
 from eapp.models import BaseModel
-from eapp.models.Product import Dish, DishStatus
-from eapp.models.Category import DishCategory
+from eapp.models.Product import Product, ProductStatus
+from eapp.models.Category import Category

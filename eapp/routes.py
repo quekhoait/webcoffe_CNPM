@@ -4,11 +4,16 @@ from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
-from eapp.controllers import ProductController, StaffController, index
+from eapp.controllers import ProductController, StaffController, index, AccountController
 
 
-app.add_url_rule('/about-us','about-us',index.aboutUs)
-app.add_url_rule('/','index',index.loadHome)
+app.add_url_rule('/login','login', index.load_login)
+
+app.add_url_rule('/regis','register', index.load_regis)
+app.add_url_rule('/api/regis','created_account',AccountController.register, methods=['POST'])
+
+app.add_url_rule('/','index',index.load_home)
+app.add_url_rule('/about-us','about-us',index.load_about_us)
 
 app.add_url_rule('/api/dish','dish',ProductController.list)
 # staff

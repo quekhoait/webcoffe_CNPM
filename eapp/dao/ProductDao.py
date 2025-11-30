@@ -1,16 +1,16 @@
-from eapp.models import Dish
+from eapp.models import Product
 
 def list(params: dict = None):
     try:
-        query = Dish.query
+        query = Product.query
 
         
         if params:
             if 'dish_category_id' in params:
-                query = query.filter(Dish.dish_category_id == params['dish_category_id'])
+                query = query.filter(Product.dish_category_id == params['dish_category_id'])
 
             if 'name' in params:
-                query = query.filter(Dish.name.contains(params['name']))
+                query = query.filter(Product.name.contains(params['name']))
 
         return query.all()
 
@@ -21,7 +21,7 @@ def list(params: dict = None):
 
 def get_by_id(id):
     try:
-        return Dish.query.get(id)
+        return Product.query.get(id)
     except Exception as ex:
         print(f"Lỗi khi món theo id: {ex}")
         return None

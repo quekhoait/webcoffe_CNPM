@@ -74,9 +74,16 @@ from flask import render_template
 # ]
 
 
-
-def loadHome():
+def load_login():
+    return render_template('page/login.html')
+  
+def load_regis():
+    return render_template('page/register.html')
+  
+def load_home():
     return render_template('page/home.html')
 
-def aboutUs():
+def load_about_us():
     return render_template('page/about_us.html')
+
+

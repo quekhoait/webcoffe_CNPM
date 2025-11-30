@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 load_dotenv()
 
 import os
+import cloudinary
+
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = os.getenv("DB_NAME")
@@ -16,4 +18,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 db = SQLAlchemy(app)
 
 from eapp import routes
+
+cloudinary.config(cloud_name='ds11ggie4',
+                  api_key='958334855172326',
+                  api_secret='Wnp7m_2M7tOvT-oHv819TRitH1Y')
 

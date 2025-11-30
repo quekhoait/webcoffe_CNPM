@@ -22,8 +22,10 @@
 
         <!-- User icon + username -->
         <div class="flex flex-col items-center leading-[1.2] relative">
-          <i class="fa-regular fa-user cursor-pointer transition-transform duration-200 hover:scale-[1.1] hover:text-blue-600"></i>
-          <p class="text-2xl absolute top-[100%] pt-[4px]">username</p>
+          <a href={{url_for('login')}}>
+            <i class="fa-regular fa-user cursor-pointer transition-transform duration-200 hover:scale-[1.1] hover:text-blue-600" ></i>
+          </a>
+            <p class="text-2xl absolute top-[100%] pt-[4px]">username</p>
         </div>
 
         <!-- Basket icon -->

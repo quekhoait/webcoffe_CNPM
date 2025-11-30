@@ -31,14 +31,7 @@ function renderDish(dish) {
 }
 
 function renderAlert(){
-   return `
-    <div id="alert-small-1" class="col-span-3 text-xl w-auto inline-flex items-center p-2 pe-3 mb-4 mt-4 text-fg-brand-strong rounded-full bg-brand-softer border border-brand-subtle" role="alert">
-        <span class="bg-brand-soft text-fg-brand-strong py-0.5 px-2 rounded-full">Thông Báo</span>
-        <div class="ms-2">
-            Không có món này
-        </div>
-    </div>
-    `
+   return document.getElementById("alert-small-1").classList.remove("hidden")
 }
 
 function renderItem(data){

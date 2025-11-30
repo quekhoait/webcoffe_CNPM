@@ -1,5 +1,5 @@
 from eapp import db, app
-from eapp.models import DishCategory, Dish, DishStatus
+from eapp.models import Category, Product, ProductStatus, Account
 import random
 
 DEFAULT_IMAGE = "https://picsum.photos/seed/picsum/200/300"
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         created_categories = {}
 
         for cat_name in cafe_categories:
-            cat = DishCategory(name=cat_name, description=f"Danh mục {cat_name.lower()} của quán.")
+            cat = Category(name=cat_name, description=f"Danh mục {cat_name.lower()} của quán.")
             db.session.add(cat)
             created_categories[cat_name] = cat
 
@@ -77,11 +77,11 @@ if __name__ == "__main__":
             category = created_categories[cat_name]
 
             for name, unit, price in items:
-                dish = Dish(
+                dish = Product(
                     name=name,
                     unit=unit,
                     price=price,
-                    status=DishStatus.ACTIVE,
+                    status=ProductStatus.ACTIVE,
                     description=f"{name} được pha chế theo công thức đặc biệt của quán.",
                     image=DEFAULT_IMAGE,
                     rating_score=round(random.uniform(3.5, 5), 1),
@@ -92,4 +92,4 @@ if __name__ == "__main__":
 
         db.session.commit()
 
-        print("☕️ Seed dữ liệu quán cà phê thành công!")
+        print("Seed dữ liệu quán cà phê thành công!")
