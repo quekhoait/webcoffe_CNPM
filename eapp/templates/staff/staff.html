@@ -6,25 +6,25 @@
 
 {% block content %}
 <div class="flex gap-3 mt-3 mx-3 bg-[#F4F0FF] ">
-    <!--    section trái-->
-    <div class="flex gap-3 flex-col w-1/3">
+  <!--    section trái-->
+  <div class="flex gap-3 flex-col w-1/3">
 
-        <!--        menu-->
-        {% include 'staff/menu_filter.html' %}
+    <!--        menu-->
+    {% include 'staff/menu_filter.html' %}
 
 
-        <!--        list item-->
-        <div id="dish-list" class="grid grid-cols-3 gap-2 p-2 bg-white">
+    <!--        list item-->
+    <div id="dish-list" class="grid grid-cols-3 gap-2 p-2 bg-white">
+      
+      {% include 'staff/dish_item.html' %}
 
-            {% include 'staff/dish_item.html' %}
-
-        </div>
     </div>
+  </div>
 
-    <!--    section phải-->
-    <div class="w-2/3 ">
-        {% include 'staff/create_order.html' %}
-    </div>
+  <!--    section phải-->
+  <div class="w-2/3 ">
+    {% include 'staff/create_order.html' %}
+  </div>
 </div>
 
 <!-- <div id="alert-small-1" class="text-xl w-auto inline-flex items-center p-2 pe-3 mb-4 mt-4 text-fg-brand-strong rounded-full bg-brand-softer border border-brand-subtle" role="alert">
