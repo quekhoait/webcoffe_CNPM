@@ -146,7 +146,7 @@ function addToOrder(id, name, price, bonusQuantity = 1, setQuantity = false) {
         console.log(document.getElementById("total-price"));
 
         document.getElementById("total-price").innerText = data.total_price + ' đ';
-        document.getElementById("total-price-tmp").innerText = data.total_price + ' đ';
+        document.getElementById("total-price-tmp").innerText = data.total_price_tmp + ' đ';
     })
 }
 

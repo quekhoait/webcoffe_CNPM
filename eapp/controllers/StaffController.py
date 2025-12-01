@@ -2,7 +2,8 @@
 from operator import ge
 from flask import json, jsonify, render_template, request, session
 
-from eapp.dao import CategoryDao, ProductDao
+from eapp.dao import CategoryDao, ProductDao, RuleDAO
+from eapp.models.Rule import RuleType
 
 
 
@@ -11,8 +12,10 @@ def load_staff():
     category = CategoryDao.list()
     dishes = ProductDao.list()
     order = session.get('order', {})
-    total = sum(item['quantity'] * item['price'] for item in order.values())
-    return render_template('/staff/staff.html', category=category, dishes=dishes, total=total)
+    rules = RuleDAO.list({'rule_type': RuleType.SERVICE})
+    total_price_tmp = sum(item['quantity'] * item['price'] for item in order.values())
+    total_price = total_price_tmp + calulate_service_fee(total_price_tmp)
+    return render_template('/staff/staff.html', category=category, dishes=dishes, total_price=total_price,total_price_tmp=total_price_tmp,rules=rules)
 
 
 def addToOrder():
@@ -48,16 +51,27 @@ def addToOrder():
     session['order'] = order
 
     item_html = render_template('staff/order_item.html',dish=order[id])
-    total_price = sum(item['quantity']*item['price'] for item in order.values())
+    total_price_tmp = sum(item['quantity']*item['price'] for item in order.values())
+    total_price = total_price_tmp + calulate_service_fee(total_price_tmp)
     return jsonify({
         "succes" : True,
         "item_html" : item_html,
         # "total_quantity" : sum(i['quantity'] for i in order.values()),
         "total_price" : total_price,
-        'item' : order[id]
+        'item' : order[id],
+        'total_price_tmp' : total_price_tmp
         # "is_change_quantity" : is_change_quantity
     })
     
+def calulate_service_fee(total_price):
+    rules = RuleDAO.list({'rule_type': RuleType.SERVICE})
+    service_fee = 0
+    for rule in rules:
+        if rule.unit == "%":
+            service_fee += total_price * (rule.value / 100)
+        else:
+            service_fee += rule.value
+    return service_fee
 
 def create_invoice():
     order = session.get('order',{})
