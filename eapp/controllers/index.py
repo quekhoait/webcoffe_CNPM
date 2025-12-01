@@ -1,4 +1,5 @@
-from flask import render_template
+from flask import render_template, request
+
 
 #coffeeProducts = [
 #     {
@@ -85,5 +86,9 @@ def load_home():
 
 def load_about_us():
     return render_template('page/about_us.html')
+
+def load_profile():
+    tab = request.args.get("tab", "profile")
+    return render_template("page/profile.html", tab=tab)
 
 

@@ -1,8 +1,9 @@
 # #Model chung
 #
 # # Import đối tượng db từ eapp/__init__.py
-from sqlalchemy_serializer import SerializerMixin
+from flask_sqlalchemy import SQLAlchemy
 from eapp import db
+from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
 
 

@@ -1,8 +1,9 @@
 from dotenv import load_dotenv
 from flask import Flask
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+# from eapp.models.Account import Account
 load_dotenv()
-
 import os
 import cloudinary
 
@@ -16,6 +17,13 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 # app.config["PAGE_SIZE"] = 8
 
 db = SQLAlchemy(app)
+login_manager = LoginManager(app=app)
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    from eapp.models.Account import Account
+    return Account.query.get(int(user_id))
 
 from eapp import routes
 
