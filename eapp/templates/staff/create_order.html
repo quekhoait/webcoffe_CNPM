@@ -1,7 +1,7 @@
 <div class="h-dvh">
-    <div class="bg-amber-50 p-5">
+    <div class="bg-amber-50 p-5 h-screen flex flex-col">
         <!--        order header-->
-        <div class="flex justify-between text-4xl">
+        <div class="flex justify-between text-3xl">
             <h2 class="font-bold text-gray-800">Đơn hàng - Bàn 12</h2>
             <div>
                 <span class=" font-semibold text-gray-600">Số bàn:</span>
@@ -10,39 +10,47 @@
             </div>
         </div>
         <!--        order item label-->
-        <div class="grid grid-cols-6 text-3xl font-semibold p-2 mt-3 bg-white shadow">
+        <div class="grid grid-cols-6 text-2xl font-semibold p-2 mt-3 bg-white shadow">
             <div class="col-span-3">Sản Phẩm</div>
             <div class="col-span-2 text-center">Số Lượng</div>
             <div class="col-span-1 text-right">Thành Tiền</div>
         </div>
 
         <!--        order -item-->
-        <div class="list-order-item">
+        <div class="list-order-item overflow-auto-y flex-1">
             {% if session['order'] %}
             {% for dish in session['order'].values() %}
-                {% include 'staff/order_item.html' %}
+            {% include 'staff/order_item.html' %}
             {% endfor %}
             {% endif %}
         </div>
 
         <!--order bill-->
 
-        <div class="text-2xl bg-white pt-2 mt-3 border-t border-gray-400">
+        <div class="text-xl bg-white pt-2 mt-3 border-t border-gray-400">
             <div class="flex justify-between text-gray-600">
                 <span>Tạm tính</span>
-                <span id="total-price-tmp">{{ total }} đ</span>
+                <span id="total-price-tmp">{{ total_price_tmp }} đ</span>
             </div>
 
-            <div class="flex justify-between text-gray-600">
-                <span>Giảm giá</span>
-                <span>100.000đ</span>
+            <!-- Phụ phí -->
+            <div>
+                {% if rules %}
+                {% for rule in rules %}
+                <div class="flex justify-between text-gray-600">
+                    <span>{{ rule.name }}</span>
+                    <span>{{ rule.value }} <span>{{ rule.unit }}</span></span>
+                </div>
+                {% endfor %}
+                {% endif %}
+                
             </div>
 
             <div class="flex justify-between  pt-2 text-3xl font-semibold text-gray-800">
                 <span>Tổng cộng</span>
-                <span id="total-price">{{ total }} đ</span>
+                <span id="total-price">{{ total_price }} đ</span>
             </div>
-            
+
         </div>
 
         <!--        order button-->

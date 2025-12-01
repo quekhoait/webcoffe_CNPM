@@ -12,6 +12,7 @@ app.add_url_rule('/api/login','login_account',AccountController.login, methods=[
 
 app.add_url_rule('/regis','register', index.load_regis)
 app.add_url_rule('/api/regis','created_account',AccountController.register, methods=['POST'])
+from eapp.controllers import CashierController, ProductController, StaffController, index
 
 app.add_url_rule('/logout','logout', AccountController.logout)
 
@@ -23,10 +24,18 @@ app.add_url_rule('/api/check_password','check_password', AccountController.check
 
 app.add_url_rule('/','index',index.load_home)
 app.add_url_rule('/about-us','about-us',index.load_about_us)
+# app.add_url_rule('/','index',index.loadHome)
+# demo
+app.add_url_rule('/staff','index2',StaffController.load_staff)
+# app.add_url_rule('/','index',CashierController.home)
+
+
 
 app.add_url_rule('/api/dish','dish',ProductController.list)
 # staff
 app.add_url_rule('/staff','staff',StaffController.load_staff)
 app.add_url_rule('/api/order','add_order',StaffController.addToOrder, methods=['post'])
 app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice, methods=['post'])
+
+#cashier
 

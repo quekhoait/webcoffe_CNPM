@@ -35,7 +35,7 @@
 //     <div id="alert-small-1" class="col-span-3 text-xl w-auto inline-flex items-center p-2 pe-3 mb-4 mt-4 text-fg-brand-strong rounded-full bg-brand-softer border border-brand-subtle" role="alert">
 //         <span class="bg-brand-soft text-fg-brand-strong py-0.5 px-2 rounded-full">Thông Báo</span>
 //         <div class="ms-2">
-//             Không có món này
+//             Không có món này 
 //         </div>
 //     </div>
 // //     `
@@ -74,7 +74,6 @@
 function loadDishes(params = {}) {
     const query = new URLSearchParams(params).toString();
     const dishList = document.getElementById('dish-list');
-    dishList.innerHTML = '';
 
     // if (dishCache[query]) {
     //     dishList.innerHTML = dishCache[query].map(renderDish).join('')
@@ -116,7 +115,7 @@ document.getElementById('search-input').addEventListener('change', (e) => {
 //     loadDishes();
 // })
 
-function addToOrder(id, name, price, bonusQuantity = 1) {
+function addToOrder(id, name, price, bonusQuantity = 1, setQuantity = false) {
 
     fetch('/api/order', {
         method: 'post',
@@ -124,7 +123,8 @@ function addToOrder(id, name, price, bonusQuantity = 1) {
             "id": id,
             "name": name,
             "price": price,
-            "bonus_quantity": bonusQuantity
+            "bonus_quantity": bonusQuantity,
+            "is_set_quantity" : setQuantity
             // "quantity" : parseInt(input?.value ?? 1)
         }),
         headers: {
@@ -142,16 +142,14 @@ function addToOrder(id, name, price, bonusQuantity = 1) {
             orderItem = document.querySelector('.list-order-item')
             orderItem.insertAdjacentHTML('beforeend', data.item_html)
         }
-        orderItem = document.querySelector('.order-item')
-        orderItem.innerHTML += renderItem(data)
-        console.log(data);
 
         console.log(document.getElementById("total-price"));
 
         document.getElementById("total-price").innerText = data.total_price + ' đ';
-        document.getElementById("total-price-tmp").innerText = data.total_price + ' đ';
+        document.getElementById("total-price-tmp").innerText = data.total_price_tmp + ' đ';
     })
 }
+
 
 function submitInvoice() {
     fetch('/api/invoice', {
@@ -163,9 +161,13 @@ function submitInvoice() {
     }).then(res => res.json()).then(data => {
         orderItem = document.querySelector('.list-order-item')
         orderItem.innerHTML = ""
+        document.getElementById("total-price").innerText = 0;
+        document.getElementById("total-price-tmp").innerText = 0;
         // location.reload()
         alert("OKK")
     })
 }
 
-
+function inputQuantity(id,name,price,element){
+    addToOrder(id,name,price,element.value,true)
+}

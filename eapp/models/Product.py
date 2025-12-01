@@ -4,6 +4,7 @@ from sqlalchemy import Column, String, Float, Enum as SQLEnum, Integer, ForeignK
 
 from eapp.models.BaseModel import BaseModel
 from eapp.models.Category import Category
+from sqlalchemy.orm import relationship
 
 
 class ProductStatus(Enum):
@@ -19,8 +20,7 @@ class Product(BaseModel):
     image = Column(String(200))
     rating_score = Column(Float, default=5)
     rating_count = Column(Integer, default=0)
-
-    dish_category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
-
+    dish_category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
+    ingredients = relationship('ProductRecipe', backref='product', lazy=True)
     def __str__(self):
         return self.name

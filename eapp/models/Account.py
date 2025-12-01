@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 from sqlalchemy import Column, String, Boolean
+from sqlalchemy import Column, ForeignKey, String
 from eapp.models.BaseModel import BaseModel
 
 class Account(BaseModel, UserMixin):
@@ -13,6 +14,7 @@ class Account(BaseModel, UserMixin):
     provider = Column(String(50), default='local')
     avatar=Column(String(250))
     status=Column(Boolean, default=True)
+    role_id = Column(ForeignKey('role.id'), nullable=False)
 
     def __str__(self):
         return f"Account(ID: {self.id}, Username: {self.username})"
