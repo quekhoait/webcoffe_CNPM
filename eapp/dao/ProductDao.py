@@ -1,4 +1,4 @@
-from eapp.models import Dish
+from eapp.models import Product as Dish
 
 def list(params: dict = None):
     try:
