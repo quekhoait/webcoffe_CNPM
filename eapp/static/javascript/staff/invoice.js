@@ -165,7 +165,9 @@ function removeItemFromInvoice(id){
 function submitInvoice() {
     fetch('/api/invoice', {
         method: 'post',
-        body: {},
+        body: JSON.stringify({
+            'staff_id' : 1
+        }),
         headers: {
             'Content-Type': 'application/json'
         }

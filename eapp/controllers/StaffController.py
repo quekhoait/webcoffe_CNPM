@@ -27,8 +27,9 @@ def load_staff():
 
 
 """
+invoice
     id:
-        id
+        id *product
         name
         price
         bonus_quantity
@@ -58,7 +59,7 @@ def removeItemFromInvoice():
     item_id = str(request.json.get('id'))
 
     InvoiceService.remove_item_from_invoice(invoice,item_id)
-
+    session['invoice'] = invoice
     total_price_tmp = InvoiceService.calculate_total(invoice)
     total_price = InvoiceService.calculate_final_total(total_price_tmp)
     
@@ -72,9 +73,18 @@ def removeItemFromInvoice():
 
 
 def create_invoice():
-    order = session.get('invoice',{})
+    invoice_items = session.get('invoice',{})
+    print(invoice_items)
+    # tạm thời test với staff_id = 1 request.json.get('staff_id')
+    invoice_data = {
+        'staff_id' : request.json.get('staff_id'),
+        'invoice_items' : invoice_items
+    }
+
+    InvoiceService.create_invoice(invoice_data)
 
     session.pop('invoice',None)
+
     return jsonify({
         "success" : True
     })

@@ -75,7 +75,43 @@ rules_seed = [
         "description": "Mức tồn kho tối thiểu cho mỗi nguyên liệu",
         "active": True
     }
-]  
+] 
+
+invoice_status_seed = [
+    {"name": "Đang xử lý", "description": "Hóa đơn mới được tạo và đang chờ xử lý."},
+    {"name": "Đã thanh toán", "description": "Hóa đơn đã được thanh toán đầy đủ."},
+    {"name": "Đã hủy", "description": "Hóa đơn đã bị hủy và không còn hiệu lực."}
+]
+
+roles = [
+    {"name": "Admin", "description": "Quản trị viên hệ thống với toàn quyền."},
+    {"name": "Cashier", "description": "Nhân viên thu ngân, chịu trách nhiệm xử lý thanh toán."},
+    {"name": "Staff", "description": "Nhân viên phục vụ và hỗ trợ khách hàng."}
+]
+
+accounts = [
+    {
+        "username": "admin",
+        "password": "123",
+        "phone": "0123456789",
+        "name": "Huy dep trai",
+        "role_id": 1
+    },
+    {
+        "username": "cashier",
+        "password": "123",
+        "phone" : "0987654321",
+        "name": "Nhân Viên Thu Ngân 1",
+        "role_id": 2
+    },
+    {
+        "username": "staff",
+        "password": "staffpass",
+        "phone" : "0912345678",
+        "name": "Nhân Viên Phục Vụ 1",
+        "role_id": 3
+    }
+]
 
 if __name__ == "__main__":
     with app.app_context():
@@ -91,7 +127,32 @@ if __name__ == "__main__":
             cat = DishCategory(name=cat_name, description=f"Danh mục {cat_name.lower()} của quán.")
             db.session.add(cat)
             created_categories[cat_name] = cat
+        
+        db.session.commit()
 
+        
+
+        for role_data in roles:
+            from eapp.models.Role import Role
+            role = Role(**role_data)
+            db.session.add(role)
+
+        db.session.commit()
+
+        # Seed accounts
+        for acc_data in accounts:
+            from eapp.models.Account import Account
+            acc = Account(**acc_data)
+            db.session.add(acc)
+        db.session.commit()
+                    
+        
+        # Seed invoice statuses
+        from eapp.models.InvoiceStatus import InvoiceStatus
+        for status_data in invoice_status_seed:
+            status = InvoiceStatus(**status_data)
+            db.session.add(status)
+        
         db.session.commit()
 
         # Seed dishes
