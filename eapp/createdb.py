@@ -1,6 +1,6 @@
 from eapp import db, app
-from eapp.models import Category as DishCategory, Product as Dish, DishStatus
-from eapp.models import Category, Product, ProductStatus, Account
+# from eapp.models import Category as DishCategory, Product as Dish, DishStatus
+from eapp.models import Category, Product, ProductStatus
 import random
 
 from eapp.models.Rule import RuleType

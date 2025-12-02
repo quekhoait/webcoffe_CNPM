@@ -29,8 +29,7 @@ document.getElementById("regis-form").addEventListener("submit", async (e) => {
 
     const data = await res.json();
     if (data.status === "error") {
-        document.getElementById("error-box").classList.remove("hidden");
-        document.getElementById("error-text").innerText = data.message;
+          showAlert("error", "Sai mật khẩu", data.message);
     } else if (data.status === "success") {
         window.location.href = "/login";
     }

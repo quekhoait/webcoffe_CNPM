@@ -17,3 +17,29 @@ def login_account(phone, password):
     password=str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     return Account.query.filter(Account.phone==phone.strip(), Account.password==password).first()
 
+def update_account_dao(user_id, username, phone, name, password, email, address, avatar):
+    print(user_id)
+    user = Account.query.get(user_id)
+    if not user:
+        return None
+    # Kiểm tra số điện thoại trùng người khác
+    acc = Account.query.filter_by(phone=phone).first()
+    if acc and acc.id != int(user_id):
+        return None
+    # Xử lý password
+    if password == "******":
+        pas = user.password
+    else:
+        pas = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    # Cập nhật dữ liệu
+    user.username = username
+    user.phone = phone
+    user.name = name
+    user.password = pas
+    user.email = email
+    user.address = address
+    user.avatar=avatar
+    db.session.commit()
+    return user
+
+

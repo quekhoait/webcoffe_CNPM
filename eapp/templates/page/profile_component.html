@@ -5,7 +5,8 @@
     class="mb-10 p-6 rounded-xl shadow-[rgba(0,0,0,0.24)_0px_3px_8px] bg-white"
   >
     <h2 class="text-3xl font-semibold text-gray-800 mb-6">Thông tin cá nhân</h2>
-    <form id="form_information" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+    <form id="form_information_profile" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+
       <div>
         <label for="username" class="block text-2xl font-medium text-gray-700"
           >Tên đăng nhập</label
@@ -16,7 +17,8 @@
           <input
             type="text"
             id="username"
-            value="Ahihi"
+            name="username"
+            value="{{current_user.username}}"
             readonly
             class="text-xl block w-full px-3 py-3 text-gray-900 border-none bg-transparent focus:ring-0 focus:outline-none"
           />
@@ -33,7 +35,8 @@
           <input
             type="password"
             id="password"
-            value="123456"
+            name="password"
+            value="******"
             readonly
             class="text-xl block w-full px-3 py-3 text-gray-900 border-none bg-transparent focus:ring-0 focus:outline-none"
           />
@@ -50,7 +53,8 @@
           <input
             type="text"
             id="name"
-            value="Nguyễn Văn A"
+            name="name"
+            value="{{current_user.name}}"
             readonly
             class="text-xl block w-full px-3 py-3 text-gray-900 border-none bg-transparent focus:ring-0 focus:outline-none"
           />
@@ -67,7 +71,8 @@
           <input
             type="email"
             id="email"
-            value="nguyenvana@email.com"
+            name="email"
+            value="{{current_user.email}}"
             readonly
             class="text-xl block w-full px-3 py-3 text-gray-900 border-none bg-transparent focus:ring-0 focus:outline-none"
           />
@@ -84,7 +89,8 @@
           <input
             type="tel"
             id="phone"
-            value="0987 654 321"
+               name="phone"
+            value="{{current_user.phone}}"
                    readonly
             class="text-xl block w-full px-3 py-3 text-gray-900 border-none bg-transparent focus:ring-0 focus:outline-none"
           />
@@ -101,8 +107,27 @@
           <input
             type="text"
             id="address"
-            value="123 Đường ABC, Phường X, Quận Y, TP. Z"
+             name="address"
+            value="{{current_user.address}}"
                    readonly
+            class="text-xl block w-full px-3 py-3 text-gray-900 border-none bg-transparent focus:ring-0 focus:outline-none"
+          />
+        </div>
+      </div>
+
+        <div>
+        <label for="avatar" class="block text-2xl font-medium text-gray-700"
+          >Ảnh đại diện</label
+        >
+        <div
+          class="mt-1 flex items-center border border-yellow-200 rounded-md shadow-sm"
+        >
+          <input
+            type="file"
+            id="avatar"
+            name="avatar"
+            value="{{current_user.avatar}}"
+                   disabled
             class="text-xl block w-full px-3 py-3 text-gray-900 border-none bg-transparent focus:ring-0 focus:outline-none"
           />
         </div>
@@ -115,14 +140,14 @@
       <!--                            </button>-->
       <button
               id="btn_update"
-        type="submit"
+        type="button"
         class="px-4 py-2 text-xl font-medium rounded-lg text-white bg-yellow-800 shadow-md hover:bg-yellow-900 transition"
       >
         Cập nhật
       </button>
            <button
-              id="btn_save"
-        type="submit"
+                   id="btn_save_profile"
+        type="button"
         class="hidden px-4 py-2 text-xl font-medium rounded-lg text-white bg-yellow-800 shadow-md hover:bg-yellow-900 transition"
       >
         Lưu
@@ -204,3 +229,6 @@
     </div>
   </div>
 </div>
+<script>
+    const current_user_id = {{ current_user.id }};
+</script>
