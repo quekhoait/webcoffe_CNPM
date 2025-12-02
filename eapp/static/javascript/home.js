@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
             header.classList.add(scrolledClass);
             header.classList.add("fixed")
         } else {
-            // SỬA: Xóa class CSS
             header.classList.remove(scrolledClass);
             header.classList.remove("fixed")
         }

@@ -9,11 +9,20 @@ html{
     font-size: 62.5%;
 }
 
-#header.scrolled-header {
-    background: white !important;
-    padding: 24px 0 !important;
+#header {
+    position: fixed; /* hoặc absolute nếu muốn */
+    top: -100px;      /* ẩn header trên màn hình */
+    left: 0;
+    width: 100%;
+    background: transparent;
+    padding: 40px 0;
+    transition: all 0.4s ease; /* mượt khi thay đổi */
+    z-index: 1000;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-    display: none;
+#header.scrolled-header {
+    top: 0;                 /* header trượt xuống */
+    background: white !important;
+    padding: 24px 0 !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* optional */
 }

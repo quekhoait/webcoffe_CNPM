@@ -1,4 +1,4 @@
-<nav class="w-full bg-[#F1ECE9] top-0 left-0 z-50 py-5 border-none" id="header">
+<nav class="w-full  top-0 left-0 z-50 py-5 border-none  {% if is_home %} bg-[#F1ECE9] {% else %} bg-white {% endif %}" id="header">
   <div class="container mx-auto flex items-center justify-between w-[86%] ">
 
     <!-- Logo -->
@@ -16,9 +16,6 @@
 
       <!-- Icons -->
       <div class="flex items-end gap-16 text-4xl">
-
-        <!-- Search icon -->
-        <i class="fa-solid fa-magnifying-glass cursor-pointer transition-transform duration-200 hover:scale-[1.1] hover:text-blue-600"></i>
 
         <!-- User icon + username -->
      <div class="relative group flex flex-col items-center leading-[1.2]">
@@ -61,7 +58,10 @@
 
 
         <!-- Basket icon -->
-        <i class="fa-solid fa-basket-shopping cursor-pointer transition-transform duration-200 hover:scale-[1.1] hover:text-red-600"></i>
+          <div class="relative">
+        <i  id="cart_icon" class="fa-solid fa-basket-shopping cursor-pointer  transition-transform duration-200 hover:scale-[1.1] hover:text-red-600"></i>
+                        {% include 'page/cart_component.html' %}
+          </div>
 
       </div>
     </div>

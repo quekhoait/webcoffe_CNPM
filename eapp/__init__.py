@@ -28,7 +28,7 @@ def load_user(user_id):
 
 from eapp import routes
 
-cloudinary.config(cloud_name='ds11ggie4',
-                  api_key='958334855172326',
-                  api_secret='Wnp7m_2M7tOvT-oHv819TRitH1Y')
+cloudinary.config(cloud_name=os.getenv("CLOUD_NAME"),
+                  api_key=os.getenv("API_KEY"),
+                  api_secret='API_SECRET')
 
