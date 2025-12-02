@@ -1,5 +1,6 @@
 <div class="h-dvh">
-    <div class="bg-amber-50 p-5 h-screen flex flex-col">
+    <div class="bg-amber-50 p-5 h-s
+    en flex flex-col">
         <!--        order header-->
         <div class="flex justify-between text-3xl">
             <h2 class="font-bold text-gray-800">Đơn hàng - Bàn 12</h2>
@@ -18,9 +19,9 @@
 
         <!--        order -item-->
         <div class="list-order-item overflow-auto-y flex-1">
-            {% if session['order'] %}
-            {% for dish in session['order'].values() %}
-            {% include 'staff/order_item.html' %}
+            {% if session['invoice'] %}
+            {% for invoice_item in session['invoice'].values() %}
+            {% include 'staff/invoice_item.html' %}
             {% endfor %}
             {% endif %}
         </div>
