@@ -111,9 +111,6 @@ document.getElementById('search-input').addEventListener('change', (e) => {
     loadDishes({ 'name': e.target.value })
 })
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     loadDishes();
-// })
 
 function addToOrder(id, name, price, bonusQuantity = 1, setQuantity = false) {
 
@@ -125,31 +122,45 @@ function addToOrder(id, name, price, bonusQuantity = 1, setQuantity = false) {
             "price": price,
             "bonus_quantity": bonusQuantity,
             "is_set_quantity" : setQuantity
-            // "quantity" : parseInt(input?.value ?? 1)
         }),
         headers: {
             "Content-Type": "application/json"
         }
     }).then(res => res.json()).then(data => {
-
-        const dish = document.getElementById(`dish-${id}`)
-
+        
+        const dish = document.getElementById(`invoice-item-${id}`)
+        
         if (dish) {
             dish.querySelector('input').value = data.item.quantity
-            dish.querySelector(`#dish-price-${id}`).innerText = data.item.quantity * data.item.price + ' đ';
+            dish.querySelector(`#invoice-item-price-${id}`).innerText = data.item.quantity * data.item.price + ' đ';
         } else {
 
             orderItem = document.querySelector('.list-order-item')
             orderItem.insertAdjacentHTML('beforeend', data.item_html)
         }
 
-        console.log(document.getElementById("total-price"));
 
         document.getElementById("total-price").innerText = data.total_price + ' đ';
         document.getElementById("total-price-tmp").innerText = data.total_price_tmp + ' đ';
     })
 }
 
+function removeItemFromInvoice(id){
+    fetch('api/remove-item',{
+        method : 'post',
+        body : JSON.stringify({
+            "id" : id
+        }),
+        headers : {
+            "Content-Type" : "application/json"
+        }
+    }).then(res => res.json()).then(data => {
+        document.getElementById(`invoice-item-${id}`).remove()
+        
+        document.getElementById("total-price").innerText = data.total_price + ' đ';
+        document.getElementById("total-price-tmp").innerText = data.total_price_tmp + ' đ';
+    })
+}
 
 function submitInvoice() {
     fetch('/api/invoice', {
