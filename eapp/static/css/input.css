@@ -28,3 +28,48 @@
   /* Màu nền nút active (Nâu vừa, Gần giống #8b6e68) -> Dùng: bg-coffee-button-active */
   --color-coffee-button-active: #8b6e68;
 }
+
+/* Style border invoice card */
+.invoice-card[data-status="selecting"] {
+    @apply bg-amber-100 border-l-4 border-amber-800 border-r-2 border-y-2 hover:shadow-lg transition-all duration-200 space-y-3;
+}
+
+.invoice-card[data-status="pending"] {
+    @apply bg-white border-l-4 border-yellow-400 hover:shadow-lg transition-all duration-200 space-y-3;
+}
+
+.invoice-card[data-status="paid"] {
+    @apply bg-white bg-green-100 border-l-4 border-green-600 hover:shadow-lg transition-all duration-200 space-y-3;
+}
+
+.invoice-card[data-status="cancelled"] {
+    @apply bg-white border-l-4 border-red-400 hover:shadow-lg transition-all duration-200 space-y-3;
+}
+
+
+
+/* Style status badge (Invoice status) */
+
+.invoice-card[data-status="pending"] .status-badge {
+    @apply text-lg bg-yellow-100 font-semibold text-yellow-800 px-3 py-1;
+}
+
+.invoice-card[data-status="paid"] .status-badge {
+    @apply text-lg bg-green-200 font-semibold text-green-900 px-3 py-1;
+}
+
+.invoice-card[data-status="cancelled"] .status-badge {
+    @apply text-lg bg-red-200 font-semibold text-red-900 px-3 py-1;
+}
+
+.invoice-card .payment-method[data-method="cash"] {
+    @apply text-blue-700 text-sm font-semibold bg-blue-100 px-2 py-1 rounded-md;
+}
+
+.invoice-card .payment-method[data-method="bank_transfer"] {
+    @apply text-purple-700 text-sm font-semibold bg-purple-100 px-2 py-1 rounded-md;
+}
+
+.invoice-card .payment-method[data-method="other"] {
+    @apply text-green-700 text-sm font-semibold bg-green-100 px-2 py-1 rounded-md;
+}

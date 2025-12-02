@@ -9,7 +9,11 @@ class InvoiceDAO:
         try:
             query = Invoice.query
             if params:
-                pass
+                if params['is_counter']: #tại quầy
+                    query = query.filter(Invoice.customer_id == None)
+                else: # online
+                    query = query.filter(Invoice.staff_id == None)
+                
         except Exception as ex:
             print(f"Lỗi khi lấy danh sách invoice: {ex}")
             return []

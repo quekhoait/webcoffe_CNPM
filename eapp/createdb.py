@@ -78,9 +78,12 @@ rules_seed = [
 ] 
 
 invoice_status_seed = [
-    {"name": "Đang xử lý", "description": "Hóa đơn mới được tạo và đang chờ xử lý."},
-    {"name": "Đã thanh toán", "description": "Hóa đơn đã được thanh toán đầy đủ."},
-    {"name": "Đã hủy", "description": "Hóa đơn đã bị hủy và không còn hiệu lực."}
+    {"name": "Chờ xử lý", "code": "PENDING", "description": "Hóa đơn mới được tạo và đang chờ xử lý."},
+    {"name": "Đã thanh toán", "code": "PAID", "description": "Hóa đơn đã được thanh toán đầy đủ."},
+    {"name": "Đã hủy", "code": "CANCELED", "description": "Hóa đơn đã bị hủy và không còn hiệu lực."}
+    # {"name": "Đang xử lý", "description": "Hóa đơn mới được tạo và đang chờ xử lý."},
+    # {"name": "Đã thanh toán", "description": "Hóa đơn đã được thanh toán đầy đủ."},
+    # {"name": "Đã hủy", "description": "Hóa đơn đã bị hủy và không còn hiệu lực."}
 ]
 
 roles = [
