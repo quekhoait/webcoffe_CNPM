@@ -23,7 +23,7 @@ app.add_url_rule('/api/update_account','update_account', AccountController.updat
 
 app.add_url_rule('/','index',index.load_home)
 app.add_url_rule('/about-us','about-us',index.load_about_us)
-# app.add_url_rule('/','index',index.loadHome)
+app.add_url_rule('/my-cart','my-cart',index.load_my_cart)
 # demo
 app.add_url_rule('/staff','index2',StaffController.load_staff)
 # app.add_url_rule('/','index',CashierController.home)
