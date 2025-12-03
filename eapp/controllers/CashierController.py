@@ -9,6 +9,8 @@ def load_cashier():
     user = get_current_user()
     invoice_status = InvoiceStatusDAO.list()
     invoices = InvoiceDAO.list()
+   
+    print(invoices[1].staff.name)
     return render_template('cashier/cashier.html',
                            user=user,
                            invoice_status = invoice_status,

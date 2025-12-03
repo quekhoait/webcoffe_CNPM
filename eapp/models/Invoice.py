@@ -18,5 +18,6 @@ class Invoice(BaseModel):
     final_total = Column(Float, nullable=False)
     payment_method = Column(SqlEnum(PaymentMethod), nullable=False)
     invoice_status_id = Column(ForeignKey('invoice_status.id'), nullable=False)
+    
     invoice_details = relationship('InvoiceDetail', backref='invoice', lazy=True)
     

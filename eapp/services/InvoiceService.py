@@ -41,13 +41,15 @@ class InvoiceService:
         del invoice[item_id]
         return invoice
     
-    # tính luôn phí dịch vụ
+    # tính tổng gồm luôn phí dịch vụ
     @staticmethod
     def calculate_final_total(total: float) -> float:
         service_fee = RuleService.calulate_service_fee(total)
         final_total = total + service_fee
         return final_total
     
+
+
     """
         customer_id,
         staff_id,
@@ -87,3 +89,5 @@ class InvoiceService:
         print(InvoiceDetailDAO.create(invoiceDetails))
 
         return invoice
+    
+    
