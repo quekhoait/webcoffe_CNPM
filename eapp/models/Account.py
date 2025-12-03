@@ -10,7 +10,10 @@ class Account(BaseModel):
     provider = Column(String(50), default='local')
     role_id = Column(ForeignKey('role.id'), nullable=False)
 
-    invoices = relationship('Invoice', backref='account', lazy=True)
+    invoice_of_customers = relationship('Invoice', backref='customer', foreign_keys='Invoice.customer_id', lazy=True)
+    invoice_of_staffs = relationship('Invoice',backref='staff',foreign_keys='Invoice.staff_id',lazy=True)
+    invoice_of_cashiers = relationship('Invoice',backref='cashier',foreign_keys='Invoice.cashier_id',lazy=True)
+
 
     def __str__(self):
         return f"Account(ID: {self.id}, Username: {self.username})"
