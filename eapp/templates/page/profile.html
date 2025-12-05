@@ -51,8 +51,8 @@
             Lịch sử đơn hàng
           </a>
           <a
-            href="?tab=orders"
-            class="text-2xl flex items-center p-3 rounded-md text-gray-600 hover:bg-yellow-100 transition {% if tab == 'orders' %} bg-yellow-200/70 text-gray-800 font-semibold {% else %} text-gray-600 hover:bg-yellow-100 {% endif %}"
+            href="{{url_for('my-cart')}}"
+            class="text-2xl flex items-center p-3 rounded-md text-gray-600 hover:bg-yellow-100 transition text-gray-600 hover:bg-yellow-100 "
           >
             <i class="fa-solid fa-clock-rotate-left pr-12"></i>
             Giỏ hàng của bạn

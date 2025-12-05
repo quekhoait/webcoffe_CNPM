@@ -6,8 +6,6 @@ from eapp.dao import CategoryDao, ProductDao, RuleDAO
 from eapp.models.Rule import RuleType
 
 
-
-
 def load_staff():
     category = CategoryDao.list()
     dishes = ProductDao.list()

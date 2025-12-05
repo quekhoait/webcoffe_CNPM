@@ -209,6 +209,7 @@
     border: 0 solid;
   }
   html, :host {
+    font-size: 62.5%;
     line-height: 1.5;
     -webkit-text-size-adjust: 100%;
     tab-size: 4;

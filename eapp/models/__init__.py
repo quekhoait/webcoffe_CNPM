@@ -4,7 +4,6 @@ from .Category import Category
 from .Ingredient import Ingredient
 from .Invoice import Invoice
 from .InvoiceDetail import InvoiceDetail
-from .InvoiceStatus import InvoiceStatus
 from .Product import Product,ProductStatus
 from .ProductRecipe import ProductRecipe
 from .Role import Role

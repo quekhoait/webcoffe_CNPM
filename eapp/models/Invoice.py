@@ -1,7 +1,15 @@
 import re
-from sqlalchemy import Column, Float, ForeignKey, String
-from eapp.models import BaseModel
+from enum import Enum
+from sqlalchemy import Column, Float, String, Enum as SqlEnum, ForeignKey
 from sqlalchemy.orm import relationship
+from eapp.models import BaseModel
+
+
+class InvoiceStatusEnum(str, Enum):
+    PENDING_PAYMENT = "pending_payment"
+    PENDING_PROCESSING = "pending_processing"
+    SHIPPING = "shipping"
+    DELIVERED = "delivered"
 
 
 class Invoice(BaseModel):
@@ -9,11 +17,9 @@ class Invoice(BaseModel):
     customer_id = Column(ForeignKey('account.id'))
     staff_id = Column(ForeignKey('account.id'), nullable=False)
     total_amount = Column(Float, nullable=False)
-    updated_date = None
     subtotal = Column(Float, nullable=False)
     extra_fee_total = Column(Float, nullable=False)
     final_total = Column(Float, nullable=False)
     payment_method = Column(String(50), nullable=False)
-    invoice_status_id = Column(ForeignKey('invoice_status.id'), nullable=False)
-    invoice_details = relationship('InvoiceDetail', backref='invoice', lazy=True)
-    
+    invoice_status = Column(SqlEnum(InvoiceStatusEnum), nullable=False)
+    invoice_details = relationship("InvoiceDetail", backref="invoice", lazy=True)
