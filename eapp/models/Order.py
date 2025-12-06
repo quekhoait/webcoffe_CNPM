@@ -10,15 +10,17 @@ class Order(BaseModel):
 
     id = Column('idHoaDon', Integer, primary_key=True)
     created_date = Column('NgayLap', DateTime, default=datetime.now)
+
+    subtotal = Column('TongTam', Float, default=0)
+    extra_fees = Column('TongPhuPhi', Float, default=0)
     total_amount = Column('TongThanhToan', Float, default=0)
+
     payment_method = Column('HinhThucThanhToan', String(50))
 
-    #người dùng đã đăng nhập
-    user_id = Column('NguoiDung_idKhachHang', Integer, ForeignKey('NguoiDung.idNguoiDung'), nullable=False)
 
-    receiver_name = Column('TenNguoiNhan', String(100))
-    receiver_phone = Column('SDTNguoiNhan', String(20))
-    note = Column('GhiChu', String(255))
+    customer_id = Column('NguoiDung_idKhachHang', Integer, ForeignKey('NguoiDung.idNguoiDung'), nullable=False)
+
+    status_id = Column('TrangThai_idTrangThai', Integer, ForeignKey('TrangThai.idTrangThai'), default=1, nullable=False)
 
     details = relationship('OrderDetail', backref='order', lazy=True)
 

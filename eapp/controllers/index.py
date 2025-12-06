@@ -1,9 +1,11 @@
-from flask import render_template
 from flask import render_template, session, request, redirect, url_for
 from eapp import db
 from eapp.models.Order import Order, OrderDetail
 from datetime import datetime
 
+from sqlalchemy import desc #hàm sx giảm dần
+from eapp.models.Product import Dish
+from eapp.models.Category import DishCategory
 
 #coffeeProducts = [
 #     {
@@ -88,79 +90,130 @@ def aboutUs():
 
 
 def checkout_page():
-    # kiểm tra đăng nhập
-    if 'user' not in session:
-        return redirect('/login-test')
+    current_user = session.get('user')
 
-    current_user = session['user']
+    #test
+    if not current_user:
+        current_user = {'id': 1, 'name': 'Khách hàng Test', 'phone': '0909000111', 'email': 'test@gmail.com'}
 
-    # xử lý giỏ hàng
+    #giỏ hàng
     cart = session.get('cart', {})
     if not cart:
         cart = {
             '1': {'id': 1, 'name': 'Cafe Demo', 'price': 25000, 'quantity': 2, 'image': ''}
         }
 
-    total_price = sum(item['price'] * item['quantity'] for item in cart.values())
+    # TongTam
+    subtotal = sum(item['price'] * item['quantity'] for item in cart.values())
+    # TongPhuPhi (Ví dụ = 0)
+    surcharge = 0
+    # TongThanhToan
+    total_amount = subtotal + surcharge
 
-    # đặt hàng
+    #xử lý đặt hàng
     if request.method == 'POST':
         try:
-            fullname = request.form.get('fullname')
-            phone = request.form.get('phone')
             payment_method = request.form.get('payment_method')
 
-            fixed_address = "Nhận tại quán"
+            if payment_method == 'MOMO':
+                order_status = 2 #đã thanh toán
 
+            else:
+                order_status = 1 #chờ xử lý
+
+            #tạo đơn hàng
             new_order = Order(
-                user_id=current_user['id'],
-                receiver_name=fullname,
-                receiver_phone=phone,
-                address=fixed_address,
-                payment_method=payment_method,
-                total_amount=total_price,
-                created_date=datetime.now()
+                customer_id=current_user['id'],  # NguoiDung_idKhachHang
+                payment_method=payment_method,  # HinhThucThanhToan
+                subtotal=subtotal,  # TongTam
+                surcharge=surcharge,  # TongPhuPhi
+                total_amount=total_amount,  # TongThanhToan
+                created_date=datetime.now(),  # NgayLap
+                status_id=order_status # TrangThai
+
             )
             db.session.add(new_order)
-            db.session.flush()
+            db.session.flush()  # Lấy ID vừa tạo
 
-            # lưu chi tiết đơn hàng
+            # Lưu chi tiết
             for item in cart.values():
+                item_total = item['price'] * item['quantity']
                 detail = OrderDetail(
-                    order_id=new_order.id,
-                    dish_id=item['id'],
-                    quantity=item['quantity'],
-                    price=item['price'],
-                    total_price=item['price'] * item['quantity']
+                    order_id=new_order.id,  # HoaDon_idHoaDon
+                    dish_id=item['id'],  # Mon_idMon
+                    quantity=item['quantity'],  # SoLuong
+                    price=item['price'],  # DonGia
+                    total_price=item['price'] * item['quantity'] # ThanhTien
                 )
                 db.session.add(detail)
 
             db.session.commit()
 
+            #xóa giỏ hàng sau khi đặt thành công
             if session.get('cart'): session.pop('cart', None)
+
             return redirect('/')
 
         except Exception as ex:
             db.session.rollback()
-            print(f"Lỗi: {ex}")
+            print(f"Lỗi DB: {ex}")
             return "Lỗi xử lý đơn hàng", 500
 
+    #hiển thị
     user_info = {
         'fullname': current_user.get('name', ''),
-        'phone': current_user.get('phone', '')
+        'phone': current_user.get('phone', ''),
+        'email': current_user.get('email', '')
     }
 
     return render_template('page/checkout.html',
                            cart_items=cart.values(),
-                           total_price=total_price,
+                           total_price=total_amount,
                            user_info=user_info)
 
-def login_test():
-    # Giả lập 1 user đã đăng nhập thành công
-    session['user'] = {
-        'id': 1,
-        'name': 'Khách hàng Test',
-        'phone': '0909123456'
-    }
-    # Sau khi login giả xong thì chuyển ngay sang trang thanh toán
-    return redirect('/checkout')
+
+
+def menu_page():
+    # /menu?q=cafe&category=1&filter=new
+    search_query = request.args.get('q', '')  #từ khóa tìm kiếm
+    category_id = request.args.get('category')  #id danh mục
+    filter_type = request.args.get('filter')  #lọc
+
+    categories = DishCategory.query.all()
+
+    query = Dish.query
+
+    # tìm kiếm
+    if search_query:
+        # tìm món có tên chứa từ khóa
+        query = query.filter(Dish.name.contains(search_query))
+
+    # lọc
+    if category_id:
+        try:
+            cat_id_int = int(category_id)
+            query = query.filter(Dish.dish_category_id == cat_id_int)
+        except ValueError:
+            pass
+
+    #sắp xếp món
+    if filter_type == 'new':
+        #sx theo ngày tạo giảm dần
+        query = query.order_by(desc(Dish.created_date))
+    elif filter_type == 'best':
+        #sx theo số lượt đánh giá giảm dần
+        query = query.order_by(desc(Dish.rating_count))
+    else:
+        #mặc định sx theo ID
+        query = query.order_by(Dish.id)
+
+    products = query.all()
+
+
+    return render_template('page/menu.html',
+                           products=products,
+                           categories=categories,
+                           # Gửi lại các tham số để View biết cái nào đang được chọn
+                           current_cate_id=int(category_id) if category_id else None,
+                           current_filter=filter_type,
+                           search_query=search_query)
