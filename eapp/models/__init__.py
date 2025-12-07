@@ -12,6 +12,8 @@ from .Stock import Stock
 from .Warehouse import Warehouse
 from .WarehouseSlip import WarehouseSlip
 from .WarehouseSlipDetail import WarehouseSlipDetail
+from .Cart import Cart
+from .CartDetail import CartDetail
 
 __all__ = [
     "Account",

@@ -92,5 +92,7 @@ def load_profile():
     return render_template("page/profile.html", tab=tab)
 
 def load_my_cart():
-    return render_template('page/cart.html')
+    tab = request.args.get("tab", "order_all")
+    return render_template("page/cart.html", tab=tab)
+
 

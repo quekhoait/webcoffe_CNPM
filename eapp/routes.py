@@ -4,7 +4,7 @@ from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
-from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index
+from eapp.controllers import  AccountController,CashierController, ProductController, StaffController, index, CartController
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
@@ -20,10 +20,13 @@ app.add_url_rule('/api/check_password','check_password', AccountController.check
 app.add_url_rule('/api/update_account','update_account', AccountController.update_account, methods=['POST'])
 
 
-
 app.add_url_rule('/','index',index.load_home)
 app.add_url_rule('/about-us','about-us',index.load_about_us)
+#Xử lý giỏ hàng
+app.add_url_rule('/api/created_cart','created_cart', CartController.created_cart, methods=['POST'])
 app.add_url_rule('/my-cart','my-cart',index.load_my_cart)
+
+
 # demo
 app.add_url_rule('/staff','index2',StaffController.load_staff)
 # app.add_url_rule('/','index',CashierController.home)
