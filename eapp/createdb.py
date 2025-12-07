@@ -1,6 +1,9 @@
 from eapp import db, app
-from eapp.models import DishCategory, Dish, DishStatus
+# from eapp.models import Category as DishCategory, Product as Dish, DishStatus
+from eapp.models import Category, Product, ProductStatus
 import random
+
+from eapp.models.Rule import RuleType
 
 DEFAULT_IMAGE = "https://picsum.photos/seed/picsum/200/300"
 
@@ -55,6 +58,26 @@ cafe_dishes = {
     ],
 }
 
+rules_seed = [
+    {
+        "name": "phí phục vụ",
+        "rule_type": RuleType.SERVICE,
+        "value": 10,
+        "unit": "%",
+        "instance_rule_id": None,
+        "description": "Phí phục vụ áp dụng cho tất cả đơn hàng",
+        "active": True
+    },{
+        "name": "Nguyên liệu tồn kho tối thiểu",
+        "rule_type": RuleType.INGREDIENT,
+        "value": 5,
+        "unit": None,
+        "instance_rule_id": None,
+        "description": "Mức tồn kho tối thiểu cho mỗi nguyên liệu",
+        "active": True
+    }
+]
+
 if __name__ == "__main__":
     with app.app_context():
         db.drop_all()
@@ -66,7 +89,7 @@ if __name__ == "__main__":
         created_categories = {}
 
         for cat_name in cafe_categories:
-            cat = DishCategory(name=cat_name, description=f"Danh mục {cat_name.lower()} của quán.")
+            cat = Category(name=cat_name, description=f"Danh mục {cat_name.lower()} của quán.")
             db.session.add(cat)
             created_categories[cat_name] = cat
 
@@ -77,11 +100,11 @@ if __name__ == "__main__":
             category = created_categories[cat_name]
 
             for name, unit, price in items:
-                dish = Dish(
+                dish = Product(
                     name=name,
                     unit=unit,
                     price=price,
-                    status=DishStatus.ACTIVE,
+                    status=ProductStatus.ACTIVE,
                     description=f"{name} được pha chế theo công thức đặc biệt của quán.",
                     image=DEFAULT_IMAGE,
                     rating_score=round(random.uniform(3.5, 5), 1),
@@ -90,6 +113,14 @@ if __name__ == "__main__":
                 )
                 db.session.add(dish)
 
+
+        db.session.commit()
+
+        # Seed rules
+        from eapp.models.Rule import Rule
+        for rule_data in rules_seed:
+            rule = Rule(**rule_data)
+            db.session.add(rule)
         db.session.commit()
 
         print("☕️ Seed dữ liệu quán cà phê thành công!")

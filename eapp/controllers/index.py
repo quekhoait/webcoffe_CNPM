@@ -6,6 +6,8 @@ from datetime import datetime
 from sqlalchemy import desc #hàm sx giảm dần
 from eapp.models.Product import Dish
 from eapp.models.Category import DishCategory
+from flask import render_template, request
+
 
 #coffeeProducts = [
 #     {
@@ -81,12 +83,18 @@ from eapp.models.Category import DishCategory
 # ]
 
 
+def load_login():
+    return render_template('page/login.html')
+  
+def load_regis():
+    return render_template('page/register.html')
+  
+def load_home():
+    return render_template('page/home.html', is_home=True)
 
-def loadHome():
-    return render_template('page/home.html')
-
-def aboutUs():
+def load_about_us():
     return render_template('page/about_us.html')
+
 
 
 def checkout_page():
@@ -217,3 +225,12 @@ def menu_page():
                            current_cate_id=int(category_id) if category_id else None,
                            current_filter=filter_type,
                            search_query=search_query)
+
+def load_profile():
+    tab = request.args.get("tab", "profile")
+    return render_template("page/profile.html", tab=tab)
+
+def load_my_cart():
+    return render_template('page/cart.html')
+
+

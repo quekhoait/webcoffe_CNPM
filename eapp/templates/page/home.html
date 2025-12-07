@@ -1,324 +1,497 @@
-{% extends 'layout/base.html' %}
-
-{% block title %}Trang Chủ Webcoffe{% endblock %}
-{% block content %}
-<div class="w-full h-[600px] bg-cover bg-center flex items-center"
-     style="background-image: url('{{ url_for('static', filename='image/bgr_banner.png') }}')">
-    <div class="ml-10 w-[50%]">
-        <h2 class="text-5xl font-extrabold leading-tight mb-6 w-[50%] text-center m-auto text-[--primary-h2]">
-            HƯƠNG VỊ CÀ PHÊ THƠM NGON
-        </h2>
-        <p class="text-3xl text-gray-700 leading-relaxed w-[55%] text-center m-auto pt-[20px]">
-            Khám phá sự tinh tế trong từng hạt cafe được lựa chọn cẩn thận
-            và hòa mình vào để đắm chìm trong những giọt cà phê
-        </p>
-        <div class="flex gap-8 justify-center pt-[32px]">
-            <button class="px-10 py-4 bg-[#c54f36] text-white text-2xl rounded-xl hover:opacity-90 transition">
-                Khám phá ngay
-            </button>
-            <button class="px-10 py-4 bg-[#372f2b] text-white text-2xl rounded-xl hover:opacity-90 transition">
-                Đặt hàng ngay
-            </button>
-        </div>
+{% extends 'layout/base.html' %} {% block title %}Trang Chủ Webcoffe{% endblock
+%} {% block content %}
+<div
+  class="w-full h-[600px] bg-cover bg-center flex items-center"
+  style="background-image: url('{{ url_for('static', filename='image/bgr_banner.png') }}')"
+>
+  <div class="ml-10 w-[50%]">
+    <h2
+      class="text-5xl font-extrabold leading-tight mb-6 w-[50%] text-center m-auto text-[--primary-h2]"
+    >
+      HƯƠNG VỊ CÀ PHÊ THƠM NGON
+    </h2>
+    <p
+      class="text-3xl text-gray-700 leading-relaxed w-[55%] text-center m-auto pt-[20px]"
+    >
+      Khám phá sự tinh tế trong từng hạt cafe được lựa chọn cẩn thận và hòa mình
+      vào để đắm chìm trong những giọt cà phê
+    </p>
+    <div class="flex gap-8 justify-center pt-[32px]">
+      <button
+        class="px-10 py-4 bg-[#c54f36] text-white text-2xl rounded-xl hover:opacity-90 transition"
+      >
+        Khám phá ngay
+      </button>
+      <button
+        class="px-10 py-4 bg-[#372f2b] text-white text-2xl rounded-xl hover:opacity-90 transition"
+      >
+        Đặt hàng ngay
+      </button>
     </div>
+  </div>
 </div>
 <div class="p-8">
-    <div class="w-[80%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
-        <div class="bg-pink-100/50 rounded-lg p-6 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
-            <div class="flex-shrink-0">
-                <div class="w-32 h-32 md:w-40 md:h-40 bg-gray-300 rounded-lg overflow-hidden">
-                    <img src="/static/image/anhcaffe_1.jpeg" alt="Hình ảnh ly cà phê" class="w-full h-full"/>
-                </div>
-            </div>
-            <div class="text-left">
-                <p class="text-xl font-semibold text-orange-600 mb-1">Ưu đãi buổi sáng</p>
-                <h2 class="text-3xl font-bold text-gray-900 mb-3 leading-tight">
-                    Nhận ngay 10% giảm giá cho đơn hàng cà phê đầu tiên của bạn
-                </h2>
-                <p class="text-gray-600 text-xl mb-4">
-                    Thức dậy với mùi thơm quyến rũ của cà phê mới pha. Bắt đầu ngày mới của bạn với một cú hích và tận
-                    hưởng hương vị cà phê yêu thích của bạn với giá ưu đãi.
-                </p>
-                <a href="#" class="text-orange-600 font-semibold inline-flex items-center group text-xl">
-                    Mua cà phê trực tuyến
-
-                </a>
-            </div>
+  <div class="w-[80%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
+    <div
+      class="bg-pink-100/50 rounded-lg p-6 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6"
+    >
+      <div class="flex-shrink-0">
+        <div
+          class="w-32 h-32 md:w-40 md:h-40 bg-gray-300 rounded-lg overflow-hidden"
+        >
+          <img
+            src="/static/image/anhcaffe_1.jpeg"
+            alt="Hình ảnh ly cà phê"
+            class="w-full h-full"
+          />
         </div>
-        <div class="bg-pink-100/50 rounded-lg p-6 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
-            <div class="flex-shrink-0">
-                <div class="w-32 h-32 md:w-40 md:h-40 bg-gray-300 rounded-lg overflow-hidden">
-                    <img src="/static/image/anhcaffe_1.jpeg" alt="Hình ảnh ly cà phê" class="w-full h-full"/>
-                </div>
-            </div>
-            <div class="text-left">
-                <p class="text-xl font-semibold text-orange-600 mb-1">Ưu đãi buổi sáng</p>
-                <h2 class="text-3xl font-bold text-gray-900 mb-3 leading-tight">
-                    Nhận ngay 10% giảm giá cho đơn hàng cà phê đầu tiên của bạn
-                </h2>
-                <p class="text-gray-600 text-xl mb-4">
-                    Thức dậy với mùi thơm quyến rũ của cà phê mới pha. Bắt đầu ngày mới của bạn với một cú hích và tận
-                    hưởng hương vị cà phê yêu thích của bạn với giá ưu đãi.
-                </p>
-                <a href="#" class="text-orange-600 font-semibold inline-flex items-center group text-xl">
-                    Mua cà phê trực tuyến
-
-                </a>
-            </div>
-        </div>
-
+      </div>
+      <div class="text-left">
+        <p class="text-xl font-semibold text-orange-600 mb-1">
+          Ưu đãi buổi sáng
+        </p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-3 leading-tight">
+          Nhận ngay 10% giảm giá cho đơn hàng cà phê đầu tiên của bạn
+        </h2>
+        <p class="text-gray-600 text-xl mb-4">
+          Thức dậy với mùi thơm quyến rũ của cà phê mới pha. Bắt đầu ngày mới
+          của bạn với một cú hích và tận hưởng hương vị cà phê yêu thích của bạn
+          với giá ưu đãi.
+        </p>
+        <a
+          href="#"
+          class="text-orange-600 font-semibold inline-flex items-center group text-xl"
+        >
+          Mua cà phê trực tuyến
+        </a>
+      </div>
     </div>
+    <div
+      class="bg-pink-100/50 rounded-lg p-6 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6"
+    >
+      <div class="flex-shrink-0">
+        <div
+          class="w-32 h-32 md:w-40 md:h-40 bg-gray-300 rounded-lg overflow-hidden"
+        >
+          <img
+            src="/static/image/anhcaffe_1.jpeg"
+            alt="Hình ảnh ly cà phê"
+            class="w-full h-full"
+          />
+        </div>
+      </div>
+      <div class="text-left">
+        <p class="text-xl font-semibold text-orange-600 mb-1">
+          Ưu đãi buổi sáng
+        </p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-3 leading-tight">
+          Nhận ngay 10% giảm giá cho đơn hàng cà phê đầu tiên của bạn
+        </h2>
+        <p class="text-gray-600 text-xl mb-4">
+          Thức dậy với mùi thơm quyến rũ của cà phê mới pha. Bắt đầu ngày mới
+          của bạn với một cú hích và tận hưởng hương vị cà phê yêu thích của bạn
+          với giá ưu đãi.
+        </p>
+        <a
+          href="#"
+          class="text-orange-600 font-semibold inline-flex items-center group text-xl"
+        >
+          Mua cà phê trực tuyến
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="py-5">
-    <div class="container w-[86%]">
-        <h2 class="text-center fw-bolder text-uppercase mb-5 text-5xl text-[--primary-h2]">
-            SẢN PHẨM NỔI BẬT
-        </h2>
-        <div class="relative w-full"> <button id="prevButton" class="absolute top-1/2 left-0 transform -translate-x-1/2 -translate-y-1/2 p-3 bg-gray-700 text-white rounded-full z-10 opacity-75 hover:opacity-100 transition-opacity focus:outline-none" onclick="scrollProducts(-1)">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+  <div class="container w-[86%]">
+    <h2
+      class="text-center fw-bolder text-uppercase mb-5 text-5xl text-[--primary-h2]"
+    >
+      SẢN PHẨM NỔI BẬT
+    </h2>
+    <div class="relative w-full">
+      <button
+        id="prevButton"
+        class="absolute top-1/2 left-0 transform -translate-x-1/2 -translate-y-1/2 p-3 bg-gray-700 text-white rounded-full z-10 opacity-75 hover:opacity-100 transition-opacity focus:outline-none"
+        onclick="scrollProducts(-1)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
         </svg>
-    </button>
+      </button>
 
-    <div id="productSlider" class="flex overflow-x-auto overflow-y-hidden gap-4 hide-scrollbar p-2 snap-x snap-mandatory scroll-smooth items-stretch w-full">
-
-        <div class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg">
-            <div class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col">
-                <div class="relative">
-                    <img src="/static/image/cafe_menu_1.png" alt="Cà Phê Espresso" class="w-full"
-                         style="height: 250px; object-fit: cover;">
-                </div>
-                <div class="p-4 flex flex-col justify-between h-full flex-grow"> <div>
-                        <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
-                        <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
-                    </div>
-                    <div class="mt-4"> <button class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors
-                            bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50">
-                            Mua ngay
-                        </button>
-                    </div>
-                </div>
+      <div
+        id="productSlider"
+        class="flex overflow-x-auto overflow-y-hidden gap-4 hide-scrollbar p-2 snap-x snap-mandatory scroll-smooth items-stretch w-full"
+      >
+        <div
+          class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg"
+        >
+          <div
+            class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col"
+          >
+            <div class="relative">
+              <img
+                src="/static/image/cafe_menu_1.png"
+                alt="Cà Phê Espresso"
+                class="w-full"
+                style="height: 250px; object-fit: cover"
+              />
             </div>
+            <div class="p-4 flex flex-col justify-between h-full flex-grow">
+              <div>
+                <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
+                <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
+              </div>
+              <div class="mt-4">
+                <button
+                  class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50"
+                >
+                  Mua ngay
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg">
-            <div class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col">
-                <div class="relative">
-                    <img src="/static/image/cafe_menu_1.png" alt="Cà Phê Espresso" class="w-full" style="height: 250px; object-fit: cover;">
-                </div>
-                <div class="p-4 flex flex-col justify-between h-full flex-grow">
-                    <div>
-                        <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
-                        <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
-                    </div>
-                    <div class="mt-4">
-                        <button class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50">
-                            Mua ngay
-                        </button>
-                    </div>
-                </div>
+        <div
+          class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg"
+        >
+          <div
+            class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col"
+          >
+            <div class="relative">
+              <img
+                src="/static/image/cafe_menu_1.png"
+                alt="Cà Phê Espresso"
+                class="w-full"
+                style="height: 250px; object-fit: cover"
+              />
             </div>
+            <div class="p-4 flex flex-col justify-between h-full flex-grow">
+              <div>
+                <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
+                <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
+              </div>
+              <div class="mt-4">
+                <button
+                  class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50"
+                >
+                  Mua ngay
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg">
-            <div class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col">
-                <div class="relative">
-                    <img src="/static/image/cafe_menu_1.png" alt="Cà Phê Espresso" class="w-full" style="height: 250px; object-fit: cover;">
-                </div>
-                <div class="p-4 flex flex-col justify-between h-full flex-grow">
-                    <div>
-                        <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
-                        <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
-                    </div>
-                    <div class="mt-4">
-                        <button class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50">
-                            Mua ngay
-                        </button>
-                    </div>
-                </div>
+        <div
+          class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg"
+        >
+          <div
+            class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col"
+          >
+            <div class="relative">
+              <img
+                src="/static/image/cafe_menu_1.png"
+                alt="Cà Phê Espresso"
+                class="w-full"
+                style="height: 250px; object-fit: cover"
+              />
             </div>
+            <div class="p-4 flex flex-col justify-between h-full flex-grow">
+              <div>
+                <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
+                <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
+              </div>
+              <div class="mt-4">
+                <button
+                  class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50"
+                >
+                  Mua ngay
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg">
-            <div class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col">
-                <div class="relative">
-                    <img src="/static/image/cafe_menu_1.png" alt="Cà Phê Espresso" class="w-full" style="height: 250px; object-fit: cover;">
-                </div>
-                <div class="p-4 flex flex-col justify-between h-full flex-grow">
-                    <div>
-                        <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
-                        <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
-                    </div>
-                    <div class="mt-4">
-                        <button class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50">
-                            Mua ngay
-                        </button>
-                    </div>
-                </div>
+        <div
+          class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg"
+        >
+          <div
+            class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col"
+          >
+            <div class="relative">
+              <img
+                src="/static/image/cafe_menu_1.png"
+                alt="Cà Phê Espresso"
+                class="w-full"
+                style="height: 250px; object-fit: cover"
+              />
             </div>
+            <div class="p-4 flex flex-col justify-between h-full flex-grow">
+              <div>
+                <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
+                <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
+              </div>
+              <div class="mt-4">
+                <button
+                  class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50"
+                >
+                  Mua ngay
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg">
-            <div class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col">
-                <div class="relative">
-                    <img src="/static/image/cafe_menu_1.png" alt="Cà Phê Espresso" class="w-full" style="height: 250px; object-fit: cover;">
-                </div>
-                <div class="p-4 flex flex-col justify-between h-full flex-grow">
-                    <div>
-                        <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
-                        <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
-                    </div>
-                    <div class="mt-4">
-                        <button class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50">
-                            Mua ngay
-                        </button>
-                    </div>
-                </div>
+        <div
+          class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg"
+        >
+          <div
+            class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col"
+          >
+            <div class="relative">
+              <img
+                src="/static/image/cafe_menu_1.png"
+                alt="Cà Phê Espresso"
+                class="w-full"
+                style="height: 250px; object-fit: cover"
+              />
             </div>
+            <div class="p-4 flex flex-col justify-between h-full flex-grow">
+              <div>
+                <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
+                <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
+              </div>
+              <div class="mt-4">
+                <button
+                  class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50"
+                >
+                  Mua ngay
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-    </div>
-
-    <button id="nextButton" class="absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 p-3 bg-gray-700 text-white rounded-full z-10 opacity-75 hover:opacity-100 transition-opacity focus:outline-none" onclick="scrollProducts(1)">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      <button
+        id="nextButton"
+        class="absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 p-3 bg-gray-700 text-white rounded-full z-10 opacity-75 hover:opacity-100 transition-opacity focus:outline-none"
+        onclick="scrollProducts(1)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          />
         </svg>
-    </button>
-</div>
+      </button>
     </div>
+  </div>
 </div>
 
 <div class="container mx-auto px-4 w-[86%] pt-8">
-    <div class="py-8 rounded-lg shadow-md mb-12 mx-32" style="background-color: #d1b49a;">
-        <div class="grid grid-cols-4 gap-4 text-center text-sm px-4">
-            <div class="flex flex-col items-center">
-                <div class="w-[150px] h-[150px] rounded-full p-2 mb-3 shadow-lg flex justify-center items-center overflow-hidden bg-white">
-                    <img src="/static/image/cafe_menu_2.png" alt="Cà phê" class="w-full h-full object-contain" />
-                </div>
-                <h3 class="text-4xl font-semibold mb-2 text-gray-800">Cà phê</h3>
-                <p class="text-2xl text-gray-800 leading-relaxed max-w-xs mx-auto line-clamp-2">
-                    Sự kết hợp hoàn hảo giữa hạt cà phê Robusta & Arabica thượng hạng được trồng trên những vùng cao
-                    nguyên Việt Nam màu mỡ, qua những bí quyết rang...
-                </p>
-            </div>
-
-             <div class="flex flex-col items-center">
-                <div class="w-[150px] h-[150px] rounded-full p-2 mb-3 shadow-lg flex justify-center items-center overflow-hidden bg-white">
-                    <img src="/static/image/cafe_menu_2.png" alt="Cà phê" class="w-full h-full object-contain" />
-                </div>
-                <h3 class="text-4xl font-semibold mb-2 text-gray-800">Cà phê</h3>
-                <p class="text-2xl text-gray-800 leading-relaxed max-w-xs mx-auto line-clamp-2">
-                    Sự kết hợp hoàn hảo giữa hạt cà phê Robusta & Arabica thượng hạng được trồng trên những vùng cao
-                    nguyên Việt Nam màu mỡ, qua những bí quyết rang...
-                </p>
-            </div>
-
-             <div class="flex flex-col items-center">
-                <div class="w-[150px] h-[150px] rounded-full p-2 mb-3 shadow-lg flex justify-center items-center overflow-hidden bg-white">
-                    <img src="/static/image/cafe_menu_2.png" alt="Cà phê" class="w-full h-full object-contain" />
-                </div>
-                <h3 class="text-4xl font-semibold mb-2 text-gray-800">Cà phê</h3>
-                <p class="text-2xl text-gray-800 leading-relaxed max-w-xs mx-auto line-clamp-2">
-                    Sự kết hợp hoàn hảo giữa hạt cà phê Robusta & Arabica thượng hạng được trồng trên những vùng cao
-                    nguyên Việt Nam màu mỡ, qua những bí quyết rang...
-                </p>
-            </div>
-
-             <div class="flex flex-col items-center">
-                <div class="w-[150px] h-[150px] rounded-full p-2 mb-3 shadow-lg flex justify-center items-center overflow-hidden bg-white">
-                    <img src="/static/image/cafe_menu_2.png" alt="Cà phê" class="w-full h-full object-contain" />
-                </div>
-                <h3 class="text-4xl font-semibold mb-2 text-gray-800">Cà phê</h3>
-                <p class="text-2xl text-gray-800 leading-relaxed max-w-xs mx-auto line-clamp-2">
-                    Sự kết hợp hoàn hảo giữa hạt cà phê Robusta & Arabica thượng hạng được trồng trên những vùng cao
-                    nguyên Việt Nam màu mỡ, qua những bí quyết rang...
-                </p>
-            </div>
+  <div
+    class="py-8 rounded-lg shadow-md mb-12 mx-32"
+    style="background-color: #d1b49a"
+  >
+    <div class="grid grid-cols-4 gap-4 text-center text-sm px-4">
+      <div class="flex flex-col items-center">
+        <div
+          class="w-[150px] h-[150px] rounded-full p-2 mb-3 shadow-lg flex justify-center items-center overflow-hidden bg-white"
+        >
+          <img
+            src="/static/image/cafe_menu_2.png"
+            alt="Cà phê"
+            class="w-full h-full object-contain"
+          />
         </div>
+        <h3 class="text-4xl font-semibold mb-2 text-gray-800">Cà phê</h3>
+        <p
+          class="text-2xl text-gray-800 leading-relaxed max-w-xs mx-auto line-clamp-2"
+        >
+          Sự kết hợp hoàn hảo giữa hạt cà phê Robusta & Arabica thượng hạng được
+          trồng trên những vùng cao nguyên Việt Nam màu mỡ, qua những bí quyết
+          rang...
+        </p>
+      </div>
+
+      <div class="flex flex-col items-center">
+        <div
+          class="w-[150px] h-[150px] rounded-full p-2 mb-3 shadow-lg flex justify-center items-center overflow-hidden bg-white"
+        >
+          <img
+            src="/static/image/cafe_menu_2.png"
+            alt="Cà phê"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-4xl font-semibold mb-2 text-gray-800">Cà phê</h3>
+        <p
+          class="text-2xl text-gray-800 leading-relaxed max-w-xs mx-auto line-clamp-2"
+        >
+          Sự kết hợp hoàn hảo giữa hạt cà phê Robusta & Arabica thượng hạng được
+          trồng trên những vùng cao nguyên Việt Nam màu mỡ, qua những bí quyết
+          rang...
+        </p>
+      </div>
+
+      <div class="flex flex-col items-center">
+        <div
+          class="w-[150px] h-[150px] rounded-full p-2 mb-3 shadow-lg flex justify-center items-center overflow-hidden bg-white"
+        >
+          <img
+            src="/static/image/cafe_menu_2.png"
+            alt="Cà phê"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-4xl font-semibold mb-2 text-gray-800">Cà phê</h3>
+        <p
+          class="text-2xl text-gray-800 leading-relaxed max-w-xs mx-auto line-clamp-2"
+        >
+          Sự kết hợp hoàn hảo giữa hạt cà phê Robusta & Arabica thượng hạng được
+          trồng trên những vùng cao nguyên Việt Nam màu mỡ, qua những bí quyết
+          rang...
+        </p>
+      </div>
+
+      <div class="flex flex-col items-center">
+        <div
+          class="w-[150px] h-[150px] rounded-full p-2 mb-3 shadow-lg flex justify-center items-center overflow-hidden bg-white"
+        >
+          <img
+            src="/static/image/cafe_menu_2.png"
+            alt="Cà phê"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-4xl font-semibold mb-2 text-gray-800">Cà phê</h3>
+        <p
+          class="text-2xl text-gray-800 leading-relaxed max-w-xs mx-auto line-clamp-2"
+        >
+          Sự kết hợp hoàn hảo giữa hạt cà phê Robusta & Arabica thượng hạng được
+          trồng trên những vùng cao nguyên Việt Nam màu mỡ, qua những bí quyết
+          rang...
+        </p>
+      </div>
     </div>
+  </div>
 
-    <div class="bg-white pt-16">
-        <h2 class="text-center fw-bolder text-uppercase mb-5 text-5xl text-[--primary-h2]">
-            lựa chọn dành cho bạn
-        </h2>
+  <div class="bg-white pt-16">
+    <h2
+      class="text-center fw-bolder text-uppercase mb-5 text-5xl text-[--primary-h2]"
+    >
+      lựa chọn dành cho bạn
+    </h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
-
-            <div class="flex items-start mb-8 pl-16 pr-4 items-center" >
-                <div class="flex-shrink-0 w-40 h-40 rounded-full border border-gray-300 overflow-hidden">
-                    <img src="/static/image/cafe_menu_3.png" alt="Cà phê Latte" class="w-full h-full object-cover"/>
-                </div>
-                <div class="flex-grow pl-4">
-                    <div class="flex justify-between items-start mb-1 border-b border-dashed border-gray-300 pb-1">
-                        <span class="text-3xl font-bold text-red-600 flex items-center">
-                            <span class="text-orange-500 mr-2 text-2xl">◆</span> LATTE
-                        </span>
-                        <span class="text-3xl font-bold text-gray-900">99000đ</span>
-                    </div>
-                    <p class="text-2xl text-gray-600 pt-1">
-                        Ly cà phê sữa ngọt ngào đến khó quên! eo èo eo eeeeeeèe è nha...
-                    </p>
-                </div>
-            </div>
-
-
-
-
-
+      <div class="flex items-start mb-8 pl-16 pr-4 items-center">
+        <div
+          class="flex-shrink-0 w-40 h-40 rounded-full border border-gray-300 overflow-hidden"
+        >
+          <img
+            src="/static/image/cafe_menu_3.png"
+            alt="Cà phê Latte"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex-grow pl-4">
+          <div
+            class="flex justify-between items-start mb-1 border-b border-dashed border-gray-300 pb-1"
+          >
+            <span class="text-3xl font-bold text-red-600 flex items-center">
+              <span class="text-orange-500 mr-2 text-2xl">◆</span> LATTE
+            </span>
+            <span class="text-3xl font-bold text-gray-900">99000đ</span>
+          </div>
+          <p class="text-2xl text-gray-600 pt-1">
+            Ly cà phê sữa ngọt ngào đến khó quên! eo èo eo eeeeeeèe è nha...
+          </p>
+        </div>
+      </div>
     </div>
 
     <div class="text-center mt-8 pb-12">
-        <button class="text-xl bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded shadow-lg transition duration-300">
-            Xem thêm
-        </button>
+      <button
+        class="text-xl bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded shadow-lg transition duration-300"
+      >
+        Xem thêm
+      </button>
     </div>
-    </div>
-
-
+  </div>
 </div>
 
 <div class="py-16 px-4">
+  <h2
+    class="text-center fw-bolder text-uppercase mb-5 text-5xl text-[--primary-h2]"
+  >
+    Câu chuyện của chúng tôi
+  </h2>
 
-     <h2 class="text-center fw-bolder text-uppercase mb-5 text-5xl text-[--primary-h2]">
-            Câu chuyện của chúng tôi
-        </h2>
-
-    <div class="relative max-w-3xl mx-auto h-[35rem] md:h-[40rem] lg:h-[45rem]">
-        <div class="absolute inset-0 w-full h-full p-8">
-            <div class="w-full h-full rounded-xl shadow-2xl overflow-hidden"
-                 style="background-color: #D6C7B7; border: 1px solid #C5B6A8;">
-                <img
-                        src="placeholder-group-photo.jpg"
-                        alt="Nhóm người đang trò chuyện vui vẻ"
-                        class="w-full h-full object-cover opacity-90"
-                >
-            </div>
-        </div>
-
-        <div class="absolute z-10 w-40 h-40 -top-8 -left-2 md:-left-16 bg-white p-2 rounded-lg shadow-xl transform rotate-3">
-            <img
-                    src="placeholder-coffee-art.jpg"
-                    alt="Các cốc cà phê nghệ thuật"
-                    class="w-full h-full object-cover rounded-md"
-            >
-        </div>
-
-        <div class="absolute z-10 w-40 h-40 bottom-16 -left-2 md:-left-12 bg-white p-2 rounded-lg shadow-xl transform -rotate-2">
-            <img
-                    src="placeholder-matcha-powder.jpg"
-                    alt="Bột trà xanh hoặc nguyên liệu"
-                    class="w-full h-full object-cover rounded-md"
-            >
-        </div>
-
-        <div class="absolute z-10 w-40 h-40 bottom-16 -right-2 md:-right-12 bg-white p-2 rounded-lg shadow-xl transform rotate-3">
-            <img
-                    src="placeholder-coffee-cherries.jpg"
-                    alt="Tay đang cầm những quả cà phê chín"
-                    class="w-full h-full object-cover rounded-md"
-            >
-        </div>
-
+  <div class="relative max-w-3xl mx-auto h-[35rem] md:h-[40rem] lg:h-[45rem]">
+    <div class="absolute inset-0 w-full h-full p-8">
+      <div
+        class="w-full h-full rounded-xl shadow-2xl overflow-hidden"
+        style="background-color: #d6c7b7; border: 1px solid #c5b6a8"
+      >
+        <img
+          src="placeholder-group-photo.jpg"
+          alt="Nhóm người đang trò chuyện vui vẻ"
+          class="w-full h-full object-cover opacity-90"
+        />
+      </div>
     </div>
+
+    <div
+      class="absolute z-10 w-40 h-40 -top-8 -left-2 md:-left-16 bg-white p-2 rounded-lg shadow-xl transform rotate-3"
+    >
+      <img
+        src="placeholder-coffee-art.jpg"
+        alt="Các cốc cà phê nghệ thuật"
+        class="w-full h-full object-cover rounded-md"
+      />
+    </div>
+
+    <div
+      class="absolute z-10 w-40 h-40 bottom-16 -left-2 md:-left-12 bg-white p-2 rounded-lg shadow-xl transform -rotate-2"
+    >
+      <img
+        src="placeholder-matcha-powder.jpg"
+        alt="Bột trà xanh hoặc nguyên liệu"
+        class="w-full h-full object-cover rounded-md"
+      />
+    </div>
+
+    <div
+      class="absolute z-10 w-40 h-40 bottom-16 -right-2 md:-right-12 bg-white p-2 rounded-lg shadow-xl transform rotate-3"
+    >
+      <img
+        src="placeholder-coffee-cherries.jpg"
+        alt="Tay đang cầm những quả cà phê chín"
+        class="w-full h-full object-cover rounded-md"
+      />
+    </div>
+  </div>
 </div>
 {% endblock %}
