@@ -86,3 +86,35 @@ def create_invoice():
     return jsonify({
         "success" : True
     })
+
+
+from flask import render_template, request, redirect
+
+
+
+def warehouse_page():
+
+    warehouses = [
+        {'id': 1, 'name': 'Kho Tổng'},
+        {'id': 2, 'name': 'Kho Quầy'}
+    ]
+    ingredients = [
+        {'id': 1, 'name': 'Cafe hạt', 'unit': 'kg'},
+        {'id': 2, 'name': 'Sữa tươi', 'unit': 'lít'},
+        {'id': 3, 'name': 'Đường', 'unit': 'kg'}
+    ]
+
+    return render_template('admin/warehouse.html',
+                           warehouses=warehouses,
+                           ingredients=ingredients)
+
+
+def create_ticket():
+    if request.method == 'POST':
+        ticket_type = request.form.get('ticket_type')
+        ingr_id = request.form.get('ingredient_id')
+        qty = request.form.get('quantity')
+
+        print(f"Xử lý phiếu {ticket_type} cho món {ingr_id} số lượng {qty}")
+
+        return redirect('/admin/warehouse')

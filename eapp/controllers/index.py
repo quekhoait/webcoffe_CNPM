@@ -1,6 +1,6 @@
 from flask import render_template, session, request, redirect, url_for
 from eapp import db
-# from eapp.models.Order import Order, OrderDetail
+from eapp.models.Order import Order, OrderDetail
 from datetime import datetime
 
 from sqlalchemy import desc #hàm sx giảm dần
@@ -84,18 +84,12 @@ from flask import render_template, request
 # ]
 
 
-def load_login():
-    return render_template('page/login.html')
-  
-def load_regis():
-    return render_template('page/register.html')
-  
-def load_home():
-    return render_template('page/home.html', is_home=True)
 
-def load_about_us():
+def loadHome():
+    return render_template('page/home.html')
+
+def aboutUs():
     return render_template('page/about_us.html')
-
 
 
 def checkout_page():
@@ -208,3 +202,21 @@ def load_my_cart():
     return render_template('page/cart.html')
 
 
+
+
+
+def product_detail(id):
+
+    product = Dish.query.get(id)
+
+    if not product:
+        return "Không tìm thấy sản phẩm", 404
+
+    related_products = Dish.query.filter(
+        Dish.dish_category_id == product.dish_category_id,
+        Dish.id != product.id
+    ).limit(4).all()
+
+    return render_template('page/product_detail.html',
+                           product=product,
+                           related_products=related_products)
