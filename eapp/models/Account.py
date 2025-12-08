@@ -4,7 +4,7 @@ from sqlalchemy import Column, ForeignKey, String
 from eapp.models.BaseModel import BaseModel
 from sqlalchemy.orm import relationship
 
-class Account(BaseModel):
+class Account(BaseModel, UserMixin):
     username = Column(String(100), nullable=False, unique=True)
     phone = Column(String(25), nullable=False, unique=True)
     name = Column(String(100))

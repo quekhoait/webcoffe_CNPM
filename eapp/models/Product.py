@@ -56,7 +56,9 @@ class Product(BaseModel):
     rating_score = Column(Float, default=5)
     rating_count = Column(Integer, default=0)
     dish_category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
+
     ingredients = relationship('ProductRecipe', backref='product', lazy=True)
+    serialize_rules = ('-category',)
 
     def __str__(self):
         return self.name

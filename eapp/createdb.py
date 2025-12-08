@@ -96,7 +96,7 @@ roles = [
 accounts = [
     {
         "username": "admin",
-        "password": "123",
+        "password": "123456",
         "phone": "0123456789",
         "name": "Huy dep trai",
         "role_id": 1
