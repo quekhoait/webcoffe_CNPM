@@ -78,6 +78,45 @@ rules_seed = [
     }
 ]
 
+invoice_status_seed = [
+    {"name": "Chờ xử lý", "code": "PENDING", "description": "Hóa đơn mới được tạo và đang chờ xử lý."},
+    {"name": "Đã thanh toán", "code": "PAID", "description": "Hóa đơn đã được thanh toán đầy đủ."},
+    {"name": "Đã hủy", "code": "CANCELLED", "description": "Hóa đơn đã bị hủy và không còn hiệu lực."}
+    # {"name": "Đang xử lý", "description": "Hóa đơn mới được tạo và đang chờ xử lý."},
+    # {"name": "Đã thanh toán", "description": "Hóa đơn đã được thanh toán đầy đủ."},
+    # {"name": "Đã hủy", "description": "Hóa đơn đã bị hủy và không còn hiệu lực."}
+]
+
+roles = [
+    {"name": "Admin", "description": "Quản trị viên hệ thống với toàn quyền."},
+    {"name": "Cashier", "description": "Nhân viên thu ngân, chịu trách nhiệm xử lý thanh toán."},
+    {"name": "Staff", "description": "Nhân viên phục vụ và hỗ trợ khách hàng."}
+]
+
+accounts = [
+    {
+        "username": "admin",
+        "password": "123",
+        "phone": "0123456789",
+        "name": "Huy dep trai",
+        "role_id": 1
+    },
+    {
+        "username": "cashier",
+        "password": "123",
+        "phone" : "0987654321",
+        "name": "Nhân Viên Thu Ngân 1",
+        "role_id": 2
+    },
+    {
+        "username": "staff",
+        "password": "staffpass",
+        "phone" : "0912345678",
+        "name": "Nhân Viên Phục Vụ 1",
+        "role_id": 3
+    }
+]
+
 if __name__ == "__main__":
     with app.app_context():
         db.drop_all()
@@ -94,6 +133,26 @@ if __name__ == "__main__":
             created_categories[cat_name] = cat
 
         db.session.commit()
+
+
+
+        for role_data in roles:
+            from eapp.models.Role import Role
+            role = Role(**role_data)
+            db.session.add(role)
+
+        db.session.commit()
+
+        # Seed accounts
+        for acc_data in accounts:
+            from eapp.models.Account import Account
+            acc = Account(**acc_data)
+            db.session.add(acc)
+        db.session.commit()
+
+
+
+
 
         # Seed dishes
         for cat_name, items in cafe_dishes.items():

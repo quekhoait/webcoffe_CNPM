@@ -7,54 +7,52 @@
 {% block content %}
 
 <div class="flex bg-amber-100">
-    <div class="basis-[30%] h-dvh bg-white">
-        <div class="p-2">
-            <!-- Header -->
-            {% include 'cashier/cashier_info.html' %}
+    <div class="basis-[30%] h-dvh bg-white flex flex-col p-2">
+        <!-- Header -->
+        {% include 'cashier/cashier_info.html' %}
 
-            <!-- tabs menu -->
-            <div class="border-b border-gray-400 w-full">
-                <ul class="text-amber-900 flex flex-wrap text-xl font-medium text-center " id="default-styled-tab"
-                    data-tabs-toggle="#default-styled-tab-content"
-                    data-tabs-active-classes="border-amber-900 text-amber-900 hover:text-fg-brand border-amber-900 hover:border-amber-900"
-                    data-tabs-inactive-classes="border-transparent text-gray-800 hover:text-fg-subtle hover:border-gray-300"
-                    role="tablist">
-                    <li class="w-1/2 " role="presentation">
-                        <button class=" w-full inline-block p-2 border-b-2 rounded-t-base" id="profile-styled-tab"
-                            data-tabs-target="#styled-profile" type="button" role="tab" aria-controls="profile"
-                            aria-selected="false">Đơn hàng Online</button>
-                    </li>
-                    <li class=" w-1/2" role="presentation">
-                        <button
-                            class="inline-block p-2 w-full border-b-2 rounded-t-base hover:text-fg-brand hover:border-brand"
-                            id="dashboard-styled-tab" data-tabs-target="#styled-dashboard" type="button" role="tab"
-                            aria-controls="dashboard" aria-selected="false">Dashboard Bàn</button>
-                    </li>
-                </ul>
-            </div>
-
-
-            {% include 'cashier/cashier_invoice_status.html' %}
-
-            <div id="default-styled-tab-content">
-                <div class="hidden rounded-base bg-neutral-secondary-soft" id="styled-profile" role="tabpanel"
-                    aria-labelledby="profile-tab">
-                    <div class="flex flex-col space-y-3">
-                        {% include 'cashier/cashier_invoice_item.html' %}
-                    </div>
-                </div>
-                <div class="hidden p-4 rounded-base bg-neutral-secondary-soft" id="styled-dashboard" role="tabpanel"
-                    aria-labelledby="dashboard-tab">
-                    <p class="text-sm text-body">This is some placeholder content the <strong
-                            class="font-medium text-heading">Dashboard tab's associated content</strong>. Clicking
-                        another tab will
-                        toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the
-                        content
-                        visibility and styling.</p>
-                </div>
-            </div>
-
+        <!-- tabs menu -->
+        <div class="border-b border-gray-400 w-full">
+            <ul class="text-amber-900 flex flex-wrap text-xl font-medium text-center " id="default-styled-tab"
+                data-tabs-toggle="#default-styled-tab-content"
+                data-tabs-active-classes="border-amber-900 text-amber-900 hover:text-fg-brand border-amber-900 hover:border-amber-900"
+                data-tabs-inactive-classes="border-transparent text-gray-800 hover:text-fg-subtle hover:border-gray-300"
+                role="tablist">
+                <li class="w-1/2 " role="presentation">
+                    <button class=" w-full inline-block p-2 border-b-2 rounded-t-base" id="profile-styled-tab"
+                        data-tabs-target="#styled-profile" type="button" role="tab" aria-controls="profile"
+                        aria-selected="false">Đơn hàng Online</button>
+                </li>
+                <li class=" w-1/2" role="presentation">
+                    <button
+                        class="inline-block p-2 w-full border-b-2 rounded-t-base hover:text-fg-brand hover:border-brand"
+                        id="dashboard-styled-tab" data-tabs-target="#styled-dashboard" type="button" role="tab"
+                        aria-controls="dashboard" aria-selected="false">Dashboard Bàn</button>
+                </li>
+            </ul>
         </div>
+
+
+        {% include 'cashier/cashier_invoice_status.html' %}
+
+        <div id="default-styled-tab-content" class="flex-1 overflow-y-auto scrollbar-none">
+            <div class="hidden rounded-base bg-neutral-secondary-soft" id="styled-profile" role="tabpanel"
+                aria-labelledby="profile-tab">
+                <div class="flex flex-col space-y-3">
+                    {% include 'cashier/cashier_invoice_item.html' %}
+                </div>
+            </div>
+            <div class="hidden p-4 rounded-base bg-neutral-secondary-soft" id="styled-dashboard" role="tabpanel"
+                aria-labelledby="dashboard-tab">
+                <p class="text-sm text-body">This is some placeholder content the <strong
+                        class="font-medium text-heading">Dashboard tab's associated content</strong>. Clicking
+                    another tab will
+                    toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the
+                    content
+                    visibility and styling.</p>
+            </div>
+        </div>
+
     </div>
     <div class="basis-[70%] h-dvh p-3">
         {% include 'cashier/invoice_detail.html' %}
@@ -66,6 +64,4 @@
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
-
-<!-- <script src="{{ url_for('static', filename='javascript/cashier/tabs.js') }}"></script> -->
 {% endblock %}

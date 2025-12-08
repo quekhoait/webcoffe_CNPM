@@ -1,3 +1,4 @@
+# from enum import Enum
 import re
 from enum import Enum
 from sqlalchemy import Column, Float, String, Enum as SqlEnum, ForeignKey
@@ -11,9 +12,13 @@ class InvoiceStatusEnum(str, Enum):
     SHIPPING = "shipping"
     DELIVERED = "delivered"
 
+class PaymentMethod(Enum):
+    CASH = 'Tiền mặt'
+    BANK_TRANSFER = 'Chuyển khoản'
+    OTHER = 'Khác'
 
 class Invoice(BaseModel):
-    cashier_id = Column(ForeignKey('account.id'), nullable=False)
+    cashier_id = Column(ForeignKey('account.id'), nullable=True)
     customer_id = Column(ForeignKey('account.id'))
     staff_id = Column(ForeignKey('account.id'), nullable=False)
     total_amount = Column(Float, nullable=False)

@@ -33,8 +33,9 @@ app.add_url_rule('/staff','index2',StaffController.load_staff)
 app.add_url_rule('/api/dish','dish',ProductController.list)
 # staff
 app.add_url_rule('/staff','staff',StaffController.load_staff)
-app.add_url_rule('/api/order','add_order',StaffController.addToOrder, methods=['post'])
+app.add_url_rule('/api/order','add_order',StaffController.addItemToInvoice, methods=['post'])
 app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice, methods=['post'])
+app.add_url_rule('/api/remove-item','remove_item',StaffController.removeItemFromInvoice, methods=['post'])
 
 
 
@@ -43,3 +44,5 @@ app.add_url_rule('/menu', 'menu', index.menu_page, methods=['GET'])
 #thanh toan
 app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
 
+#cashier
+app.add_url_rule('/cashier','cashier',CashierController.load_cashier)

@@ -1,0 +1,31 @@
+{% if invoice_item %}
+<div id="invoice-item-{{ invoice_item.id }}" class="text-2xl grid grid-cols-6 mt-3 p-2 items-center border-b border-gray-400">
+    <div class="col-span-3">
+        <p class="font-semibold text-gray-800">{{ invoice_item.name }}</p>
+        <span class="text-xl text-gray-600">{{ invoice_item.price }}đ</span>
+    </div>
+
+    <div class="col-span-2 flex items-center justify-center">
+        <button class="bg-gray-200 w-10 h-10 rounded-full flex justify-center items-center"
+        onclick="addToOrder({{ invoice_item.id }}, '{{ invoice_item.name }}', {{ invoice_item.price }}, -1)"
+        ><span
+                class="text-xl">-</span>
+        </button>
+        <input type="text" value="{{ invoice_item.quantity }}"
+            class="w-16 h-8 text-center font-semibold border-none focus:ring-0 bg-transparent text-gray-800 "
+            onblur="inputQuantity({{ invoice_item.id }}, '{{ invoice_item.name }}', {{ invoice_item.price }}, this)">
+        <button class="bg-gray-200 w-10 h-10 rounded-full flex justify-center items-center"
+            onclick="addToOrder({{ invoice_item.id }}, '{{ invoice_item.name }}', {{ invoice_item.price }}, 1)"
+        ><span>+</span>
+        </button>
+    </div>
+
+    <div class="col-span-1 text-right">
+        <span id="invoice-item-price-{{ invoice_item.id }}">{{ invoice_item.quantity * invoice_item.price }} đ</span>
+        <button class="text-red-500 hover:text-red-700"
+            onclick="removeItemFromInvoice({{ invoice_item.id }})">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </div>
+</div>
+{%  endif %}
