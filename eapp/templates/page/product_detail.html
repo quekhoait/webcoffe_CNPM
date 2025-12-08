@@ -1,0 +1,98 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}{{ product.name }} - The Coffee House{% endblock %}
+
+{% block content %}
+<div class="bg-[#fcf9eb] min-h-screen py-10">
+    <div class="container mx-auto px-6 w-[95%] md:w-[86%]">
+        
+        <div class="text-xl text-gray-500 mb-8 font-medium">
+            <a href="/" class="hover:text-[#7c5c56]">Trang chủ</a> <span class="mx-2">/</span>
+            <a href="/menu" class="hover:text-[#7c5c56]">Thực đơn</a> <span class="mx-2">/</span>
+            <span class="text-[#7c5c56] font-bold">{{ product.name }}</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-8 rounded-3xl shadow-sm">
+            
+            <div class="space-y-4">
+                <div class="aspect-square rounded-2xl overflow-hidden bg-gray-100 border border-gray-100">
+                    <img src="{{ product.image if product.image else 'https://via.placeholder.com/500' }}" 
+                         alt="{{ product.name }}" 
+                         class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                </div>
+            </div>
+
+            <div class="flex flex-col justify-center">
+                <h1 class="text-5xl font-extrabold text-[#372f2b] mb-4 leading-tight">
+                    {{ product.name }}
+                </h1>
+                
+                <p class="text-3xl font-bold text-[#c54f36] mb-6">
+                    {{ "{:,.0f}".format(product.price) }}đ
+                </p>
+
+                <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                    {{ product.description if product.description else 'Hương vị tuyệt hảo, được chế biến từ những nguyên liệu tốt nhất.' }}
+                </p>
+
+                <div class="flex items-center gap-6 mb-8">
+                    <span class="text-xl font-bold text-gray-700">Số lượng:</span>
+                    <div class="flex items-center border border-gray-300 rounded-full px-4 py-2">
+                        <button onclick="changeQty(-1)" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#c54f36] text-2xl font-bold">-</button>
+                        <input type="number" id="qty" value="1" min="1" class="w-12 text-center text-2xl font-bold text-[#372f2b] bg-transparent border-none focus:ring-0 outline-none">
+                        <button onclick="changeQty(1)" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#c54f36] text-2xl font-bold">+</button>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="addToCartNow({{ product.id }})" 
+                        class="flex-1 bg-[#c54f36] hover:bg-[#a03d28] text-white text-2xl font-bold py-4 rounded-xl shadow-lg transition flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ
+                    </button>
+                    </div>
+            </div>
+        </div>
+
+        <div class="mt-16">
+            <h2 class="text-4xl font-bold text-[#372f2b] mb-8">Bạn cũng có thể thích</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {% for item in related_products %}
+                <a href="/product/{{ item.id }}" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-lg transition group">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-4">
+                        <img src="{{ item.image }}" class="w-full h-full object-cover group-hover:scale-105 transition">
+                    </div>
+                    <h3 class="text-xl font-bold text-[#372f2b] mb-1 line-clamp-1">{{ item.name }}</h3>
+                    <p class="text-lg font-bold text-[#c54f36]">{{ "{:,.0f}".format(item.price) }}đ</p>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function changeQty(amount) {
+        let input = document.getElementById('qty');
+        let newVal = parseInt(input.value) + amount;
+        if (newVal >= 1) input.value = newVal;
+    }
+
+    function addToCartNow(productId) {
+        let quantity = parseInt(document.getElementById('qty').value);
+
+        fetch('/api/cart/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: productId, quantity: quantity }) 
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                alert('Đã thêm ' + quantity + ' sản phẩm vào giỏ!');
+                location.reload();
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -26,9 +26,9 @@ class Order(BaseModel):
 
 
 class OrderDetail(BaseModel):
-    __tablename__ = 'ChiTietHoaDon'
+    __tablename__ = 'ChiTietHonDon'
 
-    id = Column('idChiTietHoaDon', Integer, primary_key=True)
+    id = Column('idChiTietHonDon', Integer, primary_key=True)
     quantity = Column('SoLuong', Integer, default=1)
     price = Column('DonGia', Float)
     total_price = Column('ThanhTien', Float)

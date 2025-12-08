@@ -217,3 +217,20 @@ def menu_page():
                            current_cate_id=int(category_id) if category_id else None,
                            current_filter=filter_type,
                            search_query=search_query)
+
+
+def product_detail(id):
+
+    product = Dish.query.get(id)
+
+    if not product:
+        return "Không tìm thấy sản phẩm", 404
+
+    related_products = Dish.query.filter(
+        Dish.dish_category_id == product.dish_category_id,
+        Dish.id != product.id
+    ).limit(4).all()
+
+    return render_template('page/product_detail.html',
+                           product=product,
+                           related_products=related_products)

@@ -1,0 +1,143 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Quản Lý Kho - The Coffee House{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen bg-gray-100">
+    
+    <aside class="w-64 bg-white shadow-md hidden md:block">
+        <div class="p-6">
+            <div class="flex items-center gap-3 mb-8">
+                <img src="https://via.placeholder.com/40" class="rounded-full">
+                <div>
+                    <h4 class="font-bold text-gray-800">Quản Lý</h4>
+                    <p class="text-xs text-gray-500">Admin</p>
+                </div>
+            </div>
+            <nav class="space-y-2">
+                <a href="/" class="block px-4 py-3 text-gray-600 hover:bg-yellow-50 hover:text-yellow-600 rounded-lg transition"><i class="fa-solid fa-house mr-3"></i>Trang chủ</a>
+                <a href="/admin/warehouse" class="block px-4 py-3 bg-yellow-100 text-yellow-700 font-bold rounded-lg"><i class="fa-solid fa-warehouse mr-3"></i>Quản lý Kho</a>
+                <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-yellow-50 hover:text-yellow-600 rounded-lg transition"><i class="fa-solid fa-file-invoice mr-3"></i>Đơn hàng</a>
+            </nav>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-8 overflow-y-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Quản lý Kho Nguyên liệu</h1>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <div class="lg:col-span-4">
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-2">Lập Phiếu Kho</h2>
+                    
+                    <form action="/admin/warehouse/create-ticket" method="POST" class="space-y-5">
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-600 mb-2">Loại phiếu (*)</label>
+                            <select name="ticket_type" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none" onchange="toggleWarehouseInput(this.value)">
+                                <option value="NHAP">Nhập Kho (Import)</option>
+                                <option value="XUAT">Xuất Kho (Export)</option>
+                                <option value="DIEU_CHINH">Điều Chỉnh (Adjust)</option>
+                                <option value="CHUYEN">Chuyển Kho (Transfer)</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4" id="warehouse-section">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-600 mb-2">Kho Nguồn</label>
+                                <select name="source_warehouse" class="w-full p-3 border border-gray-300 rounded-lg outline-none">
+                                    {% for wh in warehouses %}
+                                    <option value="{{ wh.id }}">{{ wh.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div id="dest-warehouse-div" class="hidden">
+                                <label class="block text-sm font-semibold text-gray-600 mb-2">Kho Đích</label>
+                                <select name="dest_warehouse" class="w-full p-3 border border-gray-300 rounded-lg outline-none">
+                                    {% for wh in warehouses %}
+                                    <option value="{{ wh.id }}">{{ wh.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-600 mb-2">Nguyên liệu (*)</label>
+                            <div class="flex gap-2">
+                                <select name="ingredient_id" class="flex-1 p-3 border border-gray-300 rounded-lg outline-none">
+                                    {% for item in ingredients %}
+                                    <option value="{{ item.id }}">{{ item.name }} ({{ item.unit }})</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="number" name="quantity" placeholder="SL" class="w-20 p-3 border border-gray-300 rounded-lg outline-none text-center" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-600 mb-2">Ghi chú</label>
+                            <textarea name="note" rows="3" class="w-full p-3 border border-gray-300 rounded-lg outline-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg shadow-md transition">
+                            Xác Nhận
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 space-y-8">
+                
+                <div class="bg-red-50 border border-red-200 p-4 rounded-xl flex items-start gap-3">
+                    <div class="text-red-500 mt-1"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div>
+                        <h4 class="font-bold text-red-700">Cảnh báo tồn kho thấp</h4>
+                        <p class="text-sm text-red-600">Sắp hết hàng: <span class="font-semibold">Cafe hạt (4kg), Sữa tươi (2 lit)</span>.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Tồn kho Hiện tại</h2>
+                    <table class="w-full text-left">
+                        <thead class="text-gray-500 border-b border-gray-100">
+                            <tr>
+                                <th class="pb-3 pl-2">Tên nguyên liệu</th>
+                                <th class="pb-3 text-center">Tồn kho</th>
+                                <th class="pb-3 text-center">Đơn vị</th>
+                                <th class="pb-3 text-right pr-2">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <tr class="border-b border-gray-50 hover:bg-gray-50">
+                                <td class="py-4 pl-2 font-medium">Cafe hạt</td>
+                                <td class="py-4 text-center font-bold text-red-600">4</td>
+                                <td class="py-4 text-center text-gray-500">kg</td>
+                                <td class="py-4 text-right pr-2"><span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded">Sắp hết</span></td>
+                            </tr>
+                            <tr class="border-b border-gray-50 hover:bg-gray-50">
+                                <td class="py-4 pl-2 font-medium">Đường</td>
+                                <td class="py-4 text-center font-bold">15</td>
+                                <td class="py-4 text-center text-gray-500">kg</td>
+                                <td class="py-4 text-right pr-2"><span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded">Còn hàng</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function toggleWarehouseInput(type) {
+        const destDiv = document.getElementById('dest-warehouse-div');
+        if (type === 'CHUYEN') {
+            destDiv.classList.remove('hidden');
+        } else {
+            destDiv.classList.add('hidden');
+        }
+    }
+</script>
+{% endblock %}

@@ -21,3 +21,9 @@ app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice,
 app.add_url_rule('/menu', 'menu', index.menu_page, methods=['GET'])
 #thanh toan
 app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
+
+app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
+
+
+app.add_url_rule('/admin/warehouse', 'warehouse', StaffController.warehouse_page)
+app.add_url_rule('/admin/warehouse/create-ticket', 'create_ticket', StaffController.create_ticket, methods=['POST'])
