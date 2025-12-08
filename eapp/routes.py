@@ -12,8 +12,6 @@ app.add_url_rule('/api/login','login_account',AccountController.login, methods=[
 app.add_url_rule('/regis','register', index.load_regis)
 app.add_url_rule('/api/regis','created_account',AccountController.register, methods=['POST'])
 
-app.add_url_rule('/about-us','about-us',index.aboutUs)
-app.add_url_rule('/','index',index.loadHome)
 
 app.add_url_rule('/logout','logout', AccountController.logout)
 
@@ -47,12 +45,12 @@ app.add_url_rule('/api/remove-item','remove_item',StaffController.removeItemFrom
 app.add_url_rule('/menu', 'menu', index.load_menu, methods=['GET'])
 app.add_url_rule('/api/get_product', 'get_product', ProductController.get_product, methods=['GET'])
 #thanh toan
-app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
+# app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
 
 #cashier
 app.add_url_rule('/cashier','cashier',CashierController.load_cashier)
 
-app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
+# app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
 
 
 app.add_url_rule('/admin/warehouse', 'warehouse', StaffController.warehouse_page)
