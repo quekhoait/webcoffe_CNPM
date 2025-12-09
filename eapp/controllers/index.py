@@ -1,11 +1,11 @@
 from flask import render_template, session, request, redirect, url_for
 from eapp import db
-from eapp.models.Order import Order, OrderDetail
 from datetime import datetime
 
 from sqlalchemy import desc #hàm sx giảm dần
-from eapp.models.Product import Dish
-from eapp.models.Category import DishCategory
+
+from eapp.dao import CategoryDao, ProductDao
+from eapp.models import Category
 from flask import render_template, request
 
 
@@ -85,16 +85,16 @@ from flask import render_template, request
 
 def load_login():
     return render_template('page/login.html')
-  
+
+
 def load_regis():
     return render_template('page/register.html')
-  
+
 def load_home():
-    return render_template('page/home.html', is_home=True)
+    return render_template('page/home.html')
 
 def load_about_us():
     return render_template('page/about_us.html')
-
 
 
 def checkout_page():
@@ -181,42 +181,15 @@ def checkout_page():
 
 
 
-def menu_page():
-    # /menu?q=cafe&category=1&filter=new
-    search_query = request.args.get('q', '')  #từ khóa tìm kiếm
-    category_id = request.args.get('category')  #id danh mục
+def load_menu():
+    # /menu?name=cafe&category_id=1&filter=new
+    search_query = request.args.get('name', '')  #từ khóa tìm kiếm
+    category_id = request.args.get('category_id')  #id danh mục
     filter_type = request.args.get('filter')  #lọc
+    params = request.args.to_dict()
+    categories = CategoryDao.list()
 
-    categories = DishCategory.query.all()
-
-    query = Dish.query
-
-    # tìm kiếm
-    if search_query:
-        # tìm món có tên chứa từ khóa
-        query = query.filter(Dish.name.contains(search_query))
-
-    # lọc
-    if category_id:
-        try:
-            cat_id_int = int(category_id)
-            query = query.filter(Dish.dish_category_id == cat_id_int)
-        except ValueError:
-            pass
-
-    #sắp xếp món
-    if filter_type == 'new':
-        #sx theo ngày tạo giảm dần
-        query = query.order_by(desc(Dish.created_date))
-    elif filter_type == 'best':
-        #sx theo số lượt đánh giá giảm dần
-        query = query.order_by(desc(Dish.rating_count))
-    else:
-        #mặc định sx theo ID
-        query = query.order_by(Dish.id)
-
-    products = query.all()
-
+    products = ProductDao.list(params)
 
     return render_template('page/menu.html',
                            products=products,
@@ -236,3 +209,21 @@ def load_my_cart():
 
 
 
+
+
+
+# def product_detail(id):
+#
+#     product = Dish.query.get(id)
+#
+#     if not product:
+#         return "Không tìm thấy sản phẩm", 404
+#
+#     related_products = Dish.query.filter(
+#         Dish.dish_category_id == product.dish_category_id,
+#         Dish.id != product.id
+#     ).limit(4).all()
+#
+#     return render_template('page/product_detail.html',
+#                            product=product,
+#                            related_products=related_products)

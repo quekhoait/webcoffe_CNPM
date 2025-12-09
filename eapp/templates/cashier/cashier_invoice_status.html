@@ -2,10 +2,9 @@
     <div class="text-amber-900 bg-gray-200 rounded-2xl">
         <span>Tất cả(3)</span>
     </div>
+    {% for status in invoice_status %}
     <div>
-        <span>Chờ xử lý(3)</span>
+        <span>{{ status.name }}(3)</span>
     </div>
-    <div>
-        <span>Đã xong(3)</span>
-    </div>
+    {% endfor %}
 </div>

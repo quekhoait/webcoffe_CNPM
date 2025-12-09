@@ -41,5 +41,3 @@ def update_account_dao(user_id, username, phone, name, password, email, address,
     user.avatar=avatar
     db.session.commit()
     return user
-
-

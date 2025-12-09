@@ -33,16 +33,30 @@ app.add_url_rule('/staff','index2',StaffController.load_staff)
 
 
 
-app.add_url_rule('/api/dish','dish',ProductController.list)
+app.add_url_rule('/api/dish','dish',ProductController.list('page/menu_product_item.html'), methods=['get'])
+
 # staff
+
 app.add_url_rule('/staff','staff',StaffController.load_staff)
-app.add_url_rule('/api/order','add_order',StaffController.addToOrder, methods=['post'])
+app.add_url_rule('/api/order','add_order',StaffController.addItemToInvoice, methods=['post'])
 app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice, methods=['post'])
+app.add_url_rule('/api/remove-item','remove_item',StaffController.removeItemFromInvoice, methods=['post'])
 
 
 
 #menu
-app.add_url_rule('/menu', 'menu', index.menu_page, methods=['GET'])
+app.add_url_rule('/menu', 'menu', index.load_menu, methods=['GET'])
+app.add_url_rule('/api/get_product', 'get_product', ProductController.get_product, methods=['GET'])
+app.add_url_rule('/api/add_to_cart', 'add_to_cart', ProductController.add_to_cart, methods=['GET'])
+
 #thanh toan
 app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
 
+#cashier
+app.add_url_rule('/cashier','cashier',CashierController.load_cashier)
+
+# app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
+
+
+app.add_url_rule('/admin/warehouse', 'warehouse', StaffController.warehouse_page)
+app.add_url_rule('/admin/warehouse/create-ticket', 'create_ticket', StaffController.create_ticket, methods=['POST'])

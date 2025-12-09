@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, jsonify, session, url_for
 from flask_login import login_user, logout_user, current_user, login_required
 from eapp import app, utils
 import math, re, hashlib, cloudinary.uploader
-from eapp.dao.AccountDao import add_account, check_phone_exists, login_account, update_account_dao
+from eapp.dao.AccountDAO import add_account, check_phone_exists, login_account, update_account_dao
 from werkzeug.security import check_password_hash
 
 
@@ -52,6 +52,7 @@ def login():
         return jsonify({"status": "success", "message": "Đăng nhập thành công!"})
     except Exception as ex:
         app.logger.error(f'Lỗi khi đăng nhập: {ex}')
+        print(ex)
         return jsonify({"status": "error", "message": "Có lỗi xảy ra, thử lại sau!"})
 
 def logout():

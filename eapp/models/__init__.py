@@ -22,7 +22,6 @@ __all__ = [
     "Ingredient",
     "Invoice",
     "InvoiceDetail",
-    "InvoiceStatus",
 
     "Product",
     "ProductRecipe",
@@ -32,5 +31,4 @@ __all__ = [
     "Warehouse",
     "WarehouseSlip",
     "WarehouseSlipDetail",
-    "DishStatus",
 ]
