@@ -14,3 +14,18 @@ function loadProducts(params = {}) {
 document.getElementById('search-product').addEventListener('input', (e) => {
     loadProducts({ 'name': e.target.value })
 })
+
+function addToCart(productId) {
+    fetch('/api/add-to-cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: productId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Đã thêm vào giỏ hàng!');
+            location.reload();
+        } else { alert('Lỗi: ' + data.message); }
+    });
+}

@@ -64,20 +64,5 @@
     </div>
          <script src="{{ url_for('static', filename='javascript/product.js') }}"></script>
 
-    <script>
-        function addToCart(productId) {
-            fetch('/api/cart/add', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: productId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Đã thêm vào giỏ hàng!');
-                    location.reload();
-                } else { alert('Lỗi: ' + data.message); }
-            });
-        }
-    </script>
+
     {% endblock %}

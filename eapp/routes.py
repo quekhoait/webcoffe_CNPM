@@ -44,8 +44,10 @@ app.add_url_rule('/api/remove-item','remove_item',StaffController.removeItemFrom
 #menu
 app.add_url_rule('/menu', 'menu', index.load_menu, methods=['GET'])
 app.add_url_rule('/api/get_product', 'get_product', ProductController.get_product, methods=['GET'])
+app.add_url_rule('/api/add_to_cart', 'add_to_cart', ProductController.add_to_cart, methods=['GET'])
+
 #thanh toan
-# app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
+app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
 
 #cashier
 app.add_url_rule('/cashier','cashier',CashierController.load_cashier)

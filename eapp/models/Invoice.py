@@ -7,7 +7,7 @@ from eapp.models import BaseModel
 
 
 class InvoiceStatusEnum(str, Enum):
-    PENDING_PAYMENT = "pending_payment"
+    PENDING_PAYMENT = "pending_payment" ,
     PENDING_PROCESSING = "pending_processing"
     SHIPPING = "shipping"
     DELIVERED = "delivered"

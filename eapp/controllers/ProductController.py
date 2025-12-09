@@ -24,8 +24,6 @@ def list(filehtml):
 
         # Lấy dữ liệu (Giả định ProductDao đã được định nghĩa)
         products = ProductDao.list(params)
-        print(999)
-
         # Render template đã được chỉ định (filehtml) với dữ liệu
         return render_template(filehtml, products=products)
 
@@ -42,3 +40,11 @@ def get_product():
     # pdb.set_trace
     # return jsonify(result),200
     return jsonify([d.to_dict() for d in dishes]), 200
+
+
+def add_to_cart():
+    product_id=request.args.get("id")
+    product= ProductDao.get_by_id(product_id)
+    return jsonify({"message":"Đã thêm thành công",
+                    "data": product
+                    })
