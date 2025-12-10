@@ -117,6 +117,47 @@ accounts = [
     }
 ]
 
+ingredients_data = [
+    # Nhóm cà phê
+    {"name": "Cà phê hạt rang", "unit": "gram", "price": 0.6, "description": "Dùng để xay"},
+    {"name": "Bột cà phê", "unit": "gram", "price": 0.5, "description": "Cà phê đã xay sẵn"},
+    {"name": "Sữa đặc", "unit": "ml", "price": 0.08, "description": "Pha cà phê sữa"},
+    {"name": "Sữa tươi không đường", "unit": "ml", "price": 0.1, "description": "Pha latte/cappuccino"},
+    {"name": "Bột cacao", "unit": "gram", "price": 0.3, "description": "Dùng cho mocha hoặc chocolate nóng"},
+
+    # Nhóm trà
+    {"name": "Trà đen", "unit": "gram", "price": 0.2, "description": "Pha trà đá/trà nóng"},
+    {"name": "Trà xanh", "unit": "gram", "price": 0.25, "description": "Pha trà xanh/trà sữa"},
+    {"name": "Syrup đào", "unit": "ml", "price": 0.15, "description": "Dùng cho trà đào"},
+    {"name": "Syrup dâu", "unit": "ml", "price": 0.15, "description": "Dùng cho trà dâu"},
+
+    # Nhóm topping
+    {"name": "Trân châu đen", "unit": "gram", "price": 0.2, "description": "Dùng cho trà sữa/trà trái cây"},
+    {"name": "Thạch rau câu", "unit": "gram", "price": 0.1, "description": "Dùng cho topping"},
+    {"name": "Kem tươi", "unit": "ml", "price": 0.3, "description": "Dùng trang trí/latte"},
+
+    # Nhóm phụ liệu
+    {"name": "Đường", "unit": "gram", "price": 0.05, "description": "Ngọt hóa đồ uống"},
+    {"name": "Đá viên", "unit": "gram", "price": 0, "description": "Dùng cho đồ lạnh"},
+]
+
+warehouse_data = [
+    {"name": "Kho Tổng", "location": "Tầng hầm"},
+    {"name": "Kho Quầy", "location": "Tầng trệt"}
+]
+
+stock_data = [
+    # Kho Tổng  
+    {"warehouse_id": 1, "ingredient_id": 1, "quantity": 5000},  # Cà phê hạt rang
+    {"warehouse_id": 1, "ingredient_id": 6, "quantity":3000},  # Trà đen
+    {"warehouse_id": 1, "ingredient_id": 2, "quantity": 1000},  # Cà phê hạt rang
+    {"warehouse_id": 1, "ingredient_id": 13, "quantity": 2000}, # Đường
+    {"warehouse_id": 1, "ingredient_id": 14, "quantity": 10000}, # Đá viên
+    {"warehouse_id": 1, "ingredient_id": 10, "quantity": 1000}, # Trân châu đen
+    {"warehouse_id": 1, "ingredient_id": 11, "quantity": 800},  # Thạch rau câu
+    {"warehouse_id": 1, "ingredient_id": 12, "quantity": 1500}, # Kem tươi
+]
+
 if __name__ == "__main__":
     with app.app_context():
         db.drop_all()
@@ -180,6 +221,26 @@ if __name__ == "__main__":
         for rule_data in rules_seed:
             rule = Rule(**rule_data)
             db.session.add(rule)
+        db.session.commit()
+
+        # seed ingredients
+        from eapp.models.Ingredient import Ingredient
+        for ingredient_data in ingredients_data:
+            ingredient = Ingredient(**ingredient_data)
+            db.session.add(ingredient)
+
+        # seed warehouses
+        from eapp.models.Warehouse import Warehouse
+        for warehouse_info in warehouse_data:
+            warehouse = Warehouse(**warehouse_info)
+            db.session.add(warehouse)
+        
+        #seed stocks
+        from eapp.models.Stock import Stock
+        for stock_info in stock_data:
+            stock = Stock(**stock_info)
+            db.session.add(stock)
+        
         db.session.commit()
 
         print("☕️ Seed dữ liệu quán cà phê thành công!")

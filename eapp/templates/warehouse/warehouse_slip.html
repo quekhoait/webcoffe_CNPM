@@ -1,0 +1,68 @@
+<div class="bg-white p-6 rounded-2xl shadow-sm">
+    <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-2">Lập Phiếu Kho</h2>
+
+    <form action="/admin/warehouse/create-ticket" method="POST" class="space-y-5">
+
+        <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-2">Loại phiếu (*)</label>
+            <select name="ticket_type"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none"
+                onchange="toggleWarehouseInput(this.value)">
+                {% for name,value in slip_types %}
+                <option id="{{ name }}">{{ value }} ({{ name }})</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4" id="warehouse-section">
+            <div>
+                <label class="block text-sm font-semibold text-gray-600 mb-2">Kho Nguồn</label>
+                <select name="source_warehouse" class="w-full p-3 border border-gray-300 rounded-lg outline-none">
+                    {% for warehouse in warehouses %}
+                    <option id="{{ warehouse.id }}">{{ warehouse.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="dest-warehouse-div" class="hidden">
+                <label class="block text-sm font-semibold text-gray-600 mb-2">Kho Đích</label>
+                <select name="dest_warehouse" class="w-full p-3 border border-gray-300 rounded-lg outline-none">
+                    {% for warehouse in warehouses %}
+                    <option id="{{ warehouse.id }}">{{ warehouse.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-2">Nguyên liệu (*)</label>
+
+            <div class="flex gap-2">
+                <!-- Input có gợi ý datalist -->
+                <input list="ingredientsList" name="ingredient_name"
+                    class="flex-1 p-3 border border-gray-300 rounded-lg outline-none"
+                    placeholder="Chọn hoặc tìm nguyên liệu">
+
+                <!-- Danh sách gợi ý -->
+                <datalist id="ingredientsList">
+                    {% for ingredient in ingredients %}
+                    <option value="{{ ingredient.name }} ({{ ingredient.unit }})" data-id="{{ ingredient.id }}">
+                    </option>
+                    {% endfor %}
+                </datalist>
+
+                <input type="number" name="quantity" placeholder="SL"
+                    class="w-20 p-3 border border-gray-300 rounded-lg outline-none text-center" required>
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-2">Ghi chú</label>
+            <textarea name="note" rows="3" class="w-full p-3 border border-gray-300 rounded-lg outline-none"></textarea>
+        </div>
+
+        <button type="submit"
+            class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg shadow-md transition">
+            Xác Nhận
+        </button>
+    </form>
+</div>

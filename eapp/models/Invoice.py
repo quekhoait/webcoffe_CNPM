@@ -21,10 +21,10 @@ class Invoice(BaseModel):
     cashier_id = Column(ForeignKey('account.id'), nullable=True)
     customer_id = Column(ForeignKey('account.id'))
     staff_id = Column(ForeignKey('account.id'), nullable=False)
-    total_amount = Column(Float, nullable=False)
     subtotal = Column(Float, nullable=False)
     extra_fee_total = Column(Float, nullable=False)
     final_total = Column(Float, nullable=False)
     payment_method = Column(String(50), nullable=False)
     invoice_status = Column(SqlEnum(InvoiceStatusEnum), nullable=False)
+    
     invoice_details = relationship("InvoiceDetail", backref="invoice", lazy=True)

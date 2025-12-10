@@ -92,21 +92,7 @@ from flask import render_template, request, redirect
 
 
 
-def warehouse_page():
 
-    warehouses = [
-        {'id': 1, 'name': 'Kho Tổng'},
-        {'id': 2, 'name': 'Kho Quầy'}
-    ]
-    ingredients = [
-        {'id': 1, 'name': 'Cafe hạt', 'unit': 'kg'},
-        {'id': 2, 'name': 'Sữa tươi', 'unit': 'lít'},
-        {'id': 3, 'name': 'Đường', 'unit': 'kg'}
-    ]
-
-    return render_template('admin/warehouse.html',
-                           warehouses=warehouses,
-                           ingredients=ingredients)
 
 
 def create_ticket():

@@ -12,9 +12,8 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = os.getenv("DB_NAME")
 app = Flask(__name__)
 app.secret_key = 'JKHJHJK786575ghjghjg78675HJGJHGF^&$%$^*%*&^%&^&*%^&'
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://root:123456@localhost/coffestore"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@localhost/{DB_NAME}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
-# app.config["PAGE_SIZE"] = 8
 print(app.config["SQLALCHEMY_DATABASE_URI"])
 
 db = SQLAlchemy(app)

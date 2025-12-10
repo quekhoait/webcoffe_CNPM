@@ -4,7 +4,7 @@ from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
-from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index
+from eapp.controllers import ProductController, StaffController, WarehouseController, index, AccountController,CashierController, ProductController, StaffController, index
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
@@ -53,5 +53,5 @@ app.add_url_rule('/cashier','cashier',CashierController.load_cashier)
 # app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
 
 
-app.add_url_rule('/admin/warehouse', 'warehouse', StaffController.warehouse_page)
+app.add_url_rule('/warehouse', 'warehouse', WarehouseController.warehouse_page)
 app.add_url_rule('/admin/warehouse/create-ticket', 'create_ticket', StaffController.create_ticket, methods=['POST'])
