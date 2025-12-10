@@ -20,10 +20,13 @@ app.add_url_rule('/api/check_password','check_password', AccountController.check
 app.add_url_rule('/api/update_account','update_account', AccountController.update_account, methods=['POST'])
 
 
-
 app.add_url_rule('/','index',index.load_home)
 app.add_url_rule('/about-us','about-us',index.load_about_us)
+#Xử lý giỏ hàng
+app.add_url_rule('/api/created_cart','created_cart', CartController.created_cart, methods=['POST'])
 app.add_url_rule('/my-cart','my-cart',index.load_my_cart)
+
+
 # demo
 app.add_url_rule('/staff','index2',StaffController.load_staff)
 # app.add_url_rule('/','index',CashierController.home)
@@ -44,8 +47,10 @@ app.add_url_rule('/api/remove-item','remove_item',StaffController.removeItemFrom
 #menu
 app.add_url_rule('/menu', 'menu', index.load_menu, methods=['GET'])
 app.add_url_rule('/api/get_product', 'get_product', ProductController.get_product, methods=['GET'])
+app.add_url_rule('/api/add_to_cart', 'add_to_cart', ProductController.add_to_cart, methods=['GET'])
+
 #thanh toan
-# app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
+app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
 
 #cashier
 app.add_url_rule('/cashier','cashier',CashierController.load_cashier)
