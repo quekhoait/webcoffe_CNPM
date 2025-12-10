@@ -199,19 +199,11 @@
 
 </div>
 
-<script>
-    function toggleWarehouseInput(type) {
-        const destDiv = document.getElementById('dest-warehouse-div');
-        if (type === 'CHUYEN') {
-            destDiv.classList.remove('hidden');
-        } else {
-            destDiv.classList.add('hidden');
-        }
-    }
-</script>
+
 {% endblock %}
 
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='javascript/warehouse.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
 {% endblock %}

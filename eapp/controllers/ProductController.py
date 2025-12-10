@@ -33,12 +33,9 @@ def list(filehtml):
 
 def get_product():
     params = request.args.to_dict()
-    # re2=DishDAO.list(params)
-    # result = [d.to_dict() for d in DishDAO.list(params)]
+
     dishes = ProductDao.list(params)
-    # import pdb
-    # pdb.set_trace
-    # return jsonify(result),200
+   
     return jsonify([d.to_dict() for d in dishes]), 200
 
 

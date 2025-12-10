@@ -1,68 +1,90 @@
 <div class="bg-white p-6 rounded-2xl shadow-sm">
     <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-2">Lập Phiếu Kho</h2>
 
-    <form action="/admin/warehouse/create-ticket" method="POST" class="space-y-5">
+    <div class="space-y-5">
 
+        <!-- Slip type field -->
         <div>
             <label class="block text-sm font-semibold text-gray-600 mb-2">Loại phiếu (*)</label>
-            <select name="ticket_type"
+            <select id ="slip-type" name="slip_type"
                 class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none"
                 onchange="toggleWarehouseInput(this.value)">
                 {% for name,value in slip_types %}
-                <option id="{{ name }}">{{ value }} ({{ name }})</option>
+                <option id="{{ name }}" value="{{ name }}">{{ value }} ({{ name }})</option>
                 {% endfor %}
             </select>
         </div>
 
+        <!-- Warehouse Field -->
         <div class="grid grid-cols-2 gap-4" id="warehouse-section">
-            <div>
+            <div id="source-warehouse-div" class="hidden">
                 <label class="block text-sm font-semibold text-gray-600 mb-2">Kho Nguồn</label>
                 <select name="source_warehouse" class="w-full p-3 border border-gray-300 rounded-lg outline-none">
                     {% for warehouse in warehouses %}
-                    <option id="{{ warehouse.id }}">{{ warehouse.name }}</option>
+                    <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div id="dest-warehouse-div" class="hidden">
+            <div id="dest-warehouse-div" class="">
                 <label class="block text-sm font-semibold text-gray-600 mb-2">Kho Đích</label>
                 <select name="dest_warehouse" class="w-full p-3 border border-gray-300 rounded-lg outline-none">
                     {% for warehouse in warehouses %}
-                    <option id="{{ warehouse.id }}">{{ warehouse.name }}</option>
+                    <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
 
-        <div>
-            <label class="block text-sm font-semibold text-gray-600 mb-2">Nguyên liệu (*)</label>
+        <!-- Ingredient Field -->
+        <div class="flex flex-col space-y-2" id="ingredients-container">
+            <div class="flex items-center justify-between">
+                <label class="block text-sm font-semibold text-gray-600 mb-2">
+                    Nguyên liệu (*)
+                </label>
 
-            <div class="flex gap-2">
-                <!-- Input có gợi ý datalist -->
-                <input list="ingredientsList" name="ingredient_name"
-                    class="flex-1 p-3 border border-gray-300 rounded-lg outline-none"
-                    placeholder="Chọn hoặc tìm nguyên liệu">
+                <button id="toggle-edit-button" type="button" class="delete-row w-9 h-9 flex items-center justify-center 
+                        text-red-500 hover:text-white 
+                        rounded-full border border-red-300 
+                        hover:bg-red-500 
+                        shadow-sm hover:shadow-md
+                        transition-all duration-200 active:scale-90">
+                    ✕
+                </button>
+            </div>
 
-                <!-- Danh sách gợi ý -->
-                <datalist id="ingredientsList">
-                    {% for ingredient in ingredients %}
-                    <option value="{{ ingredient.name }} ({{ ingredient.unit }})" data-id="{{ ingredient.id }}">
-                    </option>
-                    {% endfor %}
-                </datalist>
+            <!-- <div class="flex gap-2 relative">
+                <div class="relative w-full">
+
+                    <div class="flex items-center border border-gray-300 rounded-lg bg-white">
+                        <input id="ingredient-input" placeholder="Chọn hoặc tìm nguyên liệu" autocomplete="off"
+                            class="flex-1 p-3 outline-none">
+                        <button type="button" id="toggle-button" class="px-3 text-gray-600 cursor-pointer select-none">
+                            ▼
+                        </button>
+                    </div>
+
+                    <div id="ingredient-dropdown-list"
+                        class="absolute w-full bg-white border border-gray-200 rounded-lg shadow-md hidden max-h-60 overflow-auto z-20">
+                    </div>
+                </div>
 
                 <input type="number" name="quantity" placeholder="SL"
                     class="w-20 p-3 border border-gray-300 rounded-lg outline-none text-center" required>
-            </div>
+            </div> -->
+
         </div>
+
+
+
 
         <div>
             <label class="block text-sm font-semibold text-gray-600 mb-2">Ghi chú</label>
-            <textarea name="note" rows="3" class="w-full p-3 border border-gray-300 rounded-lg outline-none"></textarea>
+            <textarea id="note" name="note" rows="3" class="w-full p-3 border border-gray-300 rounded-lg outline-none"></textarea>
         </div>
 
-        <button type="submit"
+        <button type="button" onclick="createWarehouseSlip()"
             class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg shadow-md transition">
             Xác Nhận
         </button>
-    </form>
+    </div>
 </div>

@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import jsonify, render_template, request
 
 from eapp.dao.IngredientDAO import IngredientDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
@@ -8,7 +8,6 @@ from eapp.services.InventoryService import InventoryService
 
 
 def warehouse_page():
-
     warehouse = WarehouseDAO.get_by_id(1)
     warehouses = WarehouseDAO.list()
     slip_types = [(st.name, st.value) for st in SlipType]
@@ -20,3 +19,27 @@ def warehouse_page():
                            ingredient_stocks=ingredient_stocks,
                            ingredients=ingredients,
                            warehouses=warehouses)
+
+#API
+def get_ingredients():
+    ingredients = IngredientDAO.list(request.args.to_dict())
+    return jsonify([ i.to_dict() for i in ingredients])
+
+"""
+slip_data:
+    slip_type
+    note
+    stock_user_id
+    invoice_id (option)
+    destination_warehouse_id
+    source_warehouse_id
+    ingredients (list)
+        ingredient_id
+        quantity
+"""
+def create_warehouse_slip():
+    slip_data = request.json
+    slip_data['stock_user_id'] = 1  # TODO: Lấy user từ session
+    print(slip_data)
+    InventoryService.create_slip(slip_data)
+    return jsonify({"success": True})

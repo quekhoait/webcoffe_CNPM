@@ -91,10 +91,6 @@ def create_invoice():
 from flask import render_template, request, redirect
 
 
-
-
-
-
 def create_ticket():
     if request.method == 'POST':
         ticket_type = request.form.get('ticket_type')
