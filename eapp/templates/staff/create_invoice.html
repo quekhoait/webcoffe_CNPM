@@ -2,16 +2,16 @@
     <div class="bg-amber-50 p-5 h-s
     en flex flex-col">
         <!--        order header-->
-        <div class="flex justify-between text-3xl">
-            <h2 class="font-bold text-gray-800">Đơn hàng - Bàn 12</h2>
+        <div class="flex justify-between text-4xl">
+            <h2 class="font-bold text-gray-800">Đơn hàng - #DH123123</h2>
             <div>
                 <span class=" font-semibold text-gray-600">Số bàn:</span>
                 <input type="text" value="12"
-                    class="text-3xl w-12 h-8 text-center px-1 py-1 bg-amber-100 text-gray-800 font-semibold rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 border border-transparent">
+                    class="text-4xl w-12 h-8 text-center px-1 py-1 bg-amber-100 text-gray-800 font-semibold rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 border border-transparent">
             </div>
         </div>
         <!--        order item label-->
-        <div class="grid grid-cols-6 text-2xl font-semibold p-2 mt-3 bg-white shadow">
+        <div class="text-blue-700 grid grid-cols-6 text-3xl font-semibold p-2 mt-3 bg-white shadow">
             <div class="col-span-3">Sản Phẩm</div>
             <div class="col-span-2 text-center">Số Lượng</div>
             <div class="col-span-1 text-right">Thành Tiền</div>
@@ -28,7 +28,7 @@
 
         <!--order bill-->
 
-        <div class="text-xl bg-white pt-2 mt-3 border-t border-gray-400">
+        <div class="text-3xl bg-white p-4 rounded-xl mt-3" style="box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;">
             <div class="flex justify-between text-gray-600">
                 <span>Tạm tính</span>
                 <span id="total-price-tmp">{{ total_price_tmp }} đ</span>
@@ -49,21 +49,21 @@
 
             <div class="flex justify-between  pt-2 text-3xl font-semibold text-gray-800">
                 <span>Tổng cộng</span>
-                <span id="total-price">{{ total_price }} đ</span>
+                <span id="total-price" class="text-red-700">{{ total_price }} đ</span>
             </div>
 
         </div>
 
         <!--        order button-->
         <button onclick="submitInvoice()"
-            class="text-2xl mt-6 w-full py-3 bg-amber-800 text-white font-bold rounded-xl shadow-lg hover:bg-amber-900 transition duration-200 flex justify-center items-center space-x-2">
+            class="text-2xl mt-6 w-full py-2 bg-amber-800 text-white font-bold rounded-xl shadow-lg hover:bg-amber-900 transition duration-200 flex justify-center items-center space-x-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                 <path fill-rule="evenodd"
                     d="M4 5a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4v-4H6a2 2 0 01-2-2V5zm3 1h6v6H7V6z"
                     clip-rule="evenodd" />
             </svg>
-            <span>Tạo Đơn Hàng</span>
+            <span class="text-3xl">Tạo Đơn Hàng</span>
         </button>
     </div>
 </div>

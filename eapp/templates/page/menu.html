@@ -1,0 +1,68 @@
+    {% extends 'layout/base.html' %}
+
+    {% block title %}Thực Đơn - The Coffee House{% endblock %}
+
+    {% block content %}
+    <div class="bg-[#fcf9eb] min-h-screen pt-[90px] pb-20">
+
+        <div class="container mx-auto px-6 w-[95%] md:w-[86%] pt-12">
+            <h1 class="text-5xl font-extrabold text-[#372f2b] mb-8">Thực đơn của chúng tôi</h1>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-10">
+
+                <div class="relative w-full md:w-2/3">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                        <i class="fa-solid fa-magnifying-glass text-xl"></i>
+                    </span>
+                    <input type="text" id="search-product" placeholder="Tìm kiếm món bạn yêu thích..."
+                        class="w-full py-4 pl-12 pr-4 text-2xl bg-[#f5f0f9] border-none rounded-xl focus:ring-2 focus:ring-[#7c5c56] text-gray-700 shadow-sm outline-none">
+
+                    {% if current_cate_id %}<input type="hidden" name="category" value="{{ current_cate_id }}">{% endif %}
+                    {% if current_filter %}<input type="hidden" name="filter" value="{{ current_filter }}">{% endif %}
+                </div>
+
+                <div class="flex gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+                    <a href="/menu"
+                       class="px-6 py-3 rounded-full font-bold text-xl shadow-sm border transition whitespace-nowrap {{ 'bg-[#7c5c56] text-white' if not current_filter else 'bg-white text-gray-500 hover:bg-[#efe7d6]' }}">
+                        Tất cả
+                    </a>
+
+                    <a href="/menu?filter=new{{ '&category=' ~ current_cate_id if current_cate_id else '' }}{{ '&q=' ~ search_query if search_query else '' }}"
+                       class="px-6 py-3 rounded-full font-bold text-xl shadow-sm border transition whitespace-nowrap {{ 'bg-[#7c5c56] text-white' if current_filter == 'new' else 'bg-white text-gray-500 hover:bg-[#efe7d6]' }}">
+                        Món mới
+                    </a>
+
+                    <a href="/menu?filter=best{{ '&category=' ~ current_cate_id if current_cate_id else '' }}{{ '&q=' ~ search_query if search_query else '' }}"
+                       class="px-6 py-3 rounded-full font-bold text-xl shadow-sm border transition whitespace-nowrap {{ 'bg-[#7c5c56] text-white' if current_filter == 'best' else 'bg-white text-gray-500 hover:bg-[#efe7d6]' }}">
+                        Bán chạy nhất
+                    </a>
+                </div>
+            </div>
+
+            <div class="border-b border-gray-200 mb-12 overflow-x-auto hide-scrollbar">
+                <nav class="flex gap-10 min-w-max">
+                    <a href="/menu{{ '?filter=' ~ current_filter if current_filter else '' }}{{ '&q=' ~ search_query if search_query else '' }}"
+                       class="pb-4 text-2xl font-bold transition border-b-4 {{ 'text-[#9d5a15] border-[#9d5a15]' if not current_cate_id else 'text-gray-400 border-transparent hover:text-[#7c5c56]' }}">
+                        Tất cả
+                    </a>
+
+                    {% for cat in categories %}
+                    <a href="/menu?category_id={{ cat.id }}{{ '&filter=' ~ current_filter if current_filter else '' }}{{ '&q=' ~ search_query if search_query else '' }}"
+                       class="pb-4 text-2xl font-bold transition border-b-4 {{ 'text-[#9d5a15] border-[#9d5a15]' if current_cate_id == cat.id else 'text-gray-400 border-transparent hover:text-[#7c5c56]' }}">
+                        {{ cat.name }}
+                    </a>
+                    {% endfor %}
+                </nav>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-6 w-[95%] md:w-[86%]">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="menu-product-items">
+              {% include 'page/menu_product_item.html' %}
+            </div>
+        </div>
+    </div>
+         <script src="{{ url_for('static', filename='javascript/product.js') }}"></script>
+
+
+    {% endblock %}

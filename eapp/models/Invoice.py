@@ -1,8 +1,16 @@
-from enum import Enum
+# from enum import Enum
 import re
-from sqlalchemy import Column, Float, ForeignKey, String, Enum as SqlEnum
-from eapp.models import BaseModel
+from enum import Enum
+from sqlalchemy import Column, Float, String, Enum as SqlEnum, ForeignKey
 from sqlalchemy.orm import relationship
+from eapp.models import BaseModel
+
+
+class InvoiceStatusEnum(str, Enum):
+    PENDING_PAYMENT = "pending_payment" ,
+    PENDING_PROCESSING = "pending_processing"
+    SHIPPING = "shipping"
+    DELIVERED = "delivered"
 
 class PaymentMethod(Enum):
     CASH = 'Tiền mặt'
@@ -12,12 +20,11 @@ class PaymentMethod(Enum):
 class Invoice(BaseModel):
     cashier_id = Column(ForeignKey('account.id'), nullable=True)
     customer_id = Column(ForeignKey('account.id'))
-    staff_id = Column(ForeignKey('account.id'), nullable=True)
+    staff_id = Column(ForeignKey('account.id'), nullable=False)
     subtotal = Column(Float, nullable=False)
     extra_fee_total = Column(Float, nullable=False)
     final_total = Column(Float, nullable=False)
-    payment_method = Column(SqlEnum(PaymentMethod), nullable=False)
-    invoice_status_id = Column(ForeignKey('invoice_status.id'), nullable=False)
+    payment_method = Column(String(50), nullable=False)
+    invoice_status = Column(SqlEnum(InvoiceStatusEnum), nullable=False)
     
-    invoice_details = relationship('InvoiceDetail', backref='invoice', lazy=True)
-    
+    invoice_details = relationship("InvoiceDetail", backref="invoice", lazy=True)

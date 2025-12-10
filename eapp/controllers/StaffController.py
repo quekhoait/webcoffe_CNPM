@@ -8,8 +8,6 @@ from eapp.models.Rule import RuleType
 from eapp.services.InvoiceService import InvoiceService
 
 
-
-
 def load_staff():
     category = CategoryDao.list()
     dishes = ProductDao.list()
@@ -88,3 +86,21 @@ def create_invoice():
     return jsonify({
         "success" : True
     })
+
+
+from flask import render_template, request, redirect
+
+
+
+
+
+
+def create_ticket():
+    if request.method == 'POST':
+        ticket_type = request.form.get('ticket_type')
+        ingr_id = request.form.get('ingredient_id')
+        qty = request.form.get('quantity')
+
+        print(f"Xử lý phiếu {ticket_type} cho món {ingr_id} số lượng {qty}")
+
+        return redirect('/admin/warehouse')

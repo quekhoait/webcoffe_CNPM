@@ -1,15 +1,15 @@
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const header = document.getElementById('header');
-    // Class CSS định nghĩa trong file stylesheet, ví dụ: .scrolled-header { background: red; box-shadow: ... }
     const scrolledClass = 'scrolled-header';
 
     function toggleHeaderBackground() {
-        if (window.scrollY > 100) {
+        if (window.scrollY > 50) {
             // SỬA: Thêm class CSS
             header.classList.add(scrolledClass);
             header.classList.add("fixed")
         } else {
-            // SỬA: Xóa class CSS
             header.classList.remove(scrolledClass);
             header.classList.remove("fixed")
         }
