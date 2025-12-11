@@ -99,7 +99,6 @@ def load_about_us():
 
 def checkout_page():
     current_user = session.get('user')
-
     #test
     if not current_user:
         current_user = {'id': 1, 'name': 'Khách hàng Test', 'phone': '0909000111', 'email': 'test@gmail.com'}

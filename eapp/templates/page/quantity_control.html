@@ -1,14 +1,14 @@
-<div class="flex items-center border border-gray-300 rounded-full overflow-hidden text-2xl quantity-control-wrapper">
-    <button class="w-10 h-10 text-4xl flex items-center justify-center text-gray-600 hover:bg-gray-100 transition duration-150 minus-btn"
+<div class="flex items-center border border-gray-300 rounded-full overflow-hidden text-2xl quantity-control-wrapper" >
+    <button class=" minus-btn w-10 h-10 text-4xl flex items-center justify-center text-gray-600 hover:bg-gray-100 transition duration-150"
             aria-label="Giảm số lượng">
         -
     </button>
-    <span class="w-10 text-center font-medium text-gray-900 qty-display" data-initial-qty="1">
+    <span class="w-10 text-center font-medium text-gray-900 qty-display" data-initial-qty=" {{quantity}}">
         {{quantity}}
+
     </span>
-    <button class="w-10 h-10 text-4xl flex items-center justify-center text-gray-600 hover:bg-gray-100 transition duration-150 plus-btn"
+    <button class="plus-btn w-10 h-10 text-4xl flex items-center justify-center text-gray-600 hover:bg-gray-100 transition duration-150 "
             aria-label="Tăng số lượng">
         +
     </button>
 </div>
-<script src="{{ url_for('static', filename='javascript/quantity_control.js') }}"></script>

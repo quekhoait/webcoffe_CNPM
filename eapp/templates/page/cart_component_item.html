@@ -1,20 +1,20 @@
-{% block content %}
+    {%for prod in list_prod %}
 
-{%for prod in list_prod %}
+    <div class="flex cart-component-item items-center bg-gray-50 rounded-lg p-2 space-x-2">
 
-            <div class="flex items-center bg-gray-50 rounded-lg p-2">
-            <div class="w-[60px] h-[60px] rounded-lg overflow-hidden mr-4 flex-shrink-0">
-                <img src="{{ prod.product.image }}" alt="Cà Phê Sữa Đá" class="w-full h-full object-cover">
-            </div>
+    <div class="w-[60px] h-[60px] rounded-lg overflow-hidden flex-shrink-0">
+        <img src="{{ prod.product.image }}" alt="{{ prod.product.name }}" class="w-full h-full object-cover">
+    </div>
+    <div class="flex-grow">
+        <p class="text-xl font-semibold text-gray-900">{{ prod.product.name }}</p>
+        <p class="text-lg font-bold text-red-800 price">{{ prod.product.price }}</p>
+    </div>
+    {% set quantity=prod.quantity %}
+    {% include 'page/quantity_control.html' %}
 
-            <div class="flex-grow">
-                <p class="text-3xl font-semibold text-gray-900">{{ prod.product.name }}</p>
-                <p class="text-2xl font-bold text-red-800 py-2">{{ prod.product.price }}</p>
-            </div>
-        {% set quantity = prod.quantity %}
+    <input type="checkbox" class="ml-auto select-cart-component">
+    
+</div>
 
-             {% include 'page/quantity_control.html' %}
-            <input type="checkbox" class="ml-4">
-        </div>
-        {% endfor %}
-      {% endblock %}
+
+    {% endfor %}

@@ -1,5 +1,3 @@
-
-
 function loadProducts(params = {}) {
     const query = new URLSearchParams(params).toString();
     const productList = document.getElementById('menu-product-items')
@@ -7,8 +5,10 @@ function loadProducts(params = {}) {
         .then(res => res.text())
         .then(html => {
             productList.innerHTML = html
+
         })
         .catch(err => console.error(err));
+
 }
 
 document.getElementById('search-product').addEventListener('input', (e) => {
@@ -16,54 +16,62 @@ document.getElementById('search-product').addEventListener('input', (e) => {
 })
 
 
-//Cart
-
-const mycart = document.getElementById("my_cart");
-const cartIcon = document.getElementById("cart_icon");
-const cartCancelIcon = document.getElementById("icon_cancel_cart");
-
-cartIcon.addEventListener("click", () => {
-    mycart.classList.remove("hidden");
-    fetch('/api/get-cart-by-userId')
-        .then(res => res.text())
-        .then(html => {
-            document.getElementById("cart_component_item").innerHTML = html;
-        })
-        .catch(err => console.error(err));
-});
-
-// Đóng cart khi click icon X
-cartCancelIcon.addEventListener("click", () => {
-    mycart.classList.add("hidden");
-});
-
-// Đóng cart khi click ra ngoài
-document.addEventListener("click", function (event) {
-    if (mycart.classList.contains("hidden")) return;
-    if (cartIcon.contains(event.target)) return;
-    if (mycart.contains(event.target)) return;
-    mycart.classList.add("hidden");
-});
-
-function addToCart(productId, quantity=1) {
-    fetch('/api/add_to_cart', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product_id: productId, quantity: quantity })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status == "success") {
-        alert(1)
-            showAlert("success", "Thông báo", data.message);
-        } else {
-            alert('Lỗi: ' + data.message);
+//Tính số tiền
+function calculateSubtotal() {
+    let total = 0;
+    const items = document.querySelectorAll('.cart-component-item');
+    console.log(items)
+    items.forEach(item => {
+        const checkbox = item.querySelector('.select-cart-component');
+        const price = parseFloat(item.querySelector('p.price').innerText);
+        const qty = parseInt(item.querySelector('span.qty-display').innerText);
+        console.log(price)
+        if (checkbox.checked) {
+            total += price * qty;
         }
-    })
-    .catch(err => console.error(err));
+    });
+   document.getElementById('subTotal-cart').innerText = total;
 }
 
+function setupCheckboxEvents() {
+    const checkboxes = document.querySelectorAll('.select-cart-component');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", () => {
+            calculateSubtotal();
+        });
+    });
+}
 
+function setupQuantityControl() {
+    const controls = document.querySelectorAll('.quantity-control-wrapper');
+    controls.forEach(control => {
+        const minusBtn = control.querySelector('.minus-btn');
+        const plusBtn = control.querySelector('.plus-btn');
+        const qtyDisplay = control.querySelector('.qty-display');
 
+        if (!minusBtn || !plusBtn || !qtyDisplay) return;
+        let currentQty = parseInt(qtyDisplay.textContent) || 1;
+        function update() {
+            qtyDisplay.textContent = currentQty;
+            minusBtn.disabled = currentQty <= 1;
+            minusBtn.style.opacity = currentQty <= 1 ? 0.5 : 1;
+        }
+
+        plusBtn.onclick = () => {
+            currentQty++;
+            update();
+            calculateSubtotal()
+        };
+
+        minusBtn.onclick = () => {
+            if (currentQty > 1) {
+                currentQty--;
+                update();
+                calculateSubtotal()
+            }
+        };
+        update();
+    });
+}
 
 
