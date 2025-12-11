@@ -14,11 +14,11 @@ class CartDetail(BaseModel):
     quantity = Column(Integer, default=1)
     unit_price = Column(Integer)          # giá đơn
     total_price = Column(Integer)         # thành tiền
-    note = Column(String(255))
+
 
     # Quan hệ
     product = relationship("Product", backref="cart_details", lazy=True)
-
+    serialize_rules = ('-cart', '-product.cart_details')
     def __str__(self):
         return f"{self.product.name} × {self.quantity}"
 

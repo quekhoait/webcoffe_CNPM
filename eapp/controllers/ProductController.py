@@ -42,9 +42,3 @@ def get_product():
     return jsonify([d.to_dict() for d in dishes]), 200
 
 
-def add_to_cart():
-    product_id=request.args.get("id")
-    product= ProductDao.get_by_id(product_id)
-    return jsonify({"message":"Đã thêm thành công",
-                    "data": product
-                    })

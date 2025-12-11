@@ -7,10 +7,9 @@ from eapp.models import BaseModel
 
 
 class InvoiceStatusEnum(str, Enum):
-    PENDING_PAYMENT = "pending_payment" ,
-    PENDING_PROCESSING = "pending_processing"
-    SHIPPING = "shipping"
-    DELIVERED = "delivered"
+    PENDING = "pending"  # Chờ xử lý / chờ phục vụ
+    IN_PROGRESS = "in_progress"  # Đang giao / đang phục vụ
+    COMPLETED = "completed"
 
 class PaymentMethod(Enum):
     CASH = 'Tiền mặt'
@@ -25,6 +24,7 @@ class Invoice(BaseModel):
     subtotal = Column(Float, nullable=False)
     extra_fee_total = Column(Float, nullable=False)
     final_total = Column(Float, nullable=False)
+    note = Column(String(255))
     payment_method = Column(String(50), nullable=False)
     invoice_status = Column(SqlEnum(InvoiceStatusEnum), nullable=False)
     invoice_details = relationship("InvoiceDetail", backref="invoice", lazy=True)

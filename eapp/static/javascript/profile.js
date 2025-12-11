@@ -42,9 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (formConfirm) {
     formConfirm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const currentPw = document.getElementById("current-password").value.trim();
 
       if (!currentPw) {
+          alert(1)
         showAlert("warning", "Thiếu mật khẩu", "Vui lòng nhập mật khẩu để tiếp tục.");
         return;
       }

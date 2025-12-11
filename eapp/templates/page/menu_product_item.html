@@ -10,7 +10,7 @@
                 <p class="text-lg text-gray-500 mb-4 flex-grow line-clamp-2">{{ product.description if product.description else '...' }}</p>
                 <div class="flex items-center justify-between mt-auto">
                     <span class="text-3xl font-bold text-[#372f2b]">{{ "{:,.0f}".format(product.price) }}đ</span>
-                    <button onclick="addToCart({{ product.id }})" class="w-12 h-12 rounded-full bg-[#c54f36] text-white flex items-center justify-center hover:bg-[#a03d28] transition shadow-md">
+                    <button onclick="addToCart({{ product.id}})" class="w-12 h-12 rounded-full bg-[#c54f36] text-white flex items-center justify-center hover:bg-[#a03d28] transition shadow-md">
                         <i class="fa-solid fa-cart-plus text-xl"></i>
                     </button>
                 </div>

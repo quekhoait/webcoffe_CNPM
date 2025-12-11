@@ -1,18 +1,16 @@
-from eapp import db, app
+from eapp import db
 from eapp.models.Cart import Cart
-
+from eapp.models.Product import Product
+from eapp.models.CartDetail import CartDetail
+from eapp.dao import ProductDao
 
 def get_cart_by_user(user_id):
     return Cart.query.filter_by(user_id=user_id).first()
 
-
-def created_cart_dao(user_id):
-    # 1. Kiểm tra cart đã tồn tại chưa
-    existing_cart = get_cart_by_user(user_id)
-    if existing_cart:
-        return existing_cart   # ❗ trả về cart cũ, không tạo cart mới
-
-    # 2. Nếu chưa có → tạo mới
+def create_cart_dao(user_id):
+    cart = get_cart_by_user(user_id)
+    if cart:
+        return cart
     cart = Cart(user_id=user_id)
     try:
         db.session.add(cart)
@@ -22,3 +20,41 @@ def created_cart_dao(user_id):
         db.session.rollback()
         print("Error creating cart:", e)
         return None
+
+
+def get_cart_item(cart_id, product_id):
+    return CartDetail.query.filter_by(cart_id=cart_id, product_id=product_id).first()
+
+
+def add_to_cart_dao(product_id, user_id, quantity):
+    product = ProductDao.get_by_id(product_id)
+    if product is None:
+        return {"success": False, "message": "Sản phẩm không tồn tại"}
+    # Lấy cart (nếu chưa có thì tạo mới)
+    cart = create_cart_dao(user_id)
+    cart_item = get_cart_item(cart.id, product_id)
+
+    if cart_item:
+        # nếu đã có → tăng số lượng
+        cart_item.quantity += quantity
+    else:
+        # chưa có → thêm mới
+        cart_item = CartDetail(
+            cart_id=cart.id,
+            product_id=product_id,
+            quantity=quantity,
+            unit_price=product.price
+        )
+    db.session.add(cart_item)
+    db.session.commit()
+    return cart_item
+
+# Lấy tất cả product trong cartdetail
+def get_cart_by_userId_dao(user_id):
+    return (
+        CartDetail.query
+        .join(Cart, CartDetail.cart_id == Cart.id)
+        .join(Product, CartDetail.product_id == Product.id)
+        .filter(Cart.user_id == user_id)
+        .all()
+    )
