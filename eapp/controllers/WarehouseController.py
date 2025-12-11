@@ -41,5 +41,9 @@ def create_warehouse_slip():
     slip_data = request.json
     slip_data['stock_user_id'] = 1  # TODO: Lấy user từ session
     print(slip_data)
-    InventoryService.create_slip(slip_data)
+    try:
+        InventoryService.create_slip(slip_data)
+    except Exception as ex:
+        print(f"Lỗi khi tạo phiếu kho: {ex}")
+        return jsonify({"success": False, "message": str(ex)})
     return jsonify({"success": True})

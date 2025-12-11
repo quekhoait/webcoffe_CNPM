@@ -6,11 +6,14 @@ function toggleWarehouseInput(type) {
         srcDiv.classList.add('hidden');
         destDiv.classList.remove('hidden')
     } else if (type === 'UPDATE'){
-        destDiv.classList.remove('hidden');
+        destDiv.classList.add('hidden');
         srcDiv.classList.remove('hidden')
     } else if (type === 'EXPORT'){
         destDiv.classList.add('hidden')
         srcDiv.classList.remove('hidden')
+    }else{
+        destDiv.classList.remove('hidden');
+        srcDiv.classList.remove('hidden');
     }
 }
 let ingredients = []
@@ -199,6 +202,12 @@ function createWarehouseSlip(){
         headers: {
             "Content-Type": "application/json"
         },
-    })
-    
+    }).then(res => res.json()).then(data => {
+        if (data.success) {
+            alert("Tạo phiếu kho thành công!");
+            window.location.reload();
+        } else {
+            alert("Lỗi khi tạo phiếu kho: " + data.message);
+        }}
+    )
 }

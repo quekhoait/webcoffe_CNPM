@@ -1,9 +1,11 @@
 from enum import Enum
+
 from eapp.dao import RuleDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.dao.WarehouseSlipDAO import WarehouseSlipDAO
-from eapp.models import Ingredient, Warehouse, WarehouseSlip
+from eapp.models import Ingredient, Stock, Warehouse, WarehouseSlip
 from eapp.models.Rule import RuleType
+from eapp.services.SlipStrategyFactory import SlipStrategyFactory
 
 class IngredientStatus(Enum):
     AVAILABLE = "Còn Hàng"
@@ -37,7 +39,7 @@ class InventoryService:
 
     """
     slip_data:
-        slip_type
+        slip_type: name:String
         note
         stock_user_id
         invoice_id (option)
@@ -58,13 +60,45 @@ class InventoryService:
         if dst_wh_id is not None:
             warehouse_slip.destination_warehouse_id = dst_wh_id
         
+        # xuất kho
+        if src_wh_id is not None:
+            warehouse_slip.source_warehouse_id = src_wh_id
+        
+        # parse string về enum
         warehouse_slip.slip_type = slip_data['slip_type']
         warehouse_slip.note = slip_data['note'] if slip_data['note'] else None
 
         WarehouseSlipDAO.create_warehouse_slip(warehouse_slip, slip_data['ingredients'])
+        # import pdb
+        # pdb.set_trace()
+        SlipStrategyFactory.get_strategy(warehouse_slip.slip_type).update_stock(warehouse_slip=warehouse_slip)
+
+    
+
+    # @staticmethod
+    # def update_warehouse_stock(warehouse_slip: WarehouseSlip):
+    #     warehouse = WarehouseDAO.get_by_id(warehouse_id=warehouse_slip.destination_warehouse_id)
+    #     for slip_detail in warehouse_slip.slip_details:
+    #         stock = next((s for s in warehouse.stocks if s.ingredient_id == slip_detail.ingredient_id), None)
+    #         if stock:
+    #             if warehouse_slip.slip_type == 'EXPORT':
+    #                 stock.quantity -= slip_detail.quantity
+    #             stock.quantity += slip_detail.quantity
+    #         else:
+    #             new_stock = Stock(
+    #                 warehouse_id=warehouse.id,
+    #                 ingredient_id=slip_detail.ingredient_id,
+    #                 quantity=slip_detail.quantity
+    #             )
+    #             warehouse.stocks.append(new_stock)
+    #     warehouse.save_all(warehouse.stocks)
 
 
-
+from eapp import app
+if __name__ == "__main__":
+    with app.app_context():
+        warehouse = WarehouseDAO.get_by_id(1)
+        print(warehouse.stocks)    
 
         
 

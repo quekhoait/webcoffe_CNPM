@@ -15,5 +15,14 @@ class WarehouseDAO:
             print(f"Lỗi khi lấy danh sách warehouse: {ex}")
             return []
     
+    @staticmethod
+    def update(stock: Warehouse):
+        try:
+            stock.save()
+            return stock
+        except Exception as ex:
+            print(f"Lỗi khi cập nhật warehouse: {ex}")
+            return None
+    
     
     
