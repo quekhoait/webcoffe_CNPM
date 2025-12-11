@@ -72,12 +72,4 @@ function hideAlert() {
   }, 300);
 }
 
-document.getElementById("alert_close").addEventListener("click", hideAlert);
 
-mycart=document.getElementById("my_cart")
-document.getElementById("cart_icon").addEventListener("click", ()=>{
-    mycart.classList.remove("hidden")
-})
-document.getElementById("icon_cancel_cart").addEventListener("click", ()=>{
-    mycart.classList.add("hidden")
-})

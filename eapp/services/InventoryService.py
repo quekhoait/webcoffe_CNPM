@@ -59,9 +59,11 @@ class InventoryService:
             warehouse_slip.destination_warehouse_id = dst_wh_id
         
         warehouse_slip.slip_type = slip_data['slip_type']
-        warehouse_slip.note = slip_data['note']
+        warehouse_slip.note = slip_data['note'] if slip_data['note'] else None
 
         WarehouseSlipDAO.create_warehouse_slip(warehouse_slip, slip_data['ingredients'])
+
+
 
 
         

@@ -1,4 +1,4 @@
-from eapp.models import Product
+from eapp.models import Product, CartDetail
 from sqlalchemy import desc
 
 def list(params: dict = None):
