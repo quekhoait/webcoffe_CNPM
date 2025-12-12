@@ -1,3 +1,5 @@
+
+
 /** Alert animation + style */
 function showAlert(type, title, message) {
   const alertBox = document.getElementById("form_alert");
@@ -73,11 +75,11 @@ function hideAlert() {
 }
 
 
-//Cart
-
+//Cart popup
 const mycart = document.getElementById("my_cart");
 const cartIcon = document.getElementById("cart_icon");
 const cartCancelIcon = document.getElementById("icon_cancel_cart");
+
 
 cartIcon.addEventListener("click", () => {
     mycart.classList.remove("hidden");
@@ -85,13 +87,26 @@ cartIcon.addEventListener("click", () => {
         .then(res => res.text())
         .then(html => {
             document.getElementById("cart_component_item").innerHTML = html;
-             setupQuantityControl();
-        setupCheckboxEvents();   // thêm dòng này !!!
-        calculateSubtotal();
-        })
-        .catch(err => console.error(err));
 
+            const cartPopup = document.querySelectorAll('.cart-component-item-popup');
+            console.log(cartPopup)
+            setupQuantityControl(cartPopup, 'subTotal-cart-popup');
+            setupCheckboxEvents(cartPopup, 'subTotal-cart-popup');
+
+            document.getElementById('subTotal-cart-popup')
+                .innerText = calculateSubtotal(cartPopup);
+        });
 });
+
+//cart current
+const my_current_cart = document.querySelectorAll('.cart-component-item');
+setupQuantityControl(my_current_cart, 'subTotal-cart');
+setupCheckboxEvents(my_current_cart, 'subTotal-cart');
+
+document.getElementById('subTotal-cart')
+    .innerText = calculateSubtotal(my_current_cart);
+
+
 
 // Đóng cart khi click icon X
 cartCancelIcon.addEventListener("click", () => {
@@ -124,3 +139,68 @@ function addToCart(productId, quantity=1) {
     .catch(err => console.error(err));
 }
 
+//Tính số tiền
+
+function calculateSubtotal(items) {
+    let total = 0;
+
+    items.forEach(item => {
+        const checkbox = item.querySelector('.select-cart-component');
+        const price = parseFloat(item.querySelector('p.price').innerText);
+        const qty = parseInt(item.querySelector('span.qty-display').innerText);
+
+        if (checkbox && checkbox.checked) {
+            total += price * qty;
+        }
+    });
+
+    return total;
+}
+
+
+function setupCheckboxEvents(items, subtotalElementId) {
+    items.forEach(item => {
+        const checkbox = item.querySelector('.select-cart-component');
+        if (!checkbox) return;
+
+        checkbox.addEventListener("change", () => {
+            const total = calculateSubtotal(items);
+            document.getElementById(subtotalElementId).innerText = total;
+        });
+    });
+}
+
+
+
+function setupQuantityControl(items, subtotalElementId) {
+    items.forEach(item => {
+        const minusBtn = item.querySelector('.minus-btn');
+        const plusBtn = item.querySelector('.plus-btn');
+        const qtyDisplay = item.querySelector('.qty-display');
+
+        if (!minusBtn || !plusBtn || !qtyDisplay) return;
+
+        let currentQty = parseInt(qtyDisplay.textContent) || 1;
+
+        function update() {
+            qtyDisplay.textContent = currentQty;
+            minusBtn.disabled = currentQty <= 1;
+        }
+
+        plusBtn.onclick = () => {
+            currentQty++;
+            update();
+            document.getElementById(subtotalElementId).innerText = calculateSubtotal(items);
+        };
+
+        minusBtn.onclick = () => {
+            if (currentQty > 1) {
+                currentQty--;
+                update();
+                document.getElementById(subtotalElementId).innerText = calculateSubtotal(items);
+            }
+        };
+
+        update();
+    });
+}

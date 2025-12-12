@@ -20,5 +20,10 @@ def add_to_cart():
 def get_cart_by_userId():
     user_id=current_user.id
     cart_item=CartDao.get_cart_by_userId_dao(user_id)
-    print([item.to_dict() for item in cart_item])
     return render_template('page/cart_component_item.html', list_prod=cart_item)
+
+def load_my_cart():
+    user_id = current_user.id
+    cart_item = CartDao.get_cart_by_userId_dao(user_id)
+    tab = request.args.get("tab", "order_all")
+    return render_template("page/cart.html", tab=tab, list_pro=cart_item)

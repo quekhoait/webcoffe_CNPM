@@ -1,4 +1,5 @@
 # Cấu trúc route của các trang web bình thường
+from msilib import CAB
 
 from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
@@ -21,7 +22,7 @@ app.add_url_rule('/about-us','about-us',index.load_about_us)
 
 
 #Xử lý giỏ hàng
-app.add_url_rule('/my-cart','my-cart',index.load_my_cart)
+app.add_url_rule('/my-cart','my-cart',CartController.load_my_cart)
 app.add_url_rule('/api/add_to_cart', 'add_to_cart', CartController.add_to_cart, methods=['POST'])
 app.add_url_rule('/api/get-cart-by-userId','get-cart-by-userId',CartController.get_cart_by_userId)
 # demo
@@ -47,7 +48,7 @@ app.add_url_rule('/api/get_product', 'get_product', ProductController.get_produc
 
 
 #thanh toan
-app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
+app.add_url_rule('/payment', 'payment', index.checkout_page, methods=['GET', 'POST'])
 
 #cashier
 app.add_url_rule('/cashier','cashier',CashierController.load_cashier)
