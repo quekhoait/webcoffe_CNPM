@@ -5,7 +5,8 @@ from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
-from eapp.controllers import AccountController,CashierController, ProductController, StaffController, index, CartController
+from eapp.controllers import AccountController, CashierController, ProductController, StaffController, index, \
+    CartController, PaymentController
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
@@ -48,7 +49,8 @@ app.add_url_rule('/api/get_product', 'get_product', ProductController.get_produc
 
 
 #thanh toan
-app.add_url_rule('/payment', 'payment', index.checkout_page, methods=['GET', 'POST'])
+app.add_url_rule('/payment', 'payment', PaymentController.load_data, methods=['POST', 'GET'])
+app.add_url_rule('/api/created_payment', 'created_payment', PaymentController.created_payment, methods=['POST'])
 
 #cashier
 app.add_url_rule('/cashier','cashier',CashierController.load_cashier)

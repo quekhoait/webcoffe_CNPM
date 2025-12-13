@@ -87,26 +87,23 @@ cartIcon.addEventListener("click", () => {
         .then(res => res.text())
         .then(html => {
             document.getElementById("cart_component_item").innerHTML = html;
-
             const cartPopup = document.querySelectorAll('.cart-component-item-popup');
-            console.log(cartPopup)
             setupQuantityControl(cartPopup, 'subTotal-cart-popup');
             setupCheckboxEvents(cartPopup, 'subTotal-cart-popup');
-
             document.getElementById('subTotal-cart-popup')
                 .innerText = calculateSubtotal(cartPopup);
         });
 });
 
 //cart current
+
+const subtotalEl = document.getElementById("subTotal-cart");
+if (subtotalEl) {
 const my_current_cart = document.querySelectorAll('.cart-component-item');
-setupQuantityControl(my_current_cart, 'subTotal-cart');
-setupCheckboxEvents(my_current_cart, 'subTotal-cart');
-
-document.getElementById('subTotal-cart')
-    .innerText = calculateSubtotal(my_current_cart);
-
-
+    setupQuantityControl(my_current_cart, 'subTotal-cart');
+    setupCheckboxEvents(my_current_cart, 'subTotal-cart');
+    subtotalEl.innerText = calculateSubtotal(my_current_cart);
+}
 
 // Đóng cart khi click icon X
 cartCancelIcon.addEventListener("click", () => {
@@ -140,20 +137,16 @@ function addToCart(productId, quantity=1) {
 }
 
 //Tính số tiền
-
 function calculateSubtotal(items) {
     let total = 0;
-
     items.forEach(item => {
         const checkbox = item.querySelector('.select-cart-component');
         const price = parseFloat(item.querySelector('p.price').innerText);
         const qty = parseInt(item.querySelector('span.qty-display').innerText);
-
         if (checkbox && checkbox.checked) {
             total += price * qty;
         }
     });
-
     return total;
 }
 
@@ -204,3 +197,6 @@ function setupQuantityControl(items, subtotalElementId) {
         update();
     });
 }
+
+
+
