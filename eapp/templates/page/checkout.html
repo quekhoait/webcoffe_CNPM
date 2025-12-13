@@ -3,7 +3,7 @@
 {% block title %}Thanh Toán - The Coffee House{% endblock %}
 
 {% block content %}
-<div class="bg-[#f5f0f9] min-h-screen py-10 pt-[90px]">
+<div class="bg-[#f5f0f9] min-h-screen py-10 pt-[100px]">
     <div class="container mx-auto px-6 w-[95%] md:w-[86%]">
 
         <div class="flex items-center text-2xl text-gray-500 mb-8 font-medium">
@@ -23,8 +23,8 @@
                         <i class="fa-solid fa-store text-3xl"></i>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-amber-900">Phương thức: Khách đến lấy tại quán</h3>
-                        <p class="text-xl text-amber-700">Vui lòng kiểm tra thông tin cá nhân bên dưới.</p>
+<!--                        <h3 class="text-2xl font-bold text-amber-900">Phương thức: Khách đến lấy tại quán</h3>-->
+                        <h3 class="text-xl text-amber-700">Vui lòng kiểm tra thông tin cá nhân bên dưới.</h3>
                     </div>
                 </div>
 
@@ -37,7 +37,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-xl font-semibold text-gray-600 mb-2">Họ và Tên</label>
-                                <input type="text" value="{{ user_info.fullname }}" readonly
+                                <input type="text" value="{{ user_info.name }}" readonly
                                     class="w-full p-4 text-2xl border border-gray-200 bg-gray-100 text-gray-500 rounded-xl outline-none cursor-not-allowed">
                             </div>
                             <div>
@@ -48,10 +48,11 @@
                         </div>
 
                         <div>
-                            <label class="block text-xl font-semibold text-gray-600 mb-2">Email xác nhận</label>
-                            <input type="text" value="{{ user_info.email }}" readonly
+                            <label class="block text-xl font-semibold text-gray-600 mb-2">Địa chỉ nhận</label>
+                            <input type="text" value="{{ user_info.address }}" readonly
                                 class="w-full p-4 text-2xl border border-gray-200 bg-gray-100 text-gray-500 rounded-xl outline-none cursor-not-allowed">
                         </div>
+
                     </div>
                 </div>
 
@@ -61,17 +62,17 @@
                     </h2>
 
                     <div class="space-y-4">
-                        <label class="flex items-center justify-between p-5 border border-[#d5c8b2] bg-[#fdfbf7] rounded-xl cursor-pointer hover:bg-[#efe7d6] transition group">
-                            <div class="flex items-center">
-                                <input type="radio" name="payment_method" value="COD" checked class="w-6 h-6 text-[#7c5c56] accent-[#7c5c56]">
-                                <span class="ml-4 text-2xl font-bold text-gray-700 group-hover:text-[#7c5c56]">Thanh toán tại quầy (Tiền mặt)</span>
-                            </div>
-                            <i class="fa-solid fa-cash-register text-3xl text-[#7c5c56]"></i>
-                        </label>
+<!--                        <label class="flex items-center justify-between p-5 border border-[#d5c8b2] bg-[#fdfbf7] rounded-xl cursor-pointer hover:bg-[#efe7d6] transition group">-->
+<!--                            <div class="flex items-center">-->
+<!--                                <input type="radio" name="payment_method" value="COD" checked class="w-6 h-6 text-[#7c5c56] accent-[#7c5c56]">-->
+<!--                                <span class="ml-4 text-2xl font-bold text-gray-700 group-hover:text-[#7c5c56]">Thanh toán tại quầy (Tiền mặt)</span>-->
+<!--                            </div>-->
+<!--                            <i class="fa-solid fa-cash-register text-3xl text-[#7c5c56]"></i>-->
+<!--                        </label>-->
 
                         <label class="flex items-center justify-between p-5 border border-gray-200 rounded-xl cursor-pointer hover:border-pink-300 transition">
                             <div class="flex items-center">
-                                <input type="radio" name="payment_method" value="MOMO" class="w-6 h-6 text-[#7c5c56] accent-[#7c5c56]">
+                                <input type="radio" name="payment_method" checked value="MOMO" class="w-6 h-6 text-[#7c5c56] accent-[#7c5c56]">
                                 <span class="ml-4 text-2xl font-semibold text-gray-700">Ví MoMo</span>
                             </div>
                             <i class="fa-solid fa-wallet text-3xl text-pink-600"></i>
@@ -85,18 +86,17 @@
                     <h2 class="text-3xl font-bold text-[#7c5c56] mb-6 pb-4 border-b">Đơn Hàng Của Bạn</h2>
 
                     <div class="space-y-6 mb-8 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                        {% if cart_items %}
-                            {% for item in cart_items %}
+                        {% if products %}
+                            {% for item in products %}
                             <div class="flex items-start justify-between border-b border-dashed border-gray-200 pb-4 last:border-0">
                                 <div class="flex gap-4">
-                                    <img src="{{ item.image }}" onerror="this.src='https://via.placeholder.com/80'" class="w-full h-full object-cover">
+                                    <img src="{{ item.image }}" onerror="this.src='https://via.placeholder.com/80'" class="w-[70px] h-[70px] rounded-lg object-cover">
                                     <div>
-                                        <h4 class="text-2xl font-bold text-gray-800 line-clamp-2">{{ item.name }}</h4>
-                                        <p class="text-xl text-gray-500 mt-1">{{ "{:,.0f}".format(item.price) }}đ</p>
-                                        <p class="text-lg text-gray-400">x{{ item.quantity }}</p>
+                                        <h4 class="text-3xl font-bold text-gray-800 line-clamp-2">{{ item.name }}</h4>
+                                        <p class="text-2xl text-gray-500 mt-1">{{ item.price }}</p>
                                     </div>
                                 </div>
-                                <span class="text-2xl font-bold text-[#7c5c56]">{{ "{:,.0f}".format(item.price * item.quantity) }}đ</span>
+                                <span class="text-2xl font-bold text-[#7c5c56]"></span>
                             </div>
                             {% endfor %}
                         {% else %}
@@ -106,10 +106,10 @@
 
                     <div class="flex justify-between items-center mt-6 pt-6 border-t border-gray-300">
                         <span class="text-3xl font-bold text-gray-800">Tổng thanh toán</span>
-                        <span class="text-4xl font-extrabold text-[#9d5a15]">{{ "{:,.0f}".format(total_price) }}đ</span>
+                        <span class="text-4xl font-extrabold text-[#9d5a15]">{{total}}đ</span>
                     </div>
 
-                    <button type="submit" {% if not cart_items %}disabled{% endif %}
+                    <button type="submit"
                         class="w-full mt-8 bg-[#8b6e68] hover:bg-[#7c5c56] text-white text-3xl font-bold py-5 rounded-xl shadow-lg transition uppercase disabled:opacity-50">
                         Xác Nhận Đặt Hàng
                     </button>

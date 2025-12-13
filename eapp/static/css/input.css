@@ -101,3 +101,7 @@
 .inactive-category {
     @apply bg-[#D9B99B] text-[#4A2F1E] hover:bg-[#8A4A2F] hover:text-white
 }
+
+.active-status {
+    @apply text-amber-900 bg-gray-200 rounded-2xl
+}

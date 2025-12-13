@@ -1,3 +1,4 @@
+from eapp.dao import PaymentDao
 from eapp.dao.InvoiceDAO import InvoiceDAO
 from eapp.dao.InvoiceDetailDAO import InvoiceDetailDAO
 from eapp.models import InvoiceDetail, Rule
@@ -55,7 +56,13 @@ class InvoiceService:
         staff_id,
         cashier_id,
         invoice,
-
+        invoice_items: {
+            product_id: {
+                id,
+                quantity,
+                price
+            }
+        }
     """
     
     """
@@ -65,11 +72,12 @@ class InvoiceService:
     @staticmethod
     def create_invoice(invoice_data: dict) -> Invoice:
         invoice = Invoice()
-
-        invoice.customer_id = invoice_data.get('customer_id', None)      
+        
+        invoice.order_code = PaymentDao.generate_order_code()
+        invoice.customer_id = invoice_data.get('customer_id', None)     
         invoice.staff_id = invoice_data.get('staff_id',None)
         invoice.cashier_id = invoice_data.get('cashier_id', None)           
-        invoice.payment_method = PaymentMethod.OTHER
+        invoice.payment_method = PaymentMethod.CASH
         invoice.invoice_status = InvoiceStatusEnum.PENDING
         invoice.subtotal = InvoiceService.calculate_total(invoice_data.get('invoice_items', []))
         invoice.extra_fee_total = RuleService.calulate_service_fee(invoice.subtotal)

@@ -1,6 +1,6 @@
     {%for prod in list_prod %}
 
-    <div class="flex  items-center bg-gray-50 rounded-lg p-2 space-x-2 cart-component-item-popup">
+    <div class="flex  items-center bg-gray-50 rounded-lg p-2 space-x-2 cart-component-item-popup" data-product-id="{{ prod.product.id }}">
 
     <div class="w-[60px] h-[60px] rounded-lg overflow-hidden flex-shrink-0">
         <img src="{{ prod.product.image }}" alt="{{ prod.product.name }}" class="w-full h-full object-cover">

@@ -27,15 +27,17 @@ INVOICE_STATUS_LABEL = {
     }
 }
 
+
+
 class PaymentMethod(Enum):
-    CASH = 'Tiền mặt'
-    BANK_TRANSFER = 'Chuyển khoản'
-    OTHER = 'Khác'
+    CASH = "CASH"
+    MOMO = "MOMO"
 
 class Invoice(BaseModel):
+    order_code = Column(String(50), unique=True, nullable=False)
     cashier_id = Column(ForeignKey('account.id'), nullable=True)
     customer_id = Column(ForeignKey('account.id'))
-    staff_id = Column(ForeignKey('account.id'), nullable=False)
+    staff_id = Column(ForeignKey('account.id'), nullable=True)
     subtotal = Column(Float, nullable=False)
     extra_fee_total = Column(Float, nullable=False)
     final_total = Column(Float, nullable=False)
