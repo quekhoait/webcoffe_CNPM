@@ -1,5 +1,4 @@
 # Cấu trúc route của các trang web bình thường
-from msilib import CAB
 
 from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:

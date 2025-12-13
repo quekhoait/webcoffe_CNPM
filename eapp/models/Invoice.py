@@ -17,7 +17,6 @@ class PaymentMethod(Enum):
     BANK_TRANSFER = "BANK_TRANSFER"
 
 class Invoice(BaseModel):
-    order_code = Column(String(50), unique=True, nullable=False)
     cashier_id = Column(ForeignKey('account.id'), nullable=True)
     customer_id = Column(ForeignKey('account.id'))
     staff_id = Column(ForeignKey('account.id'), nullable=False)

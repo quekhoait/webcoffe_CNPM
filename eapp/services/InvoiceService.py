@@ -2,7 +2,7 @@ from eapp.dao.InvoiceDAO import InvoiceDAO
 from eapp.dao.InvoiceDetailDAO import InvoiceDetailDAO
 from eapp.models import InvoiceDetail, Rule
 from eapp.models import Invoice
-from eapp.models.Invoice import PaymentMethod
+from eapp.models.Invoice import InvoiceStatusEnum, PaymentMethod
 from eapp.services.RuleService import RuleService
 
 
@@ -70,7 +70,7 @@ class InvoiceService:
         invoice.staff_id = invoice_data.get('staff_id',None)
         invoice.cashier_id = invoice_data.get('cashier_id', None)           
         invoice.payment_method = PaymentMethod.CASH
-        invoice.invoice_status_id = 1
+        invoice.invoice_status = InvoiceStatusEnum.PENDING_PROCESSING
         invoice.subtotal = InvoiceService.calculate_total(invoice_data.get('invoice_items', []))
         invoice.extra_fee_total = RuleService.calulate_service_fee(invoice.subtotal)
         invoice.final_total = invoice.subtotal + invoice.extra_fee_total

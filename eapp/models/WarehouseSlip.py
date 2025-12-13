@@ -1,12 +1,13 @@
 import enum
 
-from sqlalchemy import Column, Enum as SqlEnum, ForeignKey, String
+from sqlalchemy import Column, Enum as SqlEnum, ForeignKey, String, UniqueConstraint
 from eapp.models import BaseModel
-
+from sqlalchemy.orm import relationship
 class SlipType(enum.Enum):
-    IMPORT = "IMPORT"
-    EXPORT = "EXPORT"
-    UPDATE = "UPDATE"
+    IMPORT = "Nhập Kho"
+    EXPORT = "Xuất Kho"
+    UPDATE = "Cập Nhật Kho"
+    TRANSFER = "Chuyển Kho"
 
 class WarehouseSlip(BaseModel):
     updated_date = None
@@ -15,7 +16,9 @@ class WarehouseSlip(BaseModel):
     source_warehouse_id = Column(ForeignKey('warehouse.id'))
     destination_warehouse_id = Column(ForeignKey('warehouse.id'))
     stock_user_id = Column(ForeignKey('account.id'),nullable=False)
+    invoice_id = Column(ForeignKey('invoice.id'))
+
+    slip_details = relationship('WarehouseSlipDetail',backref='warehouse_slip',lazy=True)
+    __table_args__ = (UniqueConstraint('invoice_id'),)
+    # invoice
     
-
-
-
