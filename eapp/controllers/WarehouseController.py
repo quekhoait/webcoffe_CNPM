@@ -8,10 +8,11 @@ from eapp.services.InventoryService import InventoryService
 
 
 def warehouse_page():
-    warehouse = WarehouseDAO.get_by_id(1)
+    warehouse_id = int(request.args.get('warehouse_id', 1))
+    warehouse = WarehouseDAO.get_by_id(warehouse_id)
     warehouses = WarehouseDAO.list()
     slip_types = [(st.name, st.value) for st in SlipType]
-    ingredient_stocks = InventoryService.load_stock(warehouse_id=1)
+    ingredient_stocks = InventoryService.load_stock(warehouse_id=warehouse_id)
     ingredients = IngredientDAO.list()
     return render_template('warehouse/warehouse.html',
                            warehouse=warehouse,

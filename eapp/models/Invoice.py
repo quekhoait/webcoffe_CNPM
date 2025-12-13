@@ -10,17 +10,32 @@ class InvoiceStatusEnum(str, Enum):
     PENDING = "pending"  # Chờ xử lý / chờ phục vụ
     IN_PROGRESS = "in_progress"  # Đang giao / đang phục vụ
     COMPLETED = "completed"
+    CANCELLED = "cancelled"  # Đã hủy
+
+INVOICE_STATUS_LABEL = {
+    "offline": {
+        InvoiceStatusEnum.PENDING: "Chờ xử lý",
+        InvoiceStatusEnum.IN_PROGRESS: "Đang phục vụ",
+        InvoiceStatusEnum.COMPLETED: "Hoàn thành",
+        InvoiceStatusEnum.CANCELLED: "Đã hủy",
+    },
+    "online": {
+        InvoiceStatusEnum.PENDING: "Chờ xử lý",
+        InvoiceStatusEnum.IN_PROGRESS: "Đang giao",
+        InvoiceStatusEnum.COMPLETED: "Hoàn tất",
+        InvoiceStatusEnum.CANCELLED: "Đã hủy đơn",
+    }
+}
 
 class PaymentMethod(Enum):
     CASH = "CASH"
     MOMO = "MOMO"
-    BANK_TRANSFER = "BANK_TRANSFER"
+
 
 class Invoice(BaseModel):
     cashier_id = Column(ForeignKey('account.id'), nullable=True)
     customer_id = Column(ForeignKey('account.id'))
     staff_id = Column(ForeignKey('account.id'), nullable=False)
-    total_amount = Column(Float, nullable=False)
     subtotal = Column(Float, nullable=False)
     extra_fee_total = Column(Float, nullable=False)
     final_total = Column(Float, nullable=False)

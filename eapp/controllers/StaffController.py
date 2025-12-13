@@ -10,7 +10,7 @@ from eapp.services.InvoiceService import InvoiceService
 
 def load_staff():
     category = CategoryDao.list()
-    dishes = ProductDao.list()
+    products = ProductDao.list()
     invoice = session.get('invoice', {})
     rules = RuleDAO.list({'rule_type': RuleType.SERVICE})
     total_price_tmp = InvoiceService.calculate_total(invoice)
@@ -18,7 +18,7 @@ def load_staff():
 
     return render_template('/staff/staff.html',
                            category=category, 
-                           dishes=dishes, 
+                           products=products, 
                            total_price=total_price,
                            total_price_tmp=total_price_tmp,
                            rules=rules)
@@ -72,7 +72,6 @@ def removeItemFromInvoice():
 
 def create_invoice():
     invoice_items = session.get('invoice',{})
-    print(invoice_items)
     # tạm thời test với staff_id = 1 request.json.get('staff_id')
     invoice_data = {
         'staff_id' : request.json.get('staff_id'),
@@ -83,6 +82,12 @@ def create_invoice():
 
     session.pop('invoice',None)
 
+    return jsonify({
+        "success" : True
+    })
+
+def clear_invoice():
+    session.pop('invoice')
     return jsonify({
         "success" : True
     })

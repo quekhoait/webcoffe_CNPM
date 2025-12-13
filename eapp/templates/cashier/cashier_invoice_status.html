@@ -2,9 +2,9 @@
     <div class="text-amber-900 bg-gray-200 rounded-2xl">
         <span>Tất cả(3)</span>
     </div>
-    {% for status in invoice_status %}
+    {% for status, value in INVOICE_STATUS_LABEL[invoice_type].items() %}
     <div>
-        <span>{{ status.name }}(3)</span>
+        <span id="{{ status }}">{{ value }}(3)</span>
     </div>
     {% endfor %}
 </div>

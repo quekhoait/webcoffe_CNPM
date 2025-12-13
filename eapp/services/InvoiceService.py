@@ -69,8 +69,8 @@ class InvoiceService:
         invoice.customer_id = invoice_data.get('customer_id', None)      
         invoice.staff_id = invoice_data.get('staff_id',None)
         invoice.cashier_id = invoice_data.get('cashier_id', None)           
-        invoice.payment_method = PaymentMethod.CASH
-        invoice.invoice_status = InvoiceStatusEnum.PENDING_PROCESSING
+        invoice.payment_method = PaymentMethod.OTHER
+        invoice.invoice_status = InvoiceStatusEnum.PENDING
         invoice.subtotal = InvoiceService.calculate_total(invoice_data.get('invoice_items', []))
         invoice.extra_fee_total = RuleService.calulate_service_fee(invoice.subtotal)
         invoice.final_total = invoice.subtotal + invoice.extra_fee_total

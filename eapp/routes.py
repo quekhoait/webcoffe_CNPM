@@ -1,11 +1,11 @@
 # Cấu trúc route của các trang web bình thường
+from msilib import CAB
 
 from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
-from eapp.controllers import AccountController, CashierController, ProductController, StaffController, index, \
-    CartController, PaymentController
+from eapp.controllers import CartController, PaymentController, ProductController, StaffController, WarehouseController, index, AccountController,CashierController, ProductController, StaffController, index
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
@@ -31,7 +31,7 @@ app.add_url_rule('/staff','index2',StaffController.load_staff)
 
 
 
-app.add_url_rule('/api/dish','dish',ProductController.list('page/menu_product_item.html'), methods=['get'])
+app.add_url_rule('/api/products','products',ProductController.list('/staff/product_item.html'), methods=['get'])
 
 # staff
 
@@ -57,5 +57,15 @@ app.add_url_rule('/cashier','cashier',CashierController.load_cashier)
 # app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
 
 
-app.add_url_rule('/admin/warehouse', 'warehouse', StaffController.warehouse_page)
+app.add_url_rule('/warehouse', 'warehouse', WarehouseController.warehouse_page)
 app.add_url_rule('/admin/warehouse/create-ticket', 'create_ticket', StaffController.create_ticket, methods=['POST'])
+
+
+#API Ingredient
+app.add_url_rule('/api/ingredients', 'get_ingredients', WarehouseController.get_ingredients, methods=['GET'])
+
+#API WarehouseSlip
+app.add_url_rule('/api/warehouse-slips', 'create_warehouse_slip', WarehouseController.create_warehouse_slip, methods=['POST'])
+
+#API Invoice
+app.add_url_rule('/api/invoices', 'get_invoices', CashierController.load_invoices, methods=['get'])

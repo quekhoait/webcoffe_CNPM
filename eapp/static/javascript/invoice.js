@@ -1,41 +1,36 @@
 
 function loadDishes(params = {}) {
     const query = new URLSearchParams(params).toString();
-    const dishList = document.getElementById('dish-list');
+    const productList = document.getElementById('product-list');
 
-    // if (dishCache[query]) {
-    //     dishList.innerHTML = dishCache[query].map(renderDish).join('')
-    //     return
-    // }
-
-    fetch('/api/dish?' + query)
+    fetch('/api/products?' + query)
         .then(res => res.text())
         .then(html => {
-            dishList.innerHTML = html
-
-            // if(Object.keys(data).length === 0){
-            //     console.log('empty');
-            //     dishList.innerHTML = renderAlert()
-            //     return;
-            // }
-
-            // dishList.innerHTML = data.map(d => renderDish(d)).join('')
-            // data.forEach(d => container.innerHTML += renderDish(d));
+            console.log(html);
+            productList.innerHTML = html
         })
         .catch(err => console.error(err));
 }
 
 document.querySelectorAll('#category-list button').forEach(ele => {
-    ele.addEventListener('click', () => {
+    ele.addEventListener('click', (e) => {
+        document.querySelectorAll('#category-list button').forEach(btn => {
+            btn.classList.remove('active-category')
+            btn.classList.add('inactive-category')
+        })
+        e.target.classList.add('active-category')
+        e.target.classList.remove('inactive-category')
         cateId = ele.dataset?.id
         params = cateId
-            ? { 'dish_category_id': parseInt(cateId) }
+            ? { 'category_id': parseInt(cateId) }
             : {}
         loadDishes(params)
     })
 })
 
-document.getElementById('search-input').addEventListener('change', (e) => {
+document.getElementById('search-input').addEventListener('input', (e) => {
+    console.log(e.target.value);
+    
     loadDishes({ 'name': e.target.value })
 })
 
@@ -104,8 +99,19 @@ function submitInvoice() {
         orderItem.innerHTML = ""
         document.getElementById("total-price").innerText = 0;
         document.getElementById("total-price-tmp").innerText = 0;
-        // location.reload()
-        alert("OKK")
+        alert("Lập hóa đơn thành công!")
+    })
+}
+
+function clearInvoice() {
+    fetch('/api/invoice', {
+        method: 'delete'
+    }).then(res => res.json()).then(data => {
+        orderItem = document.querySelector('.list-order-item')
+        orderItem.innerHTML = ""
+        document.getElementById("total-price").innerText = 0;
+        document.getElementById("total-price-tmp").innerText = 0;
+        alert("Xóa hóa đơn thành công!")
     })
 }
 
