@@ -99,7 +99,6 @@ def load_about_us():
 
 def checkout_page():
     current_user = session.get('user')
-
     #test
     if not current_user:
         current_user = {'id': 1, 'name': 'Khách hàng Test', 'phone': '0909000111', 'email': 'test@gmail.com'}
@@ -203,9 +202,7 @@ def load_profile():
     tab = request.args.get("tab", "profile")
     return render_template("page/profile.html", tab=tab)
 
-def load_my_cart():
-    tab = request.args.get("tab", "order_all")
-    return render_template("page/cart.html", tab=tab)
+
 
 
 

@@ -15,7 +15,7 @@ class WarehouseSlip(BaseModel):
     note = Column(String(200))
     source_warehouse_id = Column(ForeignKey('warehouse.id'))
     destination_warehouse_id = Column(ForeignKey('warehouse.id'))
-    stock_user_id = Column(ForeignKey('account.id'),nullable=False)
+    stock_user_id = Column(ForeignKey('account.id'))
     invoice_id = Column(ForeignKey('invoice.id'))
 
     slip_details = relationship('WarehouseSlipDetail',backref='warehouse_slip',lazy=True)

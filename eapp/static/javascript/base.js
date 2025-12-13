@@ -1,3 +1,5 @@
+
+
 /** Alert animation + style */
 function showAlert(type, title, message) {
   const alertBox = document.getElementById("form_alert");
@@ -73,3 +75,132 @@ function hideAlert() {
 }
 
 
+//Cart popup
+const mycart = document.getElementById("my_cart");
+const cartIcon = document.getElementById("cart_icon");
+const cartCancelIcon = document.getElementById("icon_cancel_cart");
+
+
+cartIcon.addEventListener("click", () => {
+    mycart.classList.remove("hidden");
+    fetch('/api/get-cart-by-userId')
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("cart_component_item").innerHTML = html;
+
+            const cartPopup = document.querySelectorAll('.cart-component-item-popup');
+            console.log(cartPopup)
+            setupQuantityControl(cartPopup, 'subTotal-cart-popup');
+            setupCheckboxEvents(cartPopup, 'subTotal-cart-popup');
+
+            document.getElementById('subTotal-cart-popup')
+                .innerText = calculateSubtotal(cartPopup);
+        });
+});
+
+//cart current
+const my_current_cart = document.querySelectorAll('.cart-component-item');
+setupQuantityControl(my_current_cart, 'subTotal-cart');
+setupCheckboxEvents(my_current_cart, 'subTotal-cart');
+
+document.getElementById('subTotal-cart')
+    .innerText = calculateSubtotal(my_current_cart);
+
+
+
+// Đóng cart khi click icon X
+cartCancelIcon.addEventListener("click", () => {
+    mycart.classList.add("hidden");
+});
+
+// Đóng cart khi click ra ngoài
+document.addEventListener("click", function (event) {
+    if (mycart.classList.contains("hidden")) return;
+    if (cartIcon.contains(event.target)) return;
+    if (mycart.contains(event.target)) return;
+    mycart.classList.add("hidden");
+});
+
+function addToCart(productId, quantity=1) {
+    fetch('/api/add_to_cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product_id: productId, quantity: quantity })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status == "success") {
+        alert(1)
+            showAlert("success", "Thông báo", data.message);
+        } else {
+            alert('Lỗi: ' + data.message);
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+//Tính số tiền
+
+function calculateSubtotal(items) {
+    let total = 0;
+
+    items.forEach(item => {
+        const checkbox = item.querySelector('.select-cart-component');
+        const price = parseFloat(item.querySelector('p.price').innerText);
+        const qty = parseInt(item.querySelector('span.qty-display').innerText);
+
+        if (checkbox && checkbox.checked) {
+            total += price * qty;
+        }
+    });
+
+    return total;
+}
+
+
+function setupCheckboxEvents(items, subtotalElementId) {
+    items.forEach(item => {
+        const checkbox = item.querySelector('.select-cart-component');
+        if (!checkbox) return;
+
+        checkbox.addEventListener("change", () => {
+            const total = calculateSubtotal(items);
+            document.getElementById(subtotalElementId).innerText = total;
+        });
+    });
+}
+
+
+
+function setupQuantityControl(items, subtotalElementId) {
+    items.forEach(item => {
+        const minusBtn = item.querySelector('.minus-btn');
+        const plusBtn = item.querySelector('.plus-btn');
+        const qtyDisplay = item.querySelector('.qty-display');
+
+        if (!minusBtn || !plusBtn || !qtyDisplay) return;
+
+        let currentQty = parseInt(qtyDisplay.textContent) || 1;
+
+        function update() {
+            qtyDisplay.textContent = currentQty;
+            minusBtn.disabled = currentQty <= 1;
+        }
+
+        plusBtn.onclick = () => {
+            currentQty++;
+            update();
+            document.getElementById(subtotalElementId).innerText = calculateSubtotal(items);
+        };
+
+        minusBtn.onclick = () => {
+            if (currentQty > 1) {
+                currentQty--;
+                update();
+                document.getElementById(subtotalElementId).innerText = calculateSubtotal(items);
+            }
+        };
+
+        update();
+    });
+}

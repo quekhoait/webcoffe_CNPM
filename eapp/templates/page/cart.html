@@ -72,7 +72,8 @@ block content %}
           <!--============================-->
         </div>
         <!--                Giỏ hàng hiện tại-->
-        {% include 'cart/current_cart.html'%}
+          {% set list_pro=list_pro %}
+          {% include 'cart/current_cart.html'%}
 
         <!--                =========================-->
       </div>
@@ -82,6 +83,7 @@ block content %}
     </div>
   </div>
 </div>
+
 
 <script>
   // Hàm JavaScript đơn giản để bật/tắt (toggle) chi tiết đơn hàng

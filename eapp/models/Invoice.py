@@ -10,6 +10,22 @@ class InvoiceStatusEnum(str, Enum):
     PENDING = "pending"  # Chờ xử lý / chờ phục vụ
     IN_PROGRESS = "in_progress"  # Đang giao / đang phục vụ
     COMPLETED = "completed"
+    CANCELLED = "cancelled"  # Đã hủy
+
+INVOICE_STATUS_LABEL = {
+    "offline": {
+        InvoiceStatusEnum.PENDING: "Chờ xử lý",
+        InvoiceStatusEnum.IN_PROGRESS: "Đang phục vụ",
+        InvoiceStatusEnum.COMPLETED: "Hoàn thành",
+        InvoiceStatusEnum.CANCELLED: "Đã hủy",
+    },
+    "online": {
+        InvoiceStatusEnum.PENDING: "Chờ xử lý",
+        InvoiceStatusEnum.IN_PROGRESS: "Đang giao",
+        InvoiceStatusEnum.COMPLETED: "Hoàn tất",
+        InvoiceStatusEnum.CANCELLED: "Đã hủy đơn",
+    }
+}
 
 class PaymentMethod(Enum):
     CASH = 'Tiền mặt'
@@ -24,7 +40,7 @@ class Invoice(BaseModel):
     extra_fee_total = Column(Float, nullable=False)
     final_total = Column(Float, nullable=False)
     note = Column(String(255))
-    payment_method = Column(String(50), nullable=False)
+    payment_method = Column(SqlEnum(PaymentMethod), nullable=False)
     invoice_status = Column(SqlEnum(InvoiceStatusEnum), nullable=False)
     
     invoice_details = relationship("InvoiceDetail", backref="invoice", lazy=True)

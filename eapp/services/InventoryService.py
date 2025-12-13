@@ -4,6 +4,7 @@ from eapp.dao import RuleDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.dao.WarehouseSlipDAO import WarehouseSlipDAO
 from eapp.models import Ingredient, Stock, Warehouse, WarehouseSlip
+from eapp.models.Invoice import Invoice
 from eapp.models.Rule import RuleType
 from eapp.services.SlipStrategyFactory import SlipStrategyFactory
 
@@ -35,7 +36,29 @@ class InventoryService:
         if ingredient_stock.quantity < InventoryService.load_rules()[0].value:
             return IngredientStatus.LOW_STOCK
         return IngredientStatus.AVAILABLE
-    
+
+    @staticmethod
+    def invoice_process(invoice: Invoice, source_warehouse_id: int):
+        ingredients = []
+        for item in invoice.invoice_details:
+            product = item.product
+            for recipe_ingredient in product.ingredients:
+                ingredients.append({
+                    'ingredient_id' : recipe_ingredient.ingredient_id,
+                    'quantity' : recipe_ingredient.quantity * item.quantity
+                })
+        slip_data = {
+            'slip_type' : 'EXPORT',
+            'note' : f'Xuất kho tự động cho hóa đơn #{invoice.id}',
+            'stock_user_id' : None,
+            'invoice_id' : invoice.id,
+            'destination_warehouse_id' : None,
+            'source_warehouse_id' : source_warehouse_id,
+            'ingredients' : ingredients
+        }
+        return InventoryService.create_slip(slip_data)
+
+
 
     """
     slip_data:
@@ -72,6 +95,7 @@ class InventoryService:
         # import pdb
         # pdb.set_trace()
         SlipStrategyFactory.get_strategy(warehouse_slip.slip_type).update_stock(warehouse_slip=warehouse_slip)
+        return warehouse_slip
 
     
 
