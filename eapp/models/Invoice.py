@@ -47,3 +47,4 @@ class Invoice(BaseModel):
     invoice_status = Column(SqlEnum(InvoiceStatusEnum), nullable=False)
     
     invoice_details = relationship("InvoiceDetail", backref="invoice", lazy=True)
+    serialize_rules = ('-invoice_details', '-invoice.customer','-invoice.staff','-invoice.cashier')

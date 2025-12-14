@@ -72,3 +72,4 @@ app.add_url_rule('/api/warehouse-slips', 'create_warehouse_slip', WarehouseContr
 #API Invoice
 app.add_url_rule('/api/invoices', 'get_invoices', CashierController.load_invoices, methods=['get'])
 app.add_url_rule('/api/invoice-detail', 'get_invoice_detail', CashierController.load_invoice_detail, methods=['get'])
+app.add_url_rule('/api/invoices','update_invoice_status',CashierController.update_invoice_status, methods=['patch'])

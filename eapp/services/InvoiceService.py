@@ -4,6 +4,7 @@ from eapp.dao.InvoiceDetailDAO import InvoiceDetailDAO
 from eapp.models import InvoiceDetail, Rule
 from eapp.models import Invoice
 from eapp.models.Invoice import InvoiceStatusEnum, PaymentMethod
+from eapp.services.InventoryService import InventoryService
 from eapp.services.RuleService import RuleService
 
 
@@ -98,4 +99,58 @@ class InvoiceService:
 
         return invoice
     
+
+    def update_invoice_status(invoice: Invoice, new_status: InvoiceStatusEnum, warehouse_id: int = None):
+        result = {
+            'success': False,
+            'message': '',
+            'invoice': None,
+            'insufficient_ingredients': None
+        }
+
+        if new_status == InvoiceStatusEnum.IN_PROGRESS:
+            invoice.invoice_status = InvoiceStatusEnum.IN_PROGRESS
+            rs = InventoryService.invoice_process(invoice,warehouse_id)
+            if rs['success']:
+                result.update({
+                    'success': True,
+                    'message': 'Hóa đơn đang được xử lý',
+                    'invoice': invoice
+                })
+            else:
+                result.update({
+                'message': 'Nguyên liệu không đủ cho hóa đơn',
+                'insufficient_ingredients': rs['insufficient_ingredients']
+                })
+
+        elif new_status == InvoiceStatusEnum.COMPLETED:
+            if invoice.invoice_status != InvoiceStatusEnum.IN_PROGRESS:
+                result['message'] = 'Hóa đơn chưa được xử lý'
+            else:
+                invoice.invoice_status = InvoiceStatusEnum.COMPLETED
+                result.update({
+                    'success': True,
+                    'message': 'Hóa đơn đã hoàn thành',
+                    'invoice': invoice
+                })
+
+        elif new_status == InvoiceStatusEnum.CANCELLED:
+            if invoice.invoice_status == InvoiceStatusEnum.COMPLETED:
+                result['message'] = 'Không thể hủy hóa đơn đã hoàn thành'
+            else:
+                invoice.invoice_status = InvoiceStatusEnum.CANCELLED
+                result.update({
+                    'success': True,
+                    'message': 'Hủy hóa đơn thành công',
+                    'invoice': invoice
+                })
+
+        else:
+            result['message'] = 'Trạng thái hóa đơn không hợp lệ'
+
+        if result['invoice']:
+            result['invoice'].save()
+        return result
+
+
     

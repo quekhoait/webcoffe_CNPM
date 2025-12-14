@@ -36,17 +36,69 @@ class InventoryService:
         if ingredient_stock.quantity < InventoryService.load_rules()[0].value:
             return IngredientStatus.LOW_STOCK
         return IngredientStatus.AVAILABLE
+    
+
+    """
+        return
+        ingredient_id
+        required_quantity
+        available_quantity
+
+        ingredients 
+            ingredient_id
+            quantity
+    """
+    @staticmethod
+    def get_insufficient_ingredients(ingredients: list, warehouse_id: int):
+        warehouse = WarehouseDAO.get_by_id(warehouse_id=warehouse_id)
+        stocks = warehouse.stocks
+        insufficient_ingredients = []
+        for ingredient in ingredients:
+            stock = next((s for s in stocks if s.ingredient_id == ingredient['ingredient_id']), None)
+            if stock is not None:
+                print(stock.ingredient_id, stock.quantity)
+            if stock is None or stock.quantity < ingredient['quantity']:
+                insufficient_ingredients.append({
+                    'ingredient_id': ingredient['ingredient_id'],
+                    'required_quantity': ingredient['quantity'],
+                    'available_quantity': stock.quantity if stock else 0
+                })
+        return insufficient_ingredients
+
+
+    """
+        cafe: 2a , 2b : 2
+        che: 3a, 3c : 1
+    """
 
     @staticmethod
-    def invoice_process(invoice: Invoice, source_warehouse_id: int):
-        ingredients = []
+    def get_ingredient_list_from_invoice(invoice: Invoice):
+        ingredients = {}
         for item in invoice.invoice_details:
             product = item.product
             for recipe_ingredient in product.ingredients:
-                ingredients.append({
-                    'ingredient_id' : recipe_ingredient.ingredient_id,
-                    'quantity' : recipe_ingredient.quantity * item.quantity
-                })
+                if recipe_ingredient.ingredient_id in ingredients:
+                    ingredients[recipe_ingredient.ingredient_id]['quantity'] += item.quantity * recipe_ingredient.quantity
+                else:
+                    ingredients[recipe_ingredient.ingredient_id] = {
+                        'ingredient_id' : recipe_ingredient.ingredient_id,
+                        'quantity' : item.quantity * recipe_ingredient.quantity
+                    }
+
+        return ingredients
+
+    @staticmethod
+    def invoice_process(invoice: Invoice, source_warehouse_id: int):
+        ingredients = list(InventoryService.get_ingredient_list_from_invoice(invoice=invoice).values())
+        insufficient_ingredients = InventoryService.get_insufficient_ingredients(
+            ingredients=ingredients,
+            warehouse_id=source_warehouse_id
+        )
+        if insufficient_ingredients:
+            return {
+                'success' : False,
+                'insufficient_ingredients' : insufficient_ingredients
+            }
         slip_data = {
             'slip_type' : 'EXPORT',
             'note' : f'Xuất kho tự động cho hóa đơn #{invoice.id}',
@@ -56,7 +108,10 @@ class InventoryService:
             'source_warehouse_id' : source_warehouse_id,
             'ingredients' : ingredients
         }
-        return InventoryService.create_slip(slip_data)
+        return {
+            'success' : True,
+            'warehouse_slip' : InventoryService.create_slip(slip_data=slip_data)
+        }
 
 
 

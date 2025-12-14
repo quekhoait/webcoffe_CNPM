@@ -71,3 +71,21 @@ function viewInvoiceDetail(invoiceId){
         document.getElementById('invoice-detail').innerHTML = data
     })
 }
+
+function updateInvoiceStatus(invoiceId, invoiceStatus){
+    fetch('/api/invoices',{
+        method : 'patch',
+        body : JSON.stringify({
+            'invoice_id' : invoiceId,
+            'invoice_status' : invoiceStatus
+        }),
+         headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json()).then(data => {
+        if(data['success']){
+            loadInvoices()
+        }
+        alert(data['message'])
+    })
+}
