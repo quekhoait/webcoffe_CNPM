@@ -39,7 +39,6 @@ app.add_url_rule('/api/products','products',ProductController.list('/staff/produ
 app.add_url_rule('/staff','staff',StaffController.load_staff)
 app.add_url_rule('/api/order','add_order',StaffController.addItemToInvoice, methods=['post'])
 app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice, methods=['post'])
-app.add_url_rule('/api/invoice','clear_invoice',StaffController.clear_invoice, methods=['delete'])
 app.add_url_rule('/api/remove-item','remove_item',StaffController.removeItemFromInvoice, methods=['post'])
 
 
@@ -72,3 +71,4 @@ app.add_url_rule('/api/warehouse-slips', 'create_warehouse_slip', WarehouseContr
 
 #API Invoice
 app.add_url_rule('/api/invoices', 'get_invoices', CashierController.load_invoices, methods=['get'])
+app.add_url_rule('/api/invoice-detail', 'get_invoice_detail', CashierController.load_invoice_detail, methods=['get'])

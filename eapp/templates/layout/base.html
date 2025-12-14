@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Tên Trang Mặc Định{% endblock %}</title>
@@ -10,6 +9,8 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     {% endblock %}
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
@@ -35,13 +36,15 @@
     {% endblock%}
 
 
-    {% block scripts %}
+{% block scripts %}
     <script src="{{ url_for('static', filename='javascript/home.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/base.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/product.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/profile.js') }}"></script>
-    {% endblock %}
+
+     <script src="{{ url_for('static', filename='javascript/profile.js') }}"></script>
+     <script src="{{ url_for('static', filename='javascript/product.js') }}"></script>
+         <script src="{{ url_for('static', filename='javascript/base.js') }}"></script>
+<!--<script src="{{ url_for('static', filename='javascript/cart.js') }}"></script>-->
+
+ {% endblock %}
 
 </body>
-
 </html>

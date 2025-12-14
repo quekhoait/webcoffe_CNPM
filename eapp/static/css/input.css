@@ -30,9 +30,9 @@
 }
 
 /* Style border invoice card */
-.invoice-card[data-status="selecting"] {
+/* .invoice-card[data-status="selecting"] {
     @apply bg-amber-100 border-l-4 border-amber-800 border-r-2 border-y-2 hover:shadow-lg transition-all duration-200 space-y-3;
-}
+} */
 
 .invoice-card[data-status="pending"] {
     @apply  bg-yellow-50 border-l-4 border-yellow-600 hover:shadow-lg transition-all duration-200 space-y-3;
@@ -66,9 +66,9 @@
     @apply text-lg bg-red-200 font-semibold text-red-900 px-3 py-1;
 }
 
-.invoice-card[data-status="selecting"] .status-badge {
+/* .invoice-card[data-status="selecting"] .status-badge {
     @apply text-lg bg-amber-200 font-semibold text-amber-900 px-3 py-1;
-}
+} */
 
 .invoice-card[data-status="in_progress"] .status-badge {
     @apply text-lg bg-blue-200 font-semibold text-blue-900 px-3 py-1;
@@ -104,4 +104,12 @@
 
 .active-status {
     @apply text-amber-900 bg-gray-200 rounded-2xl
+}
+
+.active-invoice-card {
+    @apply bg-amber-100! border-l-4! border-amber-800! border-r-2! border-y-2! hover:shadow-lg transition-all duration-200 space-y-3;
+}
+
+.active-invoice-card .status-badge {
+    @apply text-lg! bg-amber-200! font-semibold! text-amber-900! px-3 py-1;
 }

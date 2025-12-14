@@ -1,94 +1,88 @@
-<div>
-    <div class=" p-4 rounded-lg bg-white shadow-lg border border-gray-100">
-        <div class="flex justify-between items-center mb-6">
+<div class="">
+    <div class="flex flex-col h-screen p-4 rounded-lg bg-white shadow-lg border border-gray-100">
+        <!-- Header invoice detail -->
+        <div class=" flex justify-between items-center mb-6">
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold text-gray-800">
-                    Chi tiết đơn hàng <span class="text-orange-500">#GRAB145</span>
+                    Chi tiết đơn hàng <span class="text-orange-500">{{ invoice.order_code }}</span>
                 </h1>
-                <p class="text-lg text-gray-600 mt-1">Khách hàng: Nguyễn Văn A</p>
+                {% if invoice.staff %}
+                <p class="text-lg text-gray-600 mt-1">Nhân Viên: {{ invoice.staff.name }}</p>
+                {% elif invoice.customer %}
+                <p class="text-lg text-gray-600 mt-1">Khách Hàng: {{ invoice.customer.name }}</p>
+                {% endif %}
+
             </div>
-            
+
             <div class="flex space-x-2 text-xl">
-                <button class="flex items-center space-x-2 px-3 py-2 font-medium rounded-lg text-gray-700 border border-gray-300 bg-white hover:bg-gray-50 transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0v2a2 2 0 002 2h4a2 2 0 002-2v-2m-8 0H9"></path></svg>
+                <button
+                    class="flex items-center space-x-2 px-3 py-2 font-medium rounded-lg text-gray-700 border border-gray-300 bg-white hover:bg-gray-50 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0v2a2 2 0 002 2h4a2 2 0 002-2v-2m-8 0H9">
+                        </path>
+                    </svg>
                     <span>In biên lai</span>
                 </button>
-                
-                <button class="flex items-center space-x-2 px-3 py-2  font-medium rounded-lg text-white bg-green-700 hover:bg-green-800 transition shadow-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
+                <button
+                    class="flex items-center space-x-2 px-3 py-2  font-medium rounded-lg text-white bg-green-700 hover:bg-green-800 transition shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                     <span>Hoàn thành</span>
                 </button>
             </div>
         </div>
 
-        <hr class="border-gray-500 mb-6">
+        <hr class="border-gray-500 mb-6 ">
 
-        <div class="space-y-2 mb-6">
-            
+        <!-- list product detail -->
+        <div class="space-y-2 mb-6 flex-1 overflow-y-auto scrollbar-none" >
+            {% if invoice.invoice_details %}
+            {% for detail in invoice.invoice_details %}
             <div class="flex items-center justify-between py-2 text-xl">
                 <div class="flex items-center space-x-4">
                     <div class="w-10 h-10 bg-gray-100 rounded-lg opacity-80 flex items-center justify-center">
-                        <div class="w-3 h-3 bg-gray-300 rounded-sm"></div>
+                        <!-- <div class="w-3 h-3 bg-gray-300 rounded-sm"></div> -->
+                        <img src="{{ detail.product.image }}" class="w-full h-full object-cover" alt="">
                     </div>
-                    
-                    <div>
-                        <p class="text-gray-900 font-medium">Cà phê đen đá</p>
-                        <p class="text-lg text-gray-500">Số lượng: 2</p>
-                    </div>
-                </div>
-                <div class="text-gray-900 font-medium">60.000₫</div>
-            </div>
 
-            <div class="flex items-center justify-between py-2 text-xl">
-                <div class="flex items-center space-x-4">
-                    <div class="w-10 h-10 bg-gray-100 rounded-lg opacity-80 flex items-center justify-center">
-                        <div class="w-3 h-3 bg-gray-300 rounded-sm"></div>
-                    </div>
-                    
                     <div>
-                        <p class="text-gray-900 font-medium">Cà phê đen đá</p>
-                        <p class="text-lg text-gray-500">Số lượng: 2</p>
+                        <p class="text-gray-900 font-medium">{{ detail.product.name }}</p>
+                        <p class="text-lg text-gray-500">Số lượng: {{ detail.quantity }}</p>
                     </div>
                 </div>
-                <div class="text-gray-900 font-medium">60.000₫</div>
+                <div class="text-gray-900 font-medium">{{ detail.quantity*detail.price }}₫</div>
             </div>
-
-            <div class="flex items-center justify-between py-2 text-xl">
-                <div class="flex items-center space-x-4">
-                    <div class="w-10 h-10 bg-gray-100 rounded-lg opacity-80 flex items-center justify-center">
-                        <div class="w-3 h-3 bg-gray-300 rounded-sm"></div>
-                    </div>
-                    
-                    <div>
-                        <p class="text-gray-900 font-medium">Cà phê đen đá</p>
-                        <p class="text-lg text-gray-500">Số lượng: 2</p>
-                    </div>
-                </div>
-                <div class="text-gray-900 font-medium">60.000₫</div>
-            </div>
-           
+            {% endfor %}
+            {% endif %}
         </div>
 
         <hr class="border-t border-gray-200 mb-4">
 
-        <div class="space-y-2">
+        <!-- Bill invoice detail -->
+        <div class="space-y-2 mt-auto">
             <div class="flex justify-between text-gray-700 text-base">
                 <p>Tạm tính</p>
-                <p class="font-medium">150.000₫</p>
+                <p class="font-medium">{{ invoice.subtotal }}₫</p>
             </div>
-            
+
             <div class="flex justify-between text-gray-700 text-base">
                 <p>Giảm giá</p>
                 <p class="font-medium text-red-500">0₫</p>
             </div>
 
             <hr class="border-t border-gray-100 pt-2">
-            
+
             <div class="flex justify-between text-gray-900 text-lg">
                 <p class="font-bold">Tổng cộng</p>
-                <p class="font-bold">150.000₫</p>
+                <p class="font-bold">{{ invoice.final_total }}₫</p>
             </div>
         </div>
-        
+
     </div>
 </div>

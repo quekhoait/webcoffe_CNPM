@@ -42,5 +42,14 @@ class InvoiceDAO:
         except Exception as ex:
             print(f"Lỗi khi tạo invoice: {ex}")
             return None
+
+    @staticmethod
+    def get_by_id(invoice_id: int) -> Invoice:
+        try:
+            invoice = Invoice.query.get(invoice_id)
+            return invoice
+        except Exception as ex:
+            print(f"Lỗi khi lấy invoice theo id: {ex}")
+            return None
         
     

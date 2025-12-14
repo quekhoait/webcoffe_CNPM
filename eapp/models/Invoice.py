@@ -33,11 +33,12 @@ class PaymentMethod(Enum):
     CASH = "CASH"
     MOMO = "MOMO"
 
+
 class Invoice(BaseModel):
     order_code = Column(String(50), unique=True, nullable=False)
     cashier_id = Column(ForeignKey('account.id'), nullable=True)
     customer_id = Column(ForeignKey('account.id'))
-    staff_id = Column(ForeignKey('account.id'), nullable=True)
+    staff_id = Column(ForeignKey('account.id'), nullable=False)
     subtotal = Column(Float, nullable=False)
     extra_fee_total = Column(Float, nullable=False)
     final_total = Column(Float, nullable=False)

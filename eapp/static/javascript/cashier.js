@@ -45,6 +45,8 @@ function filterInvoiceByStatus(invoice_status) {
     loadInvoices()
 }
 
+bindStatusEvent()
+
 function bindStatusEvent() {
     const statusNavigation = document.querySelectorAll('#status-navigation button')
 
@@ -61,3 +63,11 @@ function bindStatusEvent() {
     })
 }
 
+
+function viewInvoiceDetail(invoiceId){
+    fetch('/api/invoice-detail?invoice_id=' + invoiceId, {
+        method : 'get'
+    }).then(res => res.text()).then(data => {
+        document.getElementById('invoice-detail').innerHTML = data
+    })
+}
