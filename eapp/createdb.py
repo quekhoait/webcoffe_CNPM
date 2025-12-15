@@ -1,3 +1,5 @@
+import hashlib
+
 from eapp import db, app
 # from eapp.models import Category as DishCategory, Product as Dish, DishStatus
 from eapp.models import Category, Product, ProductStatus
@@ -5,6 +7,7 @@ import random
 
 from eapp.models.ProductRecipe import ProductRecipe
 from eapp.models.Rule import RuleType
+from eapp.models.Account import Role
 
 DEFAULT_IMAGE = "https://picsum.photos/seed/picsum/200/300"
 
@@ -88,33 +91,37 @@ invoice_status_seed = [
     # {"name": "Đã hủy", "description": "Hóa đơn đã bị hủy và không còn hiệu lực."}
 ]
 
-roles = [
-    {"name": "Admin", "description": "Quản trị viên hệ thống với toàn quyền."},
-    {"name": "Cashier", "description": "Nhân viên thu ngân, chịu trách nhiệm xử lý thanh toán."},
-    {"name": "Staff", "description": "Nhân viên phục vụ và hỗ trợ khách hàng."}
-]
+
 
 accounts = [
     {
         "username": "admin",
-        "password": "123456",
+        "password": str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
         "phone": "0123456789",
         "name": "Huy dep trai",
-        "role_id": 1
+        "role": Role.ADMIN
     },
     {
         "username": "cashier",
-        "password": "123",
+        "password":str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
         "phone" : "0987654321",
         "name": "Nhân Viên Thu Ngân 1",
-        "role_id": 2
+        "role": Role.CASHIER
     },
     {
         "username": "staff",
-        "password": "staffpass",
+        "password": str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
         "phone" : "0912345678",
         "name": "Nhân Viên Phục Vụ 1",
-        "role_id": 3
+        "role": Role.STAFF
+    },
+    {
+        "username": "khaoit",
+        "password": str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
+        "phone": "0916445657",
+        "address":"quem",
+        "name": "HUy ngu",
+        "role":Role.USER
     }
 ]
 
@@ -205,12 +212,6 @@ if __name__ == "__main__":
 
 
 
-        for role_data in roles:
-            from eapp.models.Role import Role
-            role = Role(**role_data)
-            db.session.add(role)
-
-        db.session.commit()
 
         # Seed accounts
         for acc_data in accounts:

@@ -104,7 +104,7 @@ function submitInvoice() {
 }
 
 function clearInvoice() {
-    fetch('/api/invoice', {
+    fetch('/api/invoices', {
         method: 'delete'
     }).then(res => res.json()).then(data => {
         orderItem = document.querySelector('.list-order-item')

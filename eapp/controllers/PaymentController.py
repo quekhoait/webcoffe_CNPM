@@ -40,6 +40,12 @@ def load_data():
     )
 
 
+"""
+    [{}]
+        product_id
+        quantity
+        price
+"""
 def created_payment():
     # payment_method = request.form.get("payment_method")
     payment_method="MOMO"
@@ -55,9 +61,9 @@ def created_payment():
         })
     total = 0
     for item in cart_items:
-        prod = ProductDao.get_by_id(item["product_id"])
-        total += prod.price * int(item["quantity"])
-
+        # prod = ProductDao.get_by_id(item["product_id"])
+        total += float(item["price"]) * int(item["quantity"])
+    print(float(item["price"]))
     invoice = PaymentDao.create_Invoice_dao(
         user_id=current_user.id,
         total=total,
@@ -65,16 +71,15 @@ def created_payment():
         note="coi nha"
     )
     print("invoice: ", invoice)
-    # for item in cart_items:
-    #     prod=ProductDao.get_by_id(item["product_id"])
-    #     PaymentDao.create_InvoiceDetail_dao(prod.id, invoice.id, int(item["quantity"]), prod.price)
-    #
-    # PaymentDao.create_Payment_dao(
-    #     invoice_id=invoice.id,
-    #     amount=total,
-    #     payment_method=payment_method,
-    #     status="pending"  # chờ thanh toán
-    # )
+    for item in cart_items:
+        prod=ProductDao.get_by_id(item["product_id"])
+        PaymentDao.create_InvoiceDetail_dao(prod.id, invoice.id, int(item["quantity"]), float(item["price"]))
+
+    PaymentDao.create_Payment_dao(
+        invoice_id=invoice.id,
+        amount=total,
+        momo_id=1
+    )
     return jsonify({
         "status": "success",
         "invoice_id": invoice.id,

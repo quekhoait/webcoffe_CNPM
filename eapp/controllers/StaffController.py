@@ -1,6 +1,7 @@
 
 from operator import ge
 from flask import json, jsonify, render_template, request, session
+from flask_login import current_user
 
 from eapp.dao import CategoryDao, ProductDao, RuleDAO
 from eapp.models.Invoice import Invoice
@@ -9,6 +10,7 @@ from eapp.services.InvoiceService import InvoiceService
 
 
 def load_staff():
+    user = current_user
     category = CategoryDao.list()
     products = ProductDao.list()
     invoice = session.get('invoice', {})
@@ -21,7 +23,8 @@ def load_staff():
                            products=products, 
                            total_price=total_price,
                            total_price_tmp=total_price_tmp,
-                           rules=rules)
+                           rules=rules,
+                           user=user)
 
 
 """

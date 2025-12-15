@@ -4,6 +4,7 @@ from eapp import app, utils
 import math, re, hashlib, cloudinary.uploader
 from eapp.dao.AccountDAO import add_account, check_phone_exists, login_account, update_account_dao
 from werkzeug.security import check_password_hash
+from eapp.models.Account import Role
 
 
 def register():    
@@ -49,7 +50,19 @@ def login():
 
         # login_user là của flask_login
         login_user(u)
-        return jsonify({"status": "success", "message": "Đăng nhập thành công!"})
+        print(u.role)
+
+        if u.role== Role.USER:
+            redirect_url = url_for("index")
+        elif u.role == Role.STAFF:
+            redirect_url = url_for("staff")
+        elif u.role == Role.CASHIER:
+            redirect_url = url_for('cashier')
+        elif u.role == Role.WAREHOUSE_KEEPER:
+            redirect_url = url_for("warehouse")
+        # elif u.role == Role.ADMIN:
+        #     return redirect(url_for("user"))
+        return jsonify({"status": "success", "message": "Đăng nhập thành công!", "redirect_url": redirect_url})
     except Exception as ex:
         app.logger.error(f'Lỗi khi đăng nhập: {ex}')
         print(ex)
@@ -57,7 +70,7 @@ def login():
 
 def logout():
     logout_user()
-    return redirect('/')
+    return redirect('/login')
 
 def check_password():
     data = request.get_json()

@@ -36,7 +36,7 @@ app.add_url_rule('/api/products','products',ProductController.list('/staff/produ
 
 # staff
 
-app.add_url_rule('/staff','staff',StaffController.load_staff)
+app.add_url_rule('/dashboard/staff','staff',StaffController.load_staff, )
 app.add_url_rule('/api/order','add_order',StaffController.addItemToInvoice, methods=['post'])
 app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice, methods=['post'])
 app.add_url_rule('/api/remove-item','remove_item',StaffController.removeItemFromInvoice, methods=['post'])
@@ -53,13 +53,13 @@ app.add_url_rule('/payment', 'payment', PaymentController.load_data, methods=['P
 app.add_url_rule('/api/created_payment', 'created_payment', PaymentController.created_payment, methods=['POST'])
 
 #cashier
-app.add_url_rule('/cashier','cashier',CashierController.load_cashier)
+app.add_url_rule('/dashboard/cashier','cashier',CashierController.load_cashier)
 app.add_url_rule('/cashier/status-bar', 'get_status_bar', CashierController.load_status_bar, methods=['get'])
 
 # app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
 
 
-app.add_url_rule('/warehouse', 'warehouse', WarehouseController.warehouse_page)
+app.add_url_rule('/dashboard/warehouse', 'warehouse', WarehouseController.warehouse_page)
 app.add_url_rule('/admin/warehouse/create-ticket', 'create_ticket', StaffController.create_ticket, methods=['POST'])
 
 
@@ -73,3 +73,4 @@ app.add_url_rule('/api/warehouse-slips', 'create_warehouse_slip', WarehouseContr
 app.add_url_rule('/api/invoices', 'get_invoices', CashierController.load_invoices, methods=['get'])
 app.add_url_rule('/api/invoice-detail', 'get_invoice_detail', CashierController.load_invoice_detail, methods=['get'])
 app.add_url_rule('/api/invoices','update_invoice_status',CashierController.update_invoice_status, methods=['patch'])
+app.add_url_rule('/api/invoices','delete_invoice',StaffController.clear_invoice, methods=['Delete'])

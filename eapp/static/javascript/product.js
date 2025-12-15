@@ -19,6 +19,7 @@ function loadProducts(params = {}) {
 document.getElementById("btn_payment").addEventListener("click", () => {
     const cartItems = document.querySelectorAll('.cart-component-item-popup');
     const selectedItems = getSelectedItems(cartItems);
+        console.log(selectedItems)
     if (selectedItems.length === 0) {
         showAlert("warning", "Thông báo", "Vui lòng chọn ít nhất 1 sản phẩm");
         return;
@@ -29,7 +30,7 @@ document.getElementById("btn_payment").addEventListener("click", () => {
         body: JSON.stringify(selectedItems)
     })
     .then(() => {
-        window.location.href = "/payment";
+         window.location.href = "/payment";
     });
 
 });
@@ -38,12 +39,13 @@ document.getElementById("btn_payment").addEventListener("click", () => {
 function getSelectedItems(cartItems) {
     let selectedItems = [];
     cartItems.forEach(item => {
-        const checkbox = item.querySelector('.select-cart-component');
 
+        const checkbox = item.querySelector('.select-cart-component');
         if (!checkbox || !checkbox.checked) return;
         selectedItems.push({
             product_id: item.dataset.productId,
-            quantity: parseInt(item.querySelector('.qty-display').innerText)
+            quantity: parseInt(item.querySelector('.qty-display').innerText),
+            price: item.dataset.productPrice
         });
     });
     return selectedItems;

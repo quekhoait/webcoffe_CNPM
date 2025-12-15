@@ -5,10 +5,11 @@ from eapp.dao.InvoiceDAO import InvoiceDAO
 from eapp.models import Account
 from eapp.models.Invoice import INVOICE_STATUS_LABEL, InvoiceStatusEnum
 from eapp.services.InvoiceService import InvoiceService
+from flask_login import login_user, logout_user, current_user, login_required
 
 
 def load_cashier():
-    user = get_current_user()
+    user = current_user
     invoice = InvoiceDAO.get_by_id(10)
     invoices = InvoiceDAO.list()
     invoice_type = 'offline'
@@ -58,5 +59,3 @@ def load_invoice_detail():
     return render_template('cashier/invoice_detail.html',
                            invoice=invoice)
 
-def get_current_user():
-    return Account.query.get(1)

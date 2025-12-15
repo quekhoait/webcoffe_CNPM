@@ -1,9 +1,17 @@
+from dns.transaction import ReadOnly
 from flask_login import UserMixin
-from sqlalchemy import Column, String, Boolean
+from sqlalchemy import Column, String, Boolean, Enum as SQLEnum
 from sqlalchemy import Column, ForeignKey, String
 from eapp.models.BaseModel import BaseModel
 from sqlalchemy.orm import relationship
+from enum import Enum
 
+class Role(Enum):
+    USER="Người Dùng"
+    STAFF="Nhân Viên"
+    CASHIER="Thu Ngân"
+    WAREHOUSE_KEEPER="Thủ Kho"
+    ADMIN="Quản lý"
 class Account(BaseModel, UserMixin):
     username = Column(String(100), nullable=False, unique=True)
     phone = Column(String(25), nullable=False, unique=True)
@@ -14,7 +22,7 @@ class Account(BaseModel, UserMixin):
     provider = Column(String(50), default='local')
     avatar=Column(String(250), default='https://res.cloudinary.com/ds11ggie4/image/upload/v1764250180/user_liifdm.png')
     status=Column(Boolean, default=True)
-    role_id = Column(ForeignKey('role.id'), nullable=False, default=1)
+    role = Column(SQLEnum(Role), nullable=False, default=Role.USER)
 
     invoice_of_customers = relationship('Invoice', backref='customer', foreign_keys='Invoice.customer_id', lazy=True)
     invoice_of_staffs = relationship('Invoice',backref='staff',foreign_keys='Invoice.staff_id',lazy=True)
