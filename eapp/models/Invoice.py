@@ -33,6 +33,7 @@ class PaymentMethod(Enum):
 
 
 class Invoice(BaseModel):
+
     cashier_id = Column(ForeignKey('account.id'), nullable=True)
     customer_id = Column(ForeignKey('account.id'))
     staff_id = Column(ForeignKey('account.id'), nullable=False)

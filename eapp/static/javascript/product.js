@@ -11,9 +11,9 @@ function loadProducts(params = {}) {
 
 }
 
-document.getElementById('search-product').addEventListener('input', (e) => {
-    loadProducts({ 'name': e.target.value })
-})
+//document.getElementById('search-product').addEventListener('input', (e) => {
+//    loadProducts({ 'name': e.target.value })
+//})
 
 
 document.getElementById("btn_payment").addEventListener("click", () => {
@@ -49,5 +49,17 @@ function getSelectedItems(cartItems) {
     return selectedItems;
 }
 
+console.log(document.getElementById("btn-accept-payment"))
+//Tiến hành thanh toán
+document.getElementById("btn-accept-payment").addEventListener("click",()=> {
+
+      fetch("/api/created_payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json()).then(data => {
+        alert(data)
+    });
+})
 
 

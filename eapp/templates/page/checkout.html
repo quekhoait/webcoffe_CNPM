@@ -14,7 +14,7 @@
 
         <h1 class="text-5xl font-bold text-[#7c5c56] mb-10">Thanh Toán</h1>
 
-        <form action="/checkout" method="POST" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
             <div class="lg:col-span-7 space-y-8">
 
@@ -109,13 +109,13 @@
                         <span class="text-4xl font-extrabold text-[#9d5a15]">{{total}}đ</span>
                     </div>
 
-                    <button type="submit"
+                    <button id="btn-accept-payment"
                         class="w-full mt-8 bg-[#8b6e68] hover:bg-[#7c5c56] text-white text-3xl font-bold py-5 rounded-xl shadow-lg transition uppercase disabled:opacity-50">
                         Xác Nhận Đặt Hàng
                     </button>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}

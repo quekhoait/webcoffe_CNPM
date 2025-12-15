@@ -18,7 +18,6 @@ def load_data():
         return redirect("/cart")
     products = []
     total = 0
-    print(items)
     for item in items:
         prod = ProductDao.get_by_id(item["product_id"])
         qty = int(item["quantity"])
@@ -42,8 +41,10 @@ def load_data():
 
 
 def created_payment():
-    payment_method = request.form.get("payment_method")
+    # payment_method = request.form.get("payment_method")
+    payment_method="MOMO"
     cart_items = session.get("checkout_items")
+    print(cart_items)
     if not cart_items:
         return jsonify({"status": "error", "message": "Giỏ hàng trống"})
 
@@ -56,13 +57,24 @@ def created_payment():
     for item in cart_items:
         prod = ProductDao.get_by_id(item["product_id"])
         total += prod.price * int(item["quantity"])
+
     invoice = PaymentDao.create_Invoice_dao(
         user_id=current_user.id,
         total=total,
         payment_method=payment_method,
         note="coi nha"
     )
-
+    print("invoice: ", invoice)
+    # for item in cart_items:
+    #     prod=ProductDao.get_by_id(item["product_id"])
+    #     PaymentDao.create_InvoiceDetail_dao(prod.id, invoice.id, int(item["quantity"]), prod.price)
+    #
+    # PaymentDao.create_Payment_dao(
+    #     invoice_id=invoice.id,
+    #     amount=total,
+    #     payment_method=payment_method,
+    #     status="pending"  # chờ thanh toán
+    # )
     return jsonify({
         "status": "success",
         "invoice_id": invoice.id,
