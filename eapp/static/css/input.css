@@ -107,9 +107,10 @@
 }
 
 .active-invoice-card {
-    @apply bg-amber-100! border-l-4! border-amber-800! border-r-2! border-y-2! hover:shadow-lg transition-all duration-200 space-y-3;
+    @apply bg-amber-100! border-l-4! border-amber-800! border-r-2! border-y-2! hover:shadow-lg transition-all duration-100 space-y-3;
 }
 
 .active-invoice-card .status-badge {
     @apply text-lg! bg-amber-200! font-semibold! text-amber-900! px-3 py-1;
 }
+

@@ -63,27 +63,39 @@ function bindStatusEvent() {
     })
 }
 
+document.addEventListener('click', (e) => {
+    const card = e.target.closest('.invoice-card')
+    if (!card) return;
 
-function viewInvoiceDetail(invoiceId){
+    const invoiceId = card.dataset.id
+    document.querySelectorAll('.invoice-card').forEach(card => {
+        card.classList.remove('active-invoice-card')
+    });
+
+    card.classList.add('active-invoice-card')
+    viewInvoiceDetail(invoiceId)
+})
+
+function viewInvoiceDetail(invoiceId) {
     fetch('/api/invoice-detail?invoice_id=' + invoiceId, {
-        method : 'get'
+        method: 'get'
     }).then(res => res.text()).then(data => {
         document.getElementById('invoice-detail').innerHTML = data
     })
 }
 
-function updateInvoiceStatus(invoiceId, invoiceStatus){
-    fetch('/api/invoices',{
-        method : 'patch',
-        body : JSON.stringify({
-            'invoice_id' : invoiceId,
-            'invoice_status' : invoiceStatus
+function updateInvoiceStatus(invoiceId, invoiceStatus) {
+    fetch('/api/invoices', {
+        method: 'patch',
+        body: JSON.stringify({
+            'invoice_id': invoiceId,
+            'invoice_status': invoiceStatus
         }),
-         headers: {
+        headers: {
             'Content-Type': 'application/json'
         }
     }).then(res => res.json()).then(data => {
-        if(data['success']){
+        if (data['success']) {
             loadInvoices()
         }
         alert(data['message'])
