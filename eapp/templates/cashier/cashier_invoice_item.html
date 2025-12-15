@@ -1,5 +1,5 @@
 <!-- Đang chọn -->
-<div data-status="selecting" class="invoice-card p-4 rounded-xl shadow-md ">
+<div data-status="selecting" class="active-invoice-card invoice-card p-4 rounded-xl shadow-md ">
     <!-- Mã đơn + trạng thái -->
     <div class="flex justify-between items-center">
         <span class="text-2xl font-extrabold tracking-wide text-amber-900">
@@ -36,7 +36,8 @@
 
 {% for invoice in invoices %}
 <!-- Trang thái chờ -->
-<div data-status="{{ invoice.invoice_status.name | lower }}" class="invoice-card p-4 rounded-xl shadow-md ">
+<div data-status="{{ invoice.invoice_status.name | lower }}" class="invoice-card p-4 box-border rounded-xl shadow-md cursor-pointer"
+ data-id="{{ invoice.id }}">
     <!-- Mã đơn + trạng thái -->
     <div class="flex justify-between items-center">
         <span class="text-2xl font-extrabold tracking-wide text-amber-900">

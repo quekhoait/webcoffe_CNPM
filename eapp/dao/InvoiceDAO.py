@@ -9,10 +9,12 @@ class InvoiceDAO:
         try:
             query = Invoice.query
             if params:
-                if params['is_counter']: #tại quầy
+                if params['invoice_type'] == 'offline': #tại quầy
                     query = query.filter(Invoice.customer_id == None)
                 else: # online
                     query = query.filter(Invoice.staff_id == None)
+                if params.get('invoice_status'):
+                    query = query.filter(Invoice.invoice_status == params['invoice_status'])
                 
         except Exception as ex:
             print(f"Lỗi khi lấy danh sách invoice: {ex}")
@@ -39,6 +41,15 @@ class InvoiceDAO:
             return invoice
         except Exception as ex:
             print(f"Lỗi khi tạo invoice: {ex}")
+            return None
+
+    @staticmethod
+    def get_by_id(invoice_id: int) -> Invoice:
+        try:
+            invoice = Invoice.query.get(invoice_id)
+            return invoice
+        except Exception as ex:
+            print(f"Lỗi khi lấy invoice theo id: {ex}")
             return None
         
     

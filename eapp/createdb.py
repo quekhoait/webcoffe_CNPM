@@ -3,6 +3,7 @@ from eapp import db, app
 from eapp.models import Category, Product, ProductStatus
 import random
 
+from eapp.models.ProductRecipe import ProductRecipe
 from eapp.models.Rule import RuleType
 
 DEFAULT_IMAGE = "https://picsum.photos/seed/picsum/200/300"
@@ -158,6 +159,33 @@ stock_data = [
     {"warehouse_id": 1, "ingredient_id": 12, "quantity": 1500}, # Kem tươi
 ]
 
+product_recipes_data = {
+    "Cà Phê Đen": [
+        {"ingredient_name": "Cà phê hạt rang", "quantity": 10, "unit": "gram"},
+        {"ingredient_name": "Đá viên", "quantity": 50, "unit": "gram"},
+    ],
+    "Cà Phê Sữa": [
+        {"ingredient_name": "Cà phê hạt rang", "quantity": 10, "unit": "gram"},
+        {"ingredient_name": "Sữa đặc", "quantity": 20, "unit": "ml"},
+        {"ingredient_name": "Đá viên", "quantity": 50, "unit": "gram"},
+    ],
+    "Bạc Sỉu": [
+        {"ingredient_name": "Cà phê hạt rang", "quantity": 5, "unit": "gram"},
+        {"ingredient_name": "Sữa tươi không đường", "quantity": 50, "unit": "ml"},
+        {"ingredient_name": "Sữa đặc", "quantity": 10, "unit": "ml"},
+        {"ingredient_name": "Đá viên", "quantity": 50, "unit": "gram"},
+    ],
+    "Latte": [
+        {"ingredient_name": "Cà phê hạt rang", "quantity": 8, "unit": "gram"},
+        {"ingredient_name": "Sữa tươi không đường", "quantity": 100, "unit": "ml"},
+    ],
+    "Trà Đào Cam Sả": [
+        {"ingredient_name": "Trà đen", "quantity": 5, "unit": "gram"},
+        {"ingredient_name": "Syrup đào", "quantity": 20, "unit": "ml"},
+        {"ingredient_name": "Đá viên", "quantity": 50, "unit": "gram"},
+    ],
+}
+
 if __name__ == "__main__":
     with app.app_context():
         db.drop_all()
@@ -242,5 +270,29 @@ if __name__ == "__main__":
             db.session.add(stock)
         
         db.session.commit()
+
+        for product_name, ingredients_list in product_recipes_data.items():
+            product = Product.query.filter_by(name=product_name).first()
+            if not product:
+                print(f"⚠️ Không tìm thấy sản phẩm {product_name}")
+                continue
+
+            for ing_data in ingredients_list:
+                ingredient = Ingredient.query.filter_by(name=ing_data["ingredient_name"]).first()
+                if not ingredient:
+                    print(f"⚠️ Không tìm thấy nguyên liệu {ing_data['ingredient_name']}")
+                    continue
+
+                recipe = ProductRecipe(
+                    product_id=product.id,
+                    ingredient_id=ingredient.id,
+                    quantity=ing_data["quantity"],
+                    unit=ing_data["unit"]
+                )
+                db.session.add(recipe)
+
+        db.session.commit()
+        print("✅ Seed dữ liệu ProductRecipe thành công!")
+
 
         print("☕️ Seed dữ liệu quán cà phê thành công!")

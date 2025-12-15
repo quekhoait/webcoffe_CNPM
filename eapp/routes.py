@@ -5,7 +5,8 @@ from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
-from eapp.controllers import CartController, PaymentController, ProductController, StaffController, WarehouseController, index, AccountController,CashierController, ProductController, StaffController, index
+from eapp.controllers import AccountController, CashierController, ProductController, StaffController, WarehouseController, index, \
+    CartController, PaymentController
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
@@ -53,6 +54,7 @@ app.add_url_rule('/api/created_payment', 'created_payment', PaymentController.cr
 
 #cashier
 app.add_url_rule('/cashier','cashier',CashierController.load_cashier)
+app.add_url_rule('/cashier/status-bar', 'get_status_bar', CashierController.load_status_bar, methods=['get'])
 
 # app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
 
@@ -69,3 +71,5 @@ app.add_url_rule('/api/warehouse-slips', 'create_warehouse_slip', WarehouseContr
 
 #API Invoice
 app.add_url_rule('/api/invoices', 'get_invoices', CashierController.load_invoices, methods=['get'])
+app.add_url_rule('/api/invoice-detail', 'get_invoice_detail', CashierController.load_invoice_detail, methods=['get'])
+app.add_url_rule('/api/invoices','update_invoice_status',CashierController.update_invoice_status, methods=['patch'])
