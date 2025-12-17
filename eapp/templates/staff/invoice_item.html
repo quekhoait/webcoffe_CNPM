@@ -1,5 +1,5 @@
 {% if invoice_item %}
-<div id="invoice-item-{{ invoice_item.id }}"
+<div id="invoice-item-{{ invoice_item.product_id }}"
     class="text-base grid grid-cols-6 mt-3 p-2 w-full items-center border-b border-gray-400">
     <div class="col-span-3">
         <p class="font-semibold text-sm text-gray-800">{{ invoice_item.name }}</p>
@@ -8,22 +8,22 @@
 
     <div class="col-span-2 flex items-center justify-center gap-1">
         <button class="bg-gray-200 w-8 h-8 rounded-full flex justify-center items-center"
-            onclick="addToOrder({{ invoice_item.id }}, '{{ invoice_item.name }}', {{ invoice_item.price }}, -1)"><span
+            onclick="addToOrder({{ invoice_item.product_id }}, '{{ invoice_item.name }}', {{ invoice_item.price }}, -1)"><span
                 class="text-sm">-</span>
         </button>
         <input type="text" value="{{ invoice_item.quantity }}"
             class="w-12 h-7 text-center font-semibold border-none focus:ring-0 bg-transparent text-gray-800 text-sm"
-            onblur="inputQuantity({{ invoice_item.id }}, '{{ invoice_item.name }}', {{ invoice_item.price }}, this)">
+            onblur="inputQuantity({{ invoice_item.product_id }}, '{{ invoice_item.name }}', {{ invoice_item.price }}, this)">
         <button class="bg-gray-200 w-8 h-8 rounded-full flex justify-center items-center"
-            onclick="addToOrder({{ invoice_item.id }}, '{{ invoice_item.name }}', {{ invoice_item.price }}, 1)"><span
+            onclick="addToOrder({{ invoice_item.product_id }}, '{{ invoice_item.name }}', {{ invoice_item.price }}, 1)"><span
                 class="text-sm">+</span>
         </button>
     </div>
 
     <div class="col-span-1 flex justify-end items-center space-x-2">
-        <span id="invoice-item-price-{{ invoice_item.id }}"
+        <span id="invoice-item-price-{{ invoice_item.product_id }}"
             class="text-sm">{{ invoice_item.quantity * invoice_item.price }} đ</span>
-        <button class="text-red-500 hover:text-red-700" onclick="removeItemFromInvoice({{ invoice_item.id }})">
+        <button class="text-red-500 hover:text-red-700" onclick="removeItemFromInvoice({{ invoice_item.product_id }})">
             <i class="fas fa-trash-alt"></i>
         </button>
     </div>

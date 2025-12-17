@@ -1,10 +1,11 @@
 from enum import Enum
 
-from eapp.dao import RuleDAO
+from eapp.dao import ProductDao, RuleDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.dao.WarehouseSlipDAO import WarehouseSlipDAO
 from eapp.models import Ingredient, Stock, Warehouse, WarehouseSlip
 from eapp.models.Invoice import Invoice
+from eapp.models.Product import Product
 from eapp.models.Rule import RuleType
 from eapp.services.SlipStrategyFactory import SlipStrategyFactory
 
@@ -13,7 +14,8 @@ class IngredientStatus(Enum):
     LOW_STOCK = "Sắp Hết"
 
 class InventoryService:
-    
+
+
     @staticmethod
     def load_stock(warehouse_id: int):
         warehouse = WarehouseDAO.get_by_id(warehouse_id)
@@ -86,7 +88,100 @@ class InventoryService:
                     }
 
         return ingredients
+    
+    @staticmethod
+    def is_product_insufficient(product_id, recipe_map, stock_map , quantity_product = 1):
+        recipe = recipe_map.get(product_id, [])
+        if not recipe:
+            return True
+        
+        for ingredient in recipe:
+            available = stock_map.get(ingredient['ingredient_id'],0)
+            required = ingredient['quantity'] * quantity_product
+            if available < required:
+                return True
+        return False
 
+    """
+        {
+            product_id,
+            quantity,
+            ingredient_insufficient [{
+                ingredient_id,
+                available,
+                required
+            }]
+            makeable_quantity
+        }
+    """
+    @staticmethod
+    def get_quantity_product_makeable(product_id,quantity,warehouse_id):
+        stock_map = WarehouseDAO.get_stock_map(warehouse_id)
+        recipe_map = ProductDao.get_product_recipe_map()
+        recipe = recipe_map.get(product_id, [])
+
+        if not recipe:
+            return {
+                "product_id": product_id,
+                "quantity": quantity,
+                "ingredient_insufficient": [],
+                "makeable_quantity": 0
+            }
+
+        max_quantities = []
+        ingredient_insufficient = []
+        result = {}
+        for ing in recipe:
+            ingredient_id = ing['ingredient_id']
+            ing_per_product = ing['quantity']
+
+            available = stock_map.get(ingredient_id,0)
+
+            if ing_per_product <= 0:
+                continue
+
+            max_quantity_product_per_ingredient = int(available // ing_per_product)
+            max_quantities.append(max_quantity_product_per_ingredient)
+
+            required = ing_per_product * quantity
+            if available < required:
+                ingredient_insufficient.append(
+                    {
+                        'ingredient_id' : ingredient_id,
+                        'available' : available,
+                        'required' : required
+                    }
+                )
+        
+        makeable_quantity = min(max_quantities)
+        return {
+            'product_id' : product_id,
+            'quantity' : quantity,
+            'ingredient_insufficient' : ingredient_insufficient,
+            'makeable_quantity' : makeable_quantity
+        }
+
+
+
+    """
+        {
+            product_id:bool,
+            product_id:bool,
+            
+        }
+    """
+    def get_product_makeable_map(products, warehouse_id):
+        stock_map = WarehouseDAO.get_stock_map(warehouse_id)
+        recipe_map = ProductDao.get_product_recipe_map()
+        result = {}
+        for product in products:
+            result[product.id] = not InventoryService.is_product_insufficient(product.id,recipe_map,stock_map)
+        return result        
+    
+        
+    
+
+    # tạo phiếu xuất kho cho hóa đơn
     @staticmethod
     def invoice_process(invoice: Invoice, source_warehouse_id: int):
         ingredients = list(InventoryService.get_ingredient_list_from_invoice(invoice=invoice).values())

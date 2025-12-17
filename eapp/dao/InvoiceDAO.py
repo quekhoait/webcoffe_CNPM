@@ -1,5 +1,6 @@
 from eapp.models import Invoice
 from eapp import db
+from eapp.models.InvoiceDetail import InvoiceDetail
 
 
 
@@ -34,9 +35,20 @@ class InvoiceDAO:
             return None
         
     @staticmethod
-    def create(invoice: Invoice) -> Invoice:
+    def create(invoice: Invoice, invoice_details: list) -> Invoice:
         try:
             db.session.add(invoice)
+            db.session.flush()
+            print(invoice_details)
+  
+            for detail in invoice_details:
+                invoice_detail = InvoiceDetail(
+                    invoice_id=invoice.id,
+                    product_id=int(detail['product_id']),
+                    quantity=detail['quantity'],
+                    price=detail['price']
+                )
+                db.session.add(invoice_detail)
             db.session.commit()
             return invoice
         except Exception as ex:

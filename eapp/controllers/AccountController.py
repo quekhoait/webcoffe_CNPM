@@ -34,19 +34,19 @@ def register():
 
 
 def login():
-    phone = request.form.get("phone")
+    identifier = request.form.get("phone")
     password = request.form.get("password")
-    phone_regex = r"^0\d{9}$"
-    if not phone or not password:
+    # phone_regex = r"^0\d{9}$"
+    if not identifier or not password:
         return jsonify({"status": "error", "message": "Vui lòng nhập đầy đủ giá trị!"})
-    if not re.match(phone_regex, phone):
-        return jsonify({"status": "error", "message": "Số điện thoại không hợp lệ!"})
+    # if not re.match(phone_regex, identifier):
+    #     return jsonify({"status": "error", "message": "Số điện thoại không hợp lệ!"})
     if len(password) < 6:
         return jsonify({"status": "error", "message": "Mật khẩu phải hơn 6 ký tự!"})
     try:
-        u = login_account(phone=phone, password=password)
+        u = login_account(identifier=identifier, password=password)
         if not u:
-            return jsonify({"status": "error", "message": "Sai số điện thoại hoặc mật khẩu!"})
+            return jsonify({"status": "error", "message": "Sai số điện thoại/username hoặc mật khẩu!"})
 
         # login_user là của flask_login
         login_user(u)

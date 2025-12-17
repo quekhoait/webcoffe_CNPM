@@ -1,6 +1,6 @@
+from hmac import new
 from eapp.dao import PaymentDao
 from eapp.dao.InvoiceDAO import InvoiceDAO
-from eapp.dao.InvoiceDetailDAO import InvoiceDetailDAO
 from eapp.models import InvoiceDetail, Rule
 from eapp.models import Invoice
 from eapp.models.Invoice import InvoiceStatusEnum, PaymentMethod
@@ -13,31 +13,56 @@ class InvoiceService:
     
     # tổng tiền item trong hóa đơn
     @staticmethod
-    def calculate_total(invoice : dict) -> float:
-        return sum(item['quantity'] * item['price'] for item in invoice.values())
+    def calculate_total(invoice : list) -> float:
+        return sum(item['quantity'] * item['price'] for item in invoice)
     
-    # thêm món vào hóa đơn
     @staticmethod
-    def add_item_to_invoice(invoice : dict, item_data : dict) -> dict:
+    def is_invalid_value(currentValue, newValue, isSetQuantity):
+        try:
+            value = int(newValue)
+        except (ValueError, TypeError):
+            return "Yêu cầu nhập vào 1 số nguyên"
+        
+        if isSetQuantity and value <= 0:
+            return "Yêu cầu nhập số lượng lớn hơn 0"
+
+        if (currentValue + value) <= 0:
+            return "Số lượng tăng thêm phải lớn hơn 0"
+        
+        return None
+    # thêm món vào hóa đơn
+
+    @staticmethod
+    def calculate_new_quantity(invoice: dict, item_data: dict) -> int:
         item_id = str(item_data.get('id'))
         bonus_quantity = int(item_data.get('bonus_quantity', 1))
-        
-        if item_id in invoice:
-            if item_data.get('is_set_quantity'):
-                invoice[item_id]['quantity'] = bonus_quantity
-            else:
-                invoice[item_id]['quantity'] += bonus_quantity
+        current_quantity = invoice.get(item_id, {}).get('quantity', 0)
 
+        if item_data.get('is_set_quantity'):
+            return bonus_quantity
+        else:
+            return current_quantity + bonus_quantity
+
+    @staticmethod
+    def add_item_to_invoice(invoice : dict, item_data : dict, new_quantity: int) -> dict:
+        item_id = str(item_data.get('id'))
+        bonus_quantity = int(item_data.get('bonus_quantity', 1))
+
+        item_id = str(item_data.get('id'))
+
+        if item_id in invoice:
+            invoice[item_id]['quantity'] = new_quantity
         else:
             invoice[item_id] = {
-                "id": item_id,
+                "product_id": item_id,
                 "name": item_data.get('name'),
                 "price": item_data.get('price'),
-                "quantity": bonus_quantity
+                "quantity": new_quantity
             }
 
         return invoice
     
+
     @staticmethod
     def remove_item_from_invoice(invoice: dict, item_id: str) -> dict:
         del invoice[item_id]
@@ -58,13 +83,13 @@ class InvoiceService:
         cashier_id,
         payment_method,
         invoice,
-        invoice_items: {
-            product_id: {
-                id,
+        invoice_items: [
+            {
+                product_id,
                 quantity,
                 price
             }
-        }
+        ]
     """
     
     """
@@ -79,24 +104,12 @@ class InvoiceService:
         invoice.customer_id = invoice_data.get('customer_id', None)     
         invoice.staff_id = invoice_data.get('staff_id',None)
         invoice.cashier_id = invoice_data.get('cashier_id', None)           
-        invoice.payment_method = invoice_data.get('payment_method',None)
-        # invoice.invoice_status = InvoiceStatusEnum.PENDING
+        invoice.payment_method = invoice_data.get('payment_method')
         invoice.subtotal = InvoiceService.calculate_total(invoice_data.get('invoice_items', []))
         invoice.extra_fee_total = RuleService.calulate_service_fee(invoice.subtotal)
         invoice.final_total = invoice.subtotal + invoice.extra_fee_total
 
-        InvoiceDAO.create(invoice)
-
-        invoiceDetails = []
-        for item in invoice_data.get('invoice_items', []).values():
-            detail = InvoiceDetail()
-            detail.invoice_id = invoice.id
-            detail.product_id = int(item['id'])
-            detail.quantity = item['quantity']
-            detail.price = item['price']
-            invoiceDetails.append(detail)
-        
-        print(InvoiceDetailDAO.create(invoiceDetails))
+        InvoiceDAO.create(invoice,invoice_data.get('invoice_items'))
 
         return invoice
     
