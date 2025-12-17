@@ -1,4 +1,5 @@
 from eapp.models import Invoice, InvoiceDetail, Payment
+from eapp.models.Payment import PaymentStatus
 from eapp import db
 import uuid
 
@@ -47,12 +48,17 @@ def create_InvoiceDetail_dao(product_id, invoice_id, quantity, price):
     return invoiceDetail
 
 
-def create_Payment_dao( invoice_id,amount, momo_id):
+def create_Payment_dao( invoice_id,amount):
     payment = Payment(
         invoice_id=invoice_id,
         amount=amount,
-        momo_id=momo_id
+        status=PaymentStatus.pending,
+        provider="momo"
     )
     db.session.add(payment)
     db.session.commit()
     return payment
+
+def get_by_momo_id(momo_id):
+    return Payment.query.filter_by(momo_id=momo_id).first()
+

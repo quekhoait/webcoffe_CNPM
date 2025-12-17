@@ -7,6 +7,7 @@ from flask import Flask, render_template
 from eapp import app
 from eapp.controllers import AccountController, CashierController, ProductController, StaffController, WarehouseController, index, \
     CartController, PaymentController
+from eapp.Momo import momo
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
@@ -26,6 +27,9 @@ app.add_url_rule('/about-us','about-us',index.load_about_us)
 app.add_url_rule('/my-cart','my-cart',CartController.load_my_cart)
 app.add_url_rule('/api/add_to_cart', 'add_to_cart', CartController.add_to_cart, methods=['POST'])
 app.add_url_rule('/api/get-cart-by-userId','get-cart-by-userId',CartController.get_cart_by_userId)
+    #Lây đơn hàng
+app.add_url_rule('/api/get_product_by_status', 'get_product_by_status', ProductController.get_product_by_status, methods=['GET'])
+
 # demo
 app.add_url_rule('/staff','index2',StaffController.load_staff)
 # app.add_url_rule('/','index',CashierController.home)
@@ -51,6 +55,12 @@ app.add_url_rule('/api/get_product', 'get_product', ProductController.get_produc
 #thanh toan
 app.add_url_rule('/payment', 'payment', PaymentController.load_data, methods=['POST', 'GET'])
 app.add_url_rule('/api/created_payment', 'created_payment', PaymentController.created_payment, methods=['POST'])
+
+#Momo
+app.add_url_rule("/api/created_momo",'created_momo', momo.created_pay, methods=['POST'])
+app.add_url_rule("/api/transaction_status",'transaction_status', momo.TransactionStatus, methods=['GET'])
+app.add_url_rule("/momo/ipn",'momo_ipn', momo.momo_ipn, methods=['POST'])
+app.add_url_rule("/momo/return",'momo_return', momo.momo_return)
 
 #cashier
 app.add_url_rule('/dashboard/cashier','cashier',CashierController.load_cashier)

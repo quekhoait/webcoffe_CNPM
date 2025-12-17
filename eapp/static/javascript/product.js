@@ -1,7 +1,7 @@
 function loadProducts(params = {}) {
     const query = new URLSearchParams(params).toString();
     const productList = document.getElementById('menu-product-items')
-    fetch('/api/dish?' + query)
+    fetch('/api/get_product?' + query)
         .then(res => res.text())
         .then(html => {
             productList.innerHTML = html
@@ -11,9 +11,13 @@ function loadProducts(params = {}) {
 
 }
 
-//document.getElementById('search-product').addEventListener('input', (e) => {
-//    loadProducts({ 'name': e.target.value })
-//})
+const searchProduct = document.getElementById('search-product')
+    if(searchProduct){
+        searchProduct.addEventListener('input', (e) => {
+            loadProducts({ 'name': e.target.value })
+        })
+    }
+
 
 
 document.getElementById("btn_payment").addEventListener("click", () => {
@@ -51,16 +55,19 @@ function getSelectedItems(cartItems) {
     return selectedItems;
 }
 
-console.log(document.getElementById("btn-accept-payment"))
+
 //Tiến hành thanh toán
 document.getElementById("btn-accept-payment").addEventListener("click",()=> {
-
       fetch("/api/created_payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" }
     })
     .then(res => res.json()).then(data => {
-        alert(data)
+          if (data.status === "success") {
+           window.open(data.pay_url, "_blank");
+        } else {
+            alert(data.message);
+        }
     });
 })
 

@@ -1,11 +1,14 @@
 from flask import app, jsonify, render_template, request, session
 from flask_login import  current_user, login_required
-
+from datetime import datetime
 from eapp.dao import ProductDao, PaymentDao
+from eapp.models.Payment import PaymentStatus
+from eapp.Momo import momo
 
 from flask import render_template, request, session, redirect
 from flask_login import current_user, login_required
 from eapp.dao import ProductDao
+from eapp import db
 
 
 
@@ -50,7 +53,6 @@ def created_payment():
     # payment_method = request.form.get("payment_method")
     payment_method="MOMO"
     cart_items = session.get("checkout_items")
-    print(cart_items)
     if not cart_items:
         return jsonify({"status": "error", "message": "Giỏ hàng trống"})
 
@@ -63,26 +65,38 @@ def created_payment():
     for item in cart_items:
         # prod = ProductDao.get_by_id(item["product_id"])
         total += float(item["price"]) * int(item["quantity"])
-    print(float(item["price"]))
     invoice = PaymentDao.create_Invoice_dao(
         user_id=current_user.id,
         total=total,
         payment_method=payment_method,
         note="coi nha"
     )
-    print("invoice: ", invoice)
     for item in cart_items:
         prod=ProductDao.get_by_id(item["product_id"])
         PaymentDao.create_InvoiceDetail_dao(prod.id, invoice.id, int(item["quantity"]), float(item["price"]))
 
-    PaymentDao.create_Payment_dao(
+    momo_order_id = f"{invoice.order_code}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+    payment=PaymentDao.create_Payment_dao(
         invoice_id=invoice.id,
         amount=total,
-        momo_id=1
     )
+    momo_res = momo.created_pay(momo_order_id, total)
+    if momo_res.get("resultCode") != 0:
+        payment.status = PaymentStatus.failed
+        db.session.commit()
+        return jsonify({
+            "status": "error",
+            "message": momo_res.get("message", "Thanh toán MoMo thất bại"),
+            "momo_response": momo_res  # debug
+        })
+    payment.momo_id = momo_order_id
+    payment.payUrl = momo_res["payUrl"]
+    db.session.commit()
+
     return jsonify({
         "status": "success",
-        "invoice_id": invoice.id,
-        "total": total
+        "pay_url": payment.payUrl
     })
+
+
 
