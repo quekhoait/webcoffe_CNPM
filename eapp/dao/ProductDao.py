@@ -1,4 +1,4 @@
-from MySQLdb._mysql import result
+# from MySQLdb._mysql import result
 from sqlalchemy.sql.functions import current_user
 
 from eapp.models import Product, CartDetail, Invoice, Payment, InvoiceDetail

@@ -26,6 +26,7 @@ class WarehouseDAO:
 
     @staticmethod    
     def get_available_stock_map(warehouse_id):
+     
         warehouse = WarehouseDAO.get_by_id(warehouse_id=warehouse_id)
         return {
             stock.ingredient_id : stock.quantity - stock.reserved

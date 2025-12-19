@@ -1,5 +1,5 @@
 from flask import app, jsonify, render_template, request
-from sklearn.gaussian_process.kernels import Product
+# from sklearn.gaussian_process.kernels import Product
 
 from eapp.dao import CartDao
 from eapp.services import  RuleService

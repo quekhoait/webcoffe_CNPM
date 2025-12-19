@@ -174,15 +174,21 @@ def create_invoice():
         'payment_method' : PaymentMethod.CASH,
     }
     #kiểm tra tồn kho lần nữa thì kết thúc hàm trả thông báo lỗi
-    check_result, used_stock_map = InventoryService.get_insufficient_products(invoice_items.values(),get_current_warehouse())
+    check_result, available_stock_map = InventoryService.get_insufficient_products(invoice_items.values(),get_current_warehouse())
 
     if check_result:
         return jsonify({
             'success' : False,
             'insufficient_products' : check_result
         })
-    print("dddd")
-    print(used_stock_map)
+
+    
+    used_stock_map = {
+        key: value - available_stock_map[key]
+        for key,value in WarehouseDAO.get_available_stock_map(get_current_warehouse()).items()
+    }
+    
+
     #tạo hóa đơn pending
     invoice = InvoiceService.create_invoice(invoice_data,get_current_warehouse(),used_stock_map)
 

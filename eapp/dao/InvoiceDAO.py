@@ -36,29 +36,17 @@ class InvoiceDAO:
             return None
         
     @staticmethod
-    def create(invoice: Invoice, invoice_details: list, warehouse_id, used_stock=None) -> Invoice:
-        try:
-            db.session.add(invoice)
-            db.session.flush()
-  
-            for detail in invoice_details:
-                invoice_detail = InvoiceDetail(
-                    invoice_id=invoice.id,
-                    product_id=int(detail['product_id']),
-                    quantity=detail['quantity'],
-                    price=detail['price']
-                )
-                db.session.add(invoice_detail)
+    def create(invoice: Invoice, invoice_details: list) -> Invoice:
+        db.session.add(invoice)
+        db.session.flush()   
 
-            #Giữ chỗ cho kho
-            InventoryService.reserve_stock_for_invoice(invoice,warehouse_id,used_stock)
-            
-            db.session.commit()
-            return invoice
-        except Exception as ex:
-            db.session.rollback()
-            app.logger.exception(ex)
-            raise Exception("Lỗi khi lưu hóa đơn")
+        for detail in invoice_details:
+            detail.invoice_id = invoice.id
+
+        db.session.add_all(invoice_details)
+        db.session.flush()
+
+        return invoice
 
     @staticmethod
     def get_by_id(invoice_id: int) -> Invoice:
