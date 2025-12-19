@@ -102,8 +102,3 @@ function updateInvoiceStatus(invoiceId, invoiceStatus) {
     })
 }
 
-
-socket.on('receive', data => {
-    alert(data['msg']);
-    loadInvoices()
-});

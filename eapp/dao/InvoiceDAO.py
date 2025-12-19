@@ -1,6 +1,7 @@
 from eapp.models import Invoice
-from eapp import db
+from eapp import app, db
 from eapp.models.InvoiceDetail import InvoiceDetail
+from eapp.services.InventoryService import InventoryService
 
 
 
@@ -35,11 +36,10 @@ class InvoiceDAO:
             return None
         
     @staticmethod
-    def create(invoice: Invoice, invoice_details: list) -> Invoice:
+    def create(invoice: Invoice, invoice_details: list, warehouse_id, used_stock=None) -> Invoice:
         try:
             db.session.add(invoice)
             db.session.flush()
-            print(invoice_details)
   
             for detail in invoice_details:
                 invoice_detail = InvoiceDetail(
@@ -49,11 +49,16 @@ class InvoiceDAO:
                     price=detail['price']
                 )
                 db.session.add(invoice_detail)
+
+            #Giữ chỗ cho kho
+            InventoryService.reserve_stock_for_invoice(invoice,warehouse_id,used_stock)
+            
             db.session.commit()
             return invoice
         except Exception as ex:
-            print(f"Lỗi khi tạo invoice: {ex}")
-            return None
+            db.session.rollback()
+            app.logger.exception(ex)
+            raise Exception("Lỗi khi lưu hóa đơn")
 
     @staticmethod
     def get_by_id(invoice_id: int) -> Invoice:
@@ -63,5 +68,12 @@ class InvoiceDAO:
         except Exception as ex:
             print(f"Lỗi khi lấy invoice theo id: {ex}")
             return None
-        
+    
+    @staticmethod
+    def save(invoice: Invoice):
+        db.session.add(invoice)
+
+    @staticmethod
+    def save_details(details: list):
+        db.session.add_all(details)
     

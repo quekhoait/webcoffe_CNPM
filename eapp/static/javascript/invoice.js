@@ -62,7 +62,7 @@ function addToOrder(id, name, price, bonusQuantity = 1, setQuantity = false) {
         if (!data.success) {
             if (data.ingredient_insufficient && data.ingredient_insufficient.length > 0) {
                 alert("Nguyên liệu không đủ cho số lượng hiện tại.\n" +
-                    "Bạn chỉ có thể làm tối đa: " + data.makeable_quantity + " món.");
+                    "Hiện tại chỉ có thể làm thêm: " + data.makeable_quantity + " món.");
                 if (dish)
                     dish.querySelector('input').value = data.item.quantity
             } else {
@@ -76,8 +76,8 @@ function addToOrder(id, name, price, bonusQuantity = 1, setQuantity = false) {
             dish.querySelector(`#invoice-item-price-${id}`).innerText = data.item.quantity * data.item.price + ' đ';
         } else {
 
-            orderItem = document.querySelector('.list-order-item')
-            orderItem.insertAdjacentHTML('beforeend', data.item_html)
+            orderItem = document.querySelector('.list-order-item').innerHTML = data.item_html
+            // orderItem.insertAdjacentHTML('beforeend', )
         }
 
 
@@ -105,7 +105,6 @@ function removeItemFromInvoice(id) {
 }
 
 function submitInvoice() {
-    socket.emit('send', { msg: 'OK da gui', warehouse_id: 1 });
 
     orderItem = document.querySelector('.list-order-item')
     if (!orderItem || orderItem.children.length === 0) {
@@ -122,6 +121,31 @@ function submitInvoice() {
         }
     }).then(res => res.json()).then(data => {
         orderItem = document.querySelector('.list-order-item')
+        if (!data['success']) {
+            fetch('/render/invoice-item')
+                .then(res => res.text())
+                .then(html => {
+                    orderItem.innerHTML = html
+
+
+                    data['insufficient_products'].forEach(item => {
+                        const el = document.getElementById(`invoice-item-${item.product_id}`);
+                        if (el) {
+                            el.classList.add('bg-red-100', 'border-red-400');
+                            const info = document.createElement('p');
+                            info.classList.add('text-xs', 'text-red-600');
+                            info.textContent = `Chỉ làm được ${item.makeable_quantity}`;
+                            el.querySelector('.col-span-3').appendChild(info);
+                        }
+                    });
+
+                });
+            
+            alert('Có một món không còn đủ nguyên liệu \nVui lòng kiểm tra lại')
+            return;
+        }
+
+
 
         orderItem.innerHTML = ""
         document.getElementById("total-price").innerText = 0;

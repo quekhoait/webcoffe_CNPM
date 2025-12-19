@@ -38,8 +38,10 @@ def get_product_recipe_map():
     product_recipe = {}
 
     for product in products:
-        product_recipe[product.id] = [ {'ingredient_id' : ing.ingredient_id, 'quantity' : ing.quantity} 
-                                      for ing in product.ingredients ]
+        product_recipe[product.id] = [ 
+            {'ingredient_id' : ing.ingredient_id, 'quantity' : ing.quantity} 
+            for ing in product.ingredients 
+        ]
 
     return product_recipe
 

@@ -2,8 +2,8 @@
 from operator import ge
 from flask import json, jsonify, render_template, request, session
 from flask_login import current_user
-from eapp.index import socketio
 from eapp.dao import CategoryDao, ProductDao, RuleDAO
+from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.models.Invoice import Invoice, PaymentMethod
 from eapp.models.Rule import RuleType
 from eapp.services.InventoryService import InventoryService
@@ -11,6 +11,8 @@ from eapp.services.InvoiceService import InvoiceService
 
 
 def load_staff():
+    # if 'available_stock_tmp' not in session:
+    #     session['available_stock_tmp'] = WarehouseDAO.get_available_stock_map(get_current_warehouse())
     user = current_user
     category = CategoryDao.list()
     products = ProductDao.list()
@@ -30,14 +32,21 @@ def load_staff():
                            product_status_map=status_map)
 
 
+
+def render_invoice_item():
+    return render_template('/staff/invoice_item.html')
+
 """
-invoice
-    id:
-        id *product
-        name
-        price
-        bonus_quantity
-        is_set_quantity
+
+invoice:
+    {
+        'product_id' : {
+            product_id,
+            name,
+            price,
+            quantity
+        }
+    }
 
 data 
     "id": id,
@@ -65,15 +74,34 @@ def addItemToInvoice():
             "item": None,
             "total_price": None
         })
+
+
+    # nếu là nhập liệu thì gỡ tạm để reset món đó về 0
+    item_tmp = None
+    if data['is_set_quantity']:
+        item_tmp = invoice.pop(product_id,None)
+    required_ingredient_map = InventoryService.get_required_ingredient_map_from_session_invoice(invoice.values())
     
-    new_quantity = InvoiceService.calculate_new_quantity(invoice,data)
+    available_stock = {
+        key : max(0, value - required_ingredient_map.get(key, 0))
+        for key, value in WarehouseDAO.get_available_stock_map(get_current_warehouse()).items()     
+    }
     
+    # print(required_ingredient_map)
+    # print(available_stock)
+    # print(WarehouseDAO.get_available_stock_map(get_current_warehouse()))
+
     #Kiểm tra kho đáp ứng được món này ko
     makeable_product = InventoryService.get_quantity_product_makeable(
         product_id=data['id'],
-        quantity=new_quantity,
-        warehouse_id=session.get('warehouse_id',1)
+        quantity=int(data['bonus_quantity']),
+        available_stock_map = available_stock
     )
+
+    # print(makeable_product)
+    # print(invoice)
+    
+    
 
     if makeable_product['ingredient_insufficient']:
         return jsonify({
@@ -81,11 +109,16 @@ def addItemToInvoice():
             "message": "Nguyên liệu không đáp ứng đủ cho số lượng hiện tại",
             "ingredient_insufficient": makeable_product['ingredient_insufficient'],
             "makeable_quantity": makeable_product['makeable_quantity'],
-            "item": invoice[product_id],
+            "item": invoice.get(product_id,item_tmp),
             "total_price": None
         })
+    
 
-    InvoiceService.add_item_to_invoice(invoice,data,new_quantity)
+    # check ok rồi thì thêm lại
+    if data['is_set_quantity']:
+        invoice[product_id] = item_tmp
+
+    InvoiceService.add_item_to_invoice(invoice,data,InvoiceService.calculate_new_quantity(invoice,data))
 
     session['invoice'] = invoice
     total = InvoiceService.calculate_total(list(invoice.values()))
@@ -120,7 +153,17 @@ def removeItemFromInvoice():
     })
  
 
-
+"""
+    invoice:
+        {
+            'product_id' : {
+                product_id,
+                name,
+                price,
+                quantity
+            }
+        }
+"""
 
 def create_invoice():
     invoice_items = session.get('invoice',{})
@@ -130,27 +173,37 @@ def create_invoice():
         'invoice_items' : list(invoice_items.values()),
         'payment_method' : PaymentMethod.CASH,
     }
+    #kiểm tra tồn kho lần nữa thì kết thúc hàm trả thông báo lỗi
+    check_result, used_stock_map = InventoryService.get_insufficient_products(invoice_items.values(),get_current_warehouse())
 
-    invoice = InvoiceService.create_invoice(invoice_data)
+    if check_result:
+        return jsonify({
+            'success' : False,
+            'insufficient_products' : check_result
+        })
+    print("dddd")
+    print(used_stock_map)
+    #tạo hóa đơn pending
+    invoice = InvoiceService.create_invoice(invoice_data,get_current_warehouse(),used_stock_map)
+
+    #cập nhật reserved trên kho lần nữa thì kết thúc hàm trả thông báo lỗi
 
     session.pop('invoice',None)
 
-
-    
-    # --- PUSH SỰ KIỆN QUA SOCKETIO ---
-    # Phát sự kiện 'new_invoice' tới tất cả client đang quan tâm
     return jsonify({
         "success" : True
     })
 
 def clear_invoice():
-    socketio.emit('receive', {'msg':"Dit me ao that day"})
 
     session.pop('invoice')
     return jsonify({
         "success" : True
     })
 
+
+def get_current_warehouse():
+    return 1
 
 from flask import render_template, request, redirect
 

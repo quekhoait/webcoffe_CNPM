@@ -1,3 +1,5 @@
+{% if session['invoice'] %}
+{% for invoice_item in session['invoice'].values() %}
 {% if invoice_item %}
 <div id="invoice-item-{{ invoice_item.product_id }}"
     class="text-base grid grid-cols-6 mt-3 p-2 w-full items-center border-b border-gray-400">
@@ -28,4 +30,6 @@
         </button>
     </div>
 </div>
+{% endif %}
+{% endfor %}
 {% endif %}

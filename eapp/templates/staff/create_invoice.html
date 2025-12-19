@@ -19,11 +19,7 @@
 
         <!-- order items -->
         <div class="list-order-item overflow-auto flex-1 scrollbar-none">
-            {% if session['invoice'] %}
-            {% for invoice_item in session['invoice'].values() %}
             {% include 'staff/invoice_item.html' %}
-            {% endfor %}
-            {% endif %}
         </div>
 
         <!-- order bill -->
