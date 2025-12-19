@@ -1,3 +1,4 @@
+from sqlalchemy import or_
 from eapp.models.Account import Account
 import hashlib
 from eapp import db, app
@@ -13,9 +14,10 @@ def add_account(username, phone, name, password):
   db.session.add(newUser)
   db.session.commit()
 
-def login_account(phone, password):
+def login_account(identifier, password):
     password=str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    return Account.query.filter(Account.phone==phone.strip(), Account.password==password).first()
+    return Account.query.filter(or_(Account.phone == identifier.strip(), Account.username == identifier.strip()),
+                                 Account.password==password).first()
 
 def update_account_dao(user_id, username, phone, name, password, email, address, avatar):
     print(user_id)

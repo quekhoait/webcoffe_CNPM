@@ -1,7 +1,8 @@
 #nhận request từ giao diện post, get
-from flask import app, jsonify, render_template, request
+from flask import app, jsonify, render_template, request, session
 
 from eapp.dao import ProductDao
+from eapp.services.InventoryService import InventoryService
 
 
 
@@ -11,9 +12,9 @@ def list(filehtml):
         params = request.args.to_dict()
 
         products = ProductDao.list(params)
-        print(products)
-        return render_template(filehtml, products=products)
-
+        return render_template(filehtml, 
+                               products=products,
+                               product_status_map=InventoryService.get_product_makeable_map(products,session.get('warehouse_id',1)))
     return view_function
 
 

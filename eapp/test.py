@@ -1,14 +1,12 @@
-from eapp import app
-from eapp.dao.InvoiceDAO import InvoiceDAO
+from eapp import app,db
+from eapp.dao import ProductDao
+from eapp.dao.WarehouseDAO import WarehouseDAO
+from eapp.models.Product import Product
 from eapp.services.InventoryService import InventoryService
 
 if __name__ == '__main__':
-    with app.app_context():  
-        invoice = InvoiceDAO.get_by_id(1)
-        print(invoice)
-        list_ingredients = InventoryService.get_ingredient_list_from_invoice(invoice)
-        rs = InventoryService.get_insufficient_ingredients(
-            ingredients=list(list_ingredients.values()),
-            warehouse_id=1
-        )
-        print(rs)
+    with app.app_context():
+        print(ProductDao.get_product_recipe_map())
+        print(WarehouseDAO.get_stock_map(1))
+        print(InventoryService.get_product_makeable_map(ProductDao.list(),1))
+        print(InventoryService.get_quantity_product_makeable(1,200,1))

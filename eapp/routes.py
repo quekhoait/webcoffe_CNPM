@@ -44,6 +44,7 @@ app.add_url_rule('/dashboard/staff','staff',StaffController.load_staff, )
 app.add_url_rule('/api/order','add_order',StaffController.addItemToInvoice, methods=['post'])
 app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice, methods=['post'])
 app.add_url_rule('/api/remove-item','remove_item',StaffController.removeItemFromInvoice, methods=['post'])
+app.add_url_rule('/render/invoice-item','invoice_item',StaffController.render_invoice_item, methods=['get'])
 
 
 

@@ -36,9 +36,20 @@ def get_by_id(id):
         print(f"Lỗi khi món theo id: {ex}")
         return None
 
+def get_product_recipe_map():
+    products = list()
+    product_recipe = {}
+
+    for product in products:
+        product_recipe[product.id] = [
+            {'ingredient_id' : ing.ingredient_id, 'quantity' : ing.quantity}
+            for ing in product.ingredients
+        ]
+
+    return product_recipe
+
 
 def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None):
-
     query = (
         Invoice.query
         .join(Payment, Payment.invoice_id == Invoice.id)

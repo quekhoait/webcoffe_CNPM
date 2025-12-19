@@ -101,3 +101,4 @@ function updateInvoiceStatus(invoiceId, invoiceStatus) {
         alert(data['message'])
     })
 }
+

@@ -1,5 +1,5 @@
 from sre_constants import IN
-from flask import jsonify, render_template, request
+from flask import jsonify, render_template, request, session
 
 from eapp.dao.InvoiceDAO import InvoiceDAO
 from eapp.models import Account
@@ -18,7 +18,8 @@ def load_cashier():
                            invoices = invoices,
                            INVOICE_STATUS_LABEL=INVOICE_STATUS_LABEL,
                            invoice_type=invoice_type,
-                           invoice=invoice)
+                           invoice=invoice,
+                           warehouse_id = session.get('warehouse_id',1))
 
 def load_status_bar():
     data = request.args.to_dict()
