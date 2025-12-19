@@ -1,5 +1,4 @@
 # Cấu trúc route của các trang web bình thường
-from msilib import CAB
 
 from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
@@ -9,12 +8,17 @@ from eapp.controllers import AccountController, CashierController, ProductContro
     CartController, PaymentController
 
 from eapp.Momo import momo
+from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index, AdminController, EmployeeController
+
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
+
 app.add_url_rule('/regis','register', index.load_regis)
 app.add_url_rule('/api/regis','created_account',AccountController.register, methods=['POST'])
 app.add_url_rule('/logout','logout', AccountController.logout)
+
+app.add_url_rule('/profile','profile', index.load_profile)
 app.add_url_rule('/api/check_password','check_password', AccountController.check_password, methods=['POST'])
 app.add_url_rule('/api/update_account','update_account', AccountController.update_account, methods=['POST'])
 
@@ -87,3 +91,18 @@ app.add_url_rule('/api/invoices','delete_invoice',StaffController.clear_invoice,
 
 #API get rule
 app.add_url_rule('/api/get-rule-calulate','get-rule-calulate',CartController.tinhTien, methods=['POST'])
+
+
+#product_manage
+app.add_url_rule('/admin/products', 'admin_product_index', AdminController.index, methods=['GET'])
+
+app.add_url_rule('/api/admin/product/add', 'api_add_product', AdminController.api_add_product, methods=['POST'])
+app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminController.api_update_product, methods=['POST'])
+app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminController.api_delete_product, methods=['POST'])
+
+#employee_manage
+app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
+
+app.add_url_rule('/api/admin/employee/add', 'api_emp_add', EmployeeController.api_add, methods=['POST'])
+app.add_url_rule('/api/admin/employee/update', 'api_emp_update', EmployeeController.api_update, methods=['POST'])
+app.add_url_rule('/api/admin/employee/delete', 'api_emp_delete', EmployeeController.api_delete, methods=['POST'])

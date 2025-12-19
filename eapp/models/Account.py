@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from sqlalchemy import Column, String, Boolean, Enum as SQLEnum
+from sqlalchemy import Column, String, Boolean
 from sqlalchemy import Column, ForeignKey, String
 from eapp.models.BaseModel import BaseModel
 from sqlalchemy.orm import relationship
