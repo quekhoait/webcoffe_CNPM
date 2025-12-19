@@ -2,6 +2,7 @@ from flask import app, jsonify, render_template, request
 from sklearn.gaussian_process.kernels import Product
 
 from eapp.dao import CartDao
+from eapp.services import  RuleService
 from flask_login import login_required, current_user
 from eapp.dao import ProductDao
 from eapp.models import Product
@@ -27,6 +28,15 @@ def get_cart_by_userId():
     user_id=current_user.id
     cart_item=CartDao.get_cart_by_userId_dao(user_id)
     return render_template('page/cart_component_item.html', list_prod=cart_item)
+
+def tinhTien():
+    total = request.get_json().get("subTotal")
+    extra_total=RuleService.RuleService.calulate_service_fee(total)
+    return jsonify({
+        "status": "success",
+        "extra_total": extra_total,
+        "final_total": total + extra_total
+    })
 
 def load_my_cart():
     user_id = current_user.id

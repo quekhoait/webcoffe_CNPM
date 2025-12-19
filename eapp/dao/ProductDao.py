@@ -66,5 +66,4 @@ def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None)
         Invoice,
         Payment
     ).all()
-    print(result)
     return result

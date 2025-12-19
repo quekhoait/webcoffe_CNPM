@@ -3,6 +3,7 @@ from eapp.models.Cart import Cart
 from eapp.models.Product import Product
 from eapp.models.CartDetail import CartDetail
 from eapp.dao import ProductDao
+from eapp.services.RuleService import RuleService
 
 def get_cart_by_user(user_id):
     return Cart.query.filter_by(user_id=user_id).first()
@@ -43,7 +44,8 @@ def add_to_cart_dao(product_id, user_id, quantity):
             cart_id=cart.id,
             product_id=product_id,
             quantity=quantity,
-            unit_price=product.price
+            unit_price=product.price,
+            total_price=product.price * quantity
         )
     db.session.add(cart_item)
     db.session.commit()

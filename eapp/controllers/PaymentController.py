@@ -4,7 +4,7 @@ from datetime import datetime
 from eapp.dao import ProductDao, PaymentDao
 from eapp.models.Payment import PaymentStatus
 from eapp.Momo import momo
-
+from eapp.services.RuleService import RuleService
 from flask import render_template, request, session, redirect
 from flask_login import current_user, login_required
 from eapp.dao import ProductDao
@@ -15,7 +15,6 @@ from eapp import db
 def load_data():
     if request.method == "POST":
         session["checkout_items"] = request.json
-
     items = session.get("checkout_items")
     if not items:
         return redirect("/cart")
@@ -24,22 +23,23 @@ def load_data():
     for item in items:
         prod = ProductDao.get_by_id(item["product_id"])
         qty = int(item["quantity"])
-        cost = prod.price * qty
-
+        total_item = prod.price * qty
         products.append({
             "image": prod.image,
             "name": prod.name,
             "price": prod.price,
             "qty": qty,
-            "cost": cost
+            "total": total_item
         })
 
-        total += cost
+        total += total_item
+    extra_fee = RuleService.calulate_service_fee(total)
+    final_total = total + extra_fee
     return render_template(
         "page/checkout.html",
         user_info=current_user,
         products=products,
-        total=total
+        total = final_total
     )
 
 
@@ -61,26 +61,29 @@ def created_payment():
             "status": "error",
             "message": "Vui lòng cập nhật thông tin trước khi đặt hàng!"
         })
-    total = 0
+    sub_total = 0
+    extra_total =0
     for item in cart_items:
-        # prod = ProductDao.get_by_id(item["product_id"])
-        total += float(item["price"]) * int(item["quantity"])
+        prod = ProductDao.get_by_id(item["product_id"])
+        sub_total += prod.price * int(item["quantity"])
+        extra_total = RuleService.calulate_service_fee(sub_total)
     invoice = PaymentDao.create_Invoice_dao(
         user_id=current_user.id,
-        total=total,
+        subtotal=sub_total,
+        extra_fee_total=extra_total,
         payment_method=payment_method,
         note="coi nha"
     )
     for item in cart_items:
         prod=ProductDao.get_by_id(item["product_id"])
-        PaymentDao.create_InvoiceDetail_dao(prod.id, invoice.id, int(item["quantity"]), float(item["price"]))
+        PaymentDao.create_InvoiceDetail_dao(prod.id, invoice.id, int(item["quantity"]),prod.price)
 
     momo_order_id = f"{invoice.order_code}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
     payment=PaymentDao.create_Payment_dao(
         invoice_id=invoice.id,
-        amount=total,
+        amount=sub_total+extra_total,
     )
-    momo_res = momo.created_pay(momo_order_id, total)
+    momo_res = momo.created_pay(momo_order_id, sub_total+extra_total)
     if momo_res.get("resultCode") != 0:
         payment.status = PaymentStatus.failed
         db.session.commit()

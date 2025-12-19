@@ -76,7 +76,7 @@ function hideAlert() {
 
 
 //Cart popup
-const mycart = document.getElementById("my_cart");
+const mycart = document.getElementById("my_cart_popup");
 const cartIcon = document.getElementById("cart_icon");
 const cartCancelIcon = document.getElementById("icon_cancel_cart");
 
@@ -88,25 +88,26 @@ cartIcon.addEventListener("click", () => {
         .then(html => {
             document.getElementById("cart_component_item").innerHTML = html;
             const cartPopup = document.querySelectorAll('.cart-component-item-popup');
-            setupQuantityControl(cartPopup, 'subTotal-cart-popup');
-            setupCheckboxEvents(cartPopup, 'subTotal-cart-popup');
+            setupQuantityControl(cartPopup, 'subTotal-cart-popup',mycart);
+            setupCheckboxEvents(cartPopup, 'subTotal-cart-popup', mycart);
             document.getElementById('subTotal-cart-popup')
                 .innerText = calculateSubtotal(cartPopup);
         });
 });
 
 //cart current
-
+const c=document.getElementById("my-cart-page")
 const subtotalEl = document.getElementById("subTotal-cart");
 if (subtotalEl) {
 const my_current_cart = document.querySelectorAll('.cart-component-item');
-    setupQuantityControl(my_current_cart, 'subTotal-cart');
-    setupCheckboxEvents(my_current_cart, 'subTotal-cart');
+    setupQuantityControl(my_current_cart, 'subTotal-cart', c);
+    setupCheckboxEvents(my_current_cart, 'subTotal-cart' , c);
     subtotalEl.innerText = calculateSubtotal(my_current_cart);
 }
 
 // Đóng cart khi click icon X
 cartCancelIcon.addEventListener("click", () => {
+  resetCartTotal(mycart);
     mycart.classList.add("hidden");
 });
 
@@ -115,8 +116,16 @@ document.addEventListener("click", function (event) {
     if (mycart.classList.contains("hidden")) return;
     if (cartIcon.contains(event.target)) return;
     if (mycart.contains(event.target)) return;
+      resetCartTotal(mycart);
     mycart.classList.add("hidden");
 });
+
+function resetCartTotal(cart) {
+    cart.querySelector("#subTotal-cart").innerText = "0 ₫";
+    cart.querySelector("#subTotal-extra").innerText = "0 ₫";
+    cart.querySelector("#total").innerText = "0 ₫";
+}
+
 
 function addToCart(productId, quantity=1) {
     fetch('/api/add_to_cart', {
@@ -134,38 +143,66 @@ function addToCart(productId, quantity=1) {
         }
     })
     .catch(err => console.error(err));
+     return subTotal;
 }
 
-//Tính số tiền
-function calculateSubtotal(items) {
-    let total = 0;
+//Tính số tiền tạm tính
+function fetchRuleCalculate(subTotal) {
+    return fetch('/api/get-rule-calulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subTotal })
+    })
+    .then(res => res.json());
+}
+
+
+function calculateSubtotal(items, cart) {
+    let subTotal = 0;
+
     items.forEach(item => {
         const checkbox = item.querySelector('.select-cart-component');
         const price = parseFloat(item.querySelector('p.price').innerText);
         const qty = parseInt(item.querySelector('span.qty-display').innerText);
         if (checkbox && checkbox.checked) {
-            total += price * qty;
+            subTotal += price * qty;
         }
     });
-    return total;
+
+    // gọi fetch đã tách ra
+    fetchRuleCalculate(subTotal)
+        .then(data => {
+            if (data.status === "success") {
+                cart.querySelector("#subTotal-cart").innerText =
+                    subTotal.toLocaleString() + " ₫";
+
+                cart.querySelector("#subTotal-extra").innerText =
+                    data.extra_total.toLocaleString() + " ₫";
+
+                cart.querySelector("#total").innerText =
+                    data.final_total.toLocaleString() + " ₫";
+            } else {
+                alert('Lỗi: ' + data.message);
+            }
+        })
+        .catch(err => console.error(err));
 }
 
 
-function setupCheckboxEvents(items, subtotalElementId) {
+function setupCheckboxEvents(items, subtotalElementId, cart) {
     items.forEach(item => {
         const checkbox = item.querySelector('.select-cart-component');
         if (!checkbox) return;
 
         checkbox.addEventListener("change", () => {
-            const total = calculateSubtotal(items);
-            document.getElementById(subtotalElementId).innerText = total;
+            const total = calculateSubtotal(items, cart);
         });
     });
 }
 
 
 
-function setupQuantityControl(items, subtotalElementId) {
+function setupQuantityControl(items, subtotalElementId, cart) {
     items.forEach(item => {
         const minusBtn = item.querySelector('.minus-btn');
         const plusBtn = item.querySelector('.plus-btn');
@@ -183,14 +220,14 @@ function setupQuantityControl(items, subtotalElementId) {
         plusBtn.onclick = () => {
             currentQty++;
             update();
-            document.getElementById(subtotalElementId).innerText = calculateSubtotal(items);
+             calculateSubtotal(items, cart);
         };
 
         minusBtn.onclick = () => {
             if (currentQty > 1) {
                 currentQty--;
                 update();
-                document.getElementById(subtotalElementId).innerText = calculateSubtotal(items);
+                 calculateSubtotal(items, cart);
             }
         };
 

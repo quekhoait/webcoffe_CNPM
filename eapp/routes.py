@@ -7,6 +7,7 @@ from flask import Flask, render_template
 from eapp import app
 from eapp.controllers import AccountController, CashierController, ProductController, StaffController, WarehouseController, index, \
     CartController, PaymentController
+
 from eapp.Momo import momo
 
 app.add_url_rule('/login','login', index.load_login)
@@ -30,8 +31,7 @@ app.add_url_rule('/api/get-cart-by-userId','get-cart-by-userId',CartController.g
     #Lây đơn hàng
 # app.add_url_rule('/api/get_product_by_status', 'get_product_by_status', ProductController.get_product_by_status, methods=['GET'])
 
-# demo
-app.add_url_rule('/staff','index2',StaffController.load_staff)
+
 # app.add_url_rule('/','index',CashierController.home)
 
 
@@ -85,3 +85,6 @@ app.add_url_rule('/api/invoices', 'get_invoices', CashierController.load_invoice
 app.add_url_rule('/api/invoice-detail', 'get_invoice_detail', CashierController.load_invoice_detail, methods=['get'])
 app.add_url_rule('/api/invoices','update_invoice_status',CashierController.update_invoice_status, methods=['patch'])
 app.add_url_rule('/api/invoices','delete_invoice',StaffController.clear_invoice, methods=['Delete'])
+
+#API get rule
+app.add_url_rule('/api/get-rule-calulate','get-rule-calulate',CartController.tinhTien, methods=['POST'])
