@@ -3,6 +3,14 @@ from sqlalchemy import Column, String, Boolean
 from sqlalchemy import Column, ForeignKey, String
 from eapp.models.BaseModel import BaseModel
 from sqlalchemy.orm import relationship
+from enum import Enum
+
+class Role(Enum):
+    USER="Người Dùng"
+    STAFF="Nhân Viên"
+    CASHIER="Thu Ngân"
+    WAREHOUSE_KEEPER="Thủ Kho"
+    ADMIN="Quản lý"
 
 class Account(BaseModel, UserMixin):
     username = Column(String(100), nullable=False, unique=True)
@@ -23,3 +31,5 @@ class Account(BaseModel, UserMixin):
 
     def __str__(self):
         return f"Account(ID: {self.id}, Username: {self.username})"
+
+

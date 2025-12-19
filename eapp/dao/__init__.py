@@ -1,3 +1,3 @@
-from eapp.dao import CategoryDao, ProductDao, AccountDAO
+from eapp.dao import CategoryDao, ProductDao, AccountDao
 
 

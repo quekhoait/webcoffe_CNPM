@@ -4,7 +4,8 @@ from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
-from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index
+from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index, AdminController, EmployeeController
+
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
@@ -45,13 +46,28 @@ app.add_url_rule('/api/remove-item','remove_item',StaffController.removeItemFrom
 app.add_url_rule('/menu', 'menu', index.load_menu, methods=['GET'])
 app.add_url_rule('/api/get_product', 'get_product', ProductController.get_product, methods=['GET'])
 #thanh toan
-# app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
+app.add_url_rule('/checkout', 'checkout', index.checkout_page, methods=['GET', 'POST'])
 
 #cashier
 app.add_url_rule('/cashier','cashier',CashierController.load_cashier)
 
-# app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
+app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
 
 
 app.add_url_rule('/admin/warehouse', 'warehouse', StaffController.warehouse_page)
 app.add_url_rule('/admin/warehouse/create-ticket', 'create_ticket', StaffController.create_ticket, methods=['POST'])
+
+
+#product_manage
+app.add_url_rule('/admin/products', 'admin_product_index', AdminController.index, methods=['GET'])
+
+app.add_url_rule('/api/admin/product/add', 'api_add_product', AdminController.api_add_product, methods=['POST'])
+app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminController.api_update_product, methods=['POST'])
+app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminController.api_delete_product, methods=['POST'])
+
+#employee_manage
+app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
+
+app.add_url_rule('/api/admin/employee/add', 'api_emp_add', EmployeeController.api_add, methods=['POST'])
+app.add_url_rule('/api/admin/employee/update', 'api_emp_update', EmployeeController.api_update, methods=['POST'])
+app.add_url_rule('/api/admin/employee/delete', 'api_emp_delete', EmployeeController.api_delete, methods=['POST'])

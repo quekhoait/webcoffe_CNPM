@@ -41,3 +41,17 @@ def update_account_dao(user_id, username, phone, name, password, email, address,
     user.avatar=avatar
     db.session.commit()
     return user
+
+
+
+def get_all_employees():
+    return Account.query.all()
+
+def admin_create_account(data):
+    return False
+
+def admin_update_account(user_id, data):
+    return False
+
+def admin_delete_account(user_id):
+    return False
