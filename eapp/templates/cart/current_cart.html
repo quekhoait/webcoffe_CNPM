@@ -15,22 +15,9 @@
       <div class="flex items-center space-x-2">
         {% set quantity=product.quantity %}
         {% include 'page/quantity_control.html' %}
-         <input type="checkbox" class="ml-auto select-cart-component">
-        <button class="text-gray-400 hover:text-red-500 p-1">
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            ></path>
-          </svg>
+         <input type="checkbox" class="ml-auto select-cart-component mx-4">
+        <button type="button" class="btn-remove-product-cart text-gray-400 hover:text-red-500 p-1" data-product-id="{{ product.product.id }}">
+          <i class="fa-solid fa-trash-can text-2xl "    ></i>
         </button>
       </div>
     </div>
@@ -56,11 +43,10 @@
       <span  id="total">0đ</span>
     </div>
   </div>
-
-
   <button
     class="w-full mt-6 py-3 bg-orange-600 text-white font-bold text-2xl rounded-xl hover:bg-orange-700 transition duration-200 shadow-md"
   >
     Tiến hành Thanh toán
   </button>
 </div>
+<script src="{{ url_for('static', filename='javascript/cart.js') }}"></script>

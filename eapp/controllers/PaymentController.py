@@ -39,7 +39,7 @@ def load_data():
         "page/checkout.html",
         user_info=current_user,
         products=products,
-        total = final_total
+        total = final_total,
     )
 
 
@@ -50,8 +50,9 @@ def load_data():
         price
 """
 def created_payment():
-    # payment_method = request.form.get("payment_method")
-    payment_method="MOMO"
+    data = request.get_json()
+    note = data.get("note")
+    payment_method = data.get("payment_method")
     cart_items = session.get("checkout_items")
     if not cart_items:
         return jsonify({"status": "error", "message": "Giỏ hàng trống"})
@@ -72,7 +73,7 @@ def created_payment():
         subtotal=sub_total,
         extra_fee_total=extra_total,
         payment_method=payment_method,
-        note="coi nha"
+        note=note
     )
     for item in cart_items:
         prod=ProductDao.get_by_id(item["product_id"])

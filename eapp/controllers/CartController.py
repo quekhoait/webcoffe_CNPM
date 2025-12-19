@@ -66,5 +66,12 @@ def load_my_cart():
         invoice_status=invoice_status,
         payment_status=payment_status
     )
-    print("list_prod_id", list_prod)
     return render_template("page/cart.html", tab=tab, list_pro=cart_item, list_order=list_prod)
+
+def remove_product_in_cart():
+    product_id=request.get_json().get('product_id')
+    CartDao.remove_product_in_cart_dao(product_id, current_user.id)
+    return jsonify({
+        "status": "success",
+        "message": "Đã xoá sản phẩm khỏi giỏ hàng"
+    })

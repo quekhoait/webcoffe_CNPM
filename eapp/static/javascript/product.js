@@ -1,3 +1,4 @@
+
 function loadProducts(params = {}) {
     const query = new URLSearchParams(params).toString();
     const productList = document.getElementById('menu-product-items')
@@ -55,9 +56,18 @@ function getSelectedItems(cartItems) {
 
 //Tiến hành thanh toán
 document.getElementById("btn-accept-payment").addEventListener("click",()=> {
+ const note = document.getElementById("order-note").value;
+
+    const paymentMethod = document.querySelector(
+        'input[name="payment_method"]:checked'
+    )?.value;
       fetch("/api/created_payment", {
         method: "POST",
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+            note: note,
+            payment_method: paymentMethod
+        })
     })
     .then(res => res.json()).then(data => {
           if (data.status === "success") {
@@ -67,6 +77,8 @@ document.getElementById("btn-accept-payment").addEventListener("click",()=> {
         }
     });
 })
+
+
 
 
 

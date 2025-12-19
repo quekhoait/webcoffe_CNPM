@@ -60,3 +60,14 @@ def get_cart_by_userId_dao(user_id):
         .filter(Cart.user_id == user_id)
         .all()
     )
+
+def remove_product_in_cart_dao(product_id, user_id):
+    cart_item = (CartDetail.query
+                 .join(Cart, CartDetail.cart_id == Cart.id)
+                 .filter(CartDetail.product_id == product_id, Cart.user_id==user_id).first()
+                 )
+    if not cart_item:
+        return False
+    db.session.delete(cart_item)
+    db.session.commit()
+    return True
