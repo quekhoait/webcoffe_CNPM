@@ -1,6 +1,7 @@
+from MySQLdb._mysql import result
 from sqlalchemy.sql.functions import current_user
 
-from eapp.models import Product, CartDetail, Invoice, Payment
+from eapp.models import Product, CartDetail, Invoice, Payment, InvoiceDetail
 from sqlalchemy import desc
 
 def list(params: dict = None):
@@ -36,12 +37,23 @@ def get_by_id(id):
         return None
 
 
-def get_product_by_status_dao(invoice_status=None, payment_status=None):
-    query = Invoice.query.join(Payment, Payment.invoice_id == Invoice.id)
-    query = query.filter(Invoice.customer_id == current_user.id)
+def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None):
+
+    query = (
+        Invoice.query
+        .join(Payment, Payment.invoice_id == Invoice.id)
+        .join(InvoiceDetail, InvoiceDetail.invoice_id == Invoice.id)
+        .join(Product, Product.id == InvoiceDetail.product_id)
+        .filter(Invoice.customer_id == user_id)
+    )
     if invoice_status is not None:
         query = query.filter(Invoice.invoice_status == invoice_status)
     if payment_status is not None:
         query = query.filter(Payment.status == payment_status)
-    list_prod = query.all()
-    return list_prod
+    result = query.with_entities(
+        Product,
+        Invoice,
+        Payment
+    ).all()
+    print(result)
+    return result

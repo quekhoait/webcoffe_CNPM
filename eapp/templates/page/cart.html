@@ -45,20 +45,20 @@ class="pb-2 text-2xl font-medium text-gray-500 hover:text-gray-700
               </p>
               <p
                class="pb-2 text-2xl font-medium text-gray-500 hover:text-gray-700
-{% if request.args.get('tab') == 'shipping' %}
+{% if request.args.get('tab') == 'completed' %}
   border-b-2 border-orange-500 text-orange-500
 {% endif %}"
               >
-                <a href="?tab=shipping">
-                    Đang giao
+                <a href="?tab=completed">
+                    Đã giao
                    </a>
               </p>
               <p class="pb-2 text-2xl font-medium text-gray-500 hover:text-gray-700
-{% if request.args.get('tab') == 'delivered' %}
+{% if request.args.get('tab') == 'cancelled' %}
   border-b-2 border-orange-500 text-orange-500
 {% endif %}"   >
-                  <a href="?tab=delivered">
-                    Đã giao
+                  <a href="?tab=cancelled">
+                    Đã hủy
                    </a>
               </p>
             </div>
@@ -76,12 +76,10 @@ class="pb-2 text-2xl font-medium text-gray-500 hover:text-gray-700
           </div>
 
           <!--                    Các đơn hàng đang vvaf đã thanh toán-->
-          {% if tab == 'order_all' %} {% include 'cart/order_all.html' %} {%
-          elif tab == 'pending_payment' %} {% include 'cart/pending_payment.html' %}{%
-          elif tab == 'pending_processing' %} {% include 'cart/pending_processing.html' %}{%
-          elif tab == 'shipping' %} {% include 'cart/shipping.html' %}{%
-          elif tab == 'delivered' %} {% include 'cart/delivered.html' %}
-          {% endif %}
+   {% if list_order %}
+    {% set cart = list_order %}
+    {% include 'cart/my_order.html' %}
+{% endif %}
 
           <!--============================-->
         </div>

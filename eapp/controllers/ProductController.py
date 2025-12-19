@@ -23,16 +23,7 @@ def get_product():
     return jsonify([d.to_dict() for d in dishes]), 200
 
 
-def get_product_by_status():
-    invoice_status = request.args.get("invoice_status")
-    payment_status = request.args.get("payment_status")
-    prod_list=ProductDao.get_product_by_status_dao(invoice_status, payment_status)
-    result = []
-    for p in prod_list:
-        result.append({
-            "invoice_id": p.id
-        })
-    return jsonify(result)
+
 
 
 

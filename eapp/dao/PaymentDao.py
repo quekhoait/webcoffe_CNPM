@@ -1,6 +1,8 @@
+from eapp.dao import InvoiceDAO
 from eapp.models import Invoice, InvoiceDetail, Payment
 from eapp.models.Payment import PaymentStatus
 from eapp import db
+from datetime import datetime, timedelta
 import uuid
 
 
@@ -53,7 +55,8 @@ def create_Payment_dao( invoice_id,amount):
         invoice_id=invoice_id,
         amount=amount,
         status=PaymentStatus.pending,
-        provider="momo"
+        provider="momo",
+        expired_date = datetime.now() + timedelta(minutes=100)
     )
     db.session.add(payment)
     db.session.commit()
@@ -62,3 +65,15 @@ def create_Payment_dao( invoice_id,amount):
 def get_by_momo_id(momo_id):
     return Payment.query.filter_by(momo_id=momo_id).first()
 
+def repay_payment_dao(invoice_id):
+    payment = Payment.query.filter(
+        Payment.invoice_id == invoice_id,
+        Payment.status == PaymentStatus.pending,
+        Payment.expired_date > datetime.now()
+        ).order_by(Payment.created_date.desc()).first() #sắp xếp lấy cái mới nhất
+    invoice=Invoice.query.get(invoice_id)
+    amount=invoice.final_total
+    if payment:
+        return payment
+    newPayment=create_Payment_dao(invoice_id, amount)
+    return newPayment

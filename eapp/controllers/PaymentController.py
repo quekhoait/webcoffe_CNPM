@@ -99,4 +99,14 @@ def created_payment():
     })
 
 
-
+def repay_payment():
+    invoice_id = request.get_json().get("invoice_id")
+    print("invoice_id_cl: ", invoice_id)
+    result = PaymentDao.repay_payment_dao(
+        invoice_id=invoice_id,
+    )
+    print("res: ", result)
+    return jsonify({
+        "status": "success",
+        "pay_url": result.payUrl
+    })

@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, BigInteger, Enum, UniqueConstraint
+from sqlalchemy import Column, Integer, String, ForeignKey, BigInteger, Enum, UniqueConstraint, DateTime
 from eapp.models import BaseModel
+from datetime import datetime
 import enum
 
 
@@ -17,3 +18,4 @@ class Payment(BaseModel):
     payUrl= Column(String(500), nullable=True)
     invoice_id = Column(ForeignKey("invoice.id"), nullable=False)
     provider = Column(String(50), nullable=False, default="momo")
+    expired_date  = Column(DateTime, nullable=False)

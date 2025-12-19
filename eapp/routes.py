@@ -28,7 +28,7 @@ app.add_url_rule('/my-cart','my-cart',CartController.load_my_cart)
 app.add_url_rule('/api/add_to_cart', 'add_to_cart', CartController.add_to_cart, methods=['POST'])
 app.add_url_rule('/api/get-cart-by-userId','get-cart-by-userId',CartController.get_cart_by_userId)
     #Lây đơn hàng
-app.add_url_rule('/api/get_product_by_status', 'get_product_by_status', ProductController.get_product_by_status, methods=['GET'])
+# app.add_url_rule('/api/get_product_by_status', 'get_product_by_status', ProductController.get_product_by_status, methods=['GET'])
 
 # demo
 app.add_url_rule('/staff','index2',StaffController.load_staff)
@@ -55,7 +55,7 @@ app.add_url_rule('/api/get_product', 'get_product', ProductController.get_produc
 #thanh toan
 app.add_url_rule('/payment', 'payment', PaymentController.load_data, methods=['POST', 'GET'])
 app.add_url_rule('/api/created_payment', 'created_payment', PaymentController.created_payment, methods=['POST'])
-
+app.add_url_rule('/api/repay_payment', 'repay_payment', PaymentController.repay_payment, methods=['POST'])
 #Momo
 app.add_url_rule("/api/created_momo",'created_momo', momo.created_pay, methods=['POST'])
 app.add_url_rule("/api/transaction_status",'transaction_status', momo.TransactionStatus, methods=['GET'])
