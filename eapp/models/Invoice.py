@@ -7,24 +7,41 @@ from eapp.models import BaseModel
 
 
 class InvoiceStatusEnum(str, Enum):
-    PENDING_PAYMENT = "pending_payment"
-    PENDING_PROCESSING = "pending_processing"
-    SHIPPING = "shipping"
-    DELIVERED = "delivered"
+    PENDING = "pending"  # Chờ xử lý / chờ phục vụ
+    IN_PROGRESS = "in_progress"  # Đang giao / đang phục vụ
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"  # Đã hủy
+
+INVOICE_STATUS_LABEL = {
+    "offline": {
+        InvoiceStatusEnum.PENDING: "Chờ xử lý",
+        InvoiceStatusEnum.IN_PROGRESS: "Đang phục vụ",
+        InvoiceStatusEnum.COMPLETED: "Hoàn thành",
+        InvoiceStatusEnum.CANCELLED: "Đã hủy",
+    },
+    "online": {
+        InvoiceStatusEnum.PENDING: "Chờ xử lý",
+        InvoiceStatusEnum.IN_PROGRESS: "Đang giao",
+        InvoiceStatusEnum.COMPLETED: "Hoàn tất",
+        InvoiceStatusEnum.CANCELLED: "Đã hủy đơn",
+    }
+}
 
 class PaymentMethod(Enum):
-    CASH = 'Tiền mặt'
-    BANK_TRANSFER = 'Chuyển khoản'
-    OTHER = 'Khác'
+    CASH = "CASH"
+    MOMO = "MOMO"
+
 
 class Invoice(BaseModel):
+    order_code = Column(String(50), unique=True, nullable=False)
     cashier_id = Column(ForeignKey('account.id'), nullable=True)
     customer_id = Column(ForeignKey('account.id'))
-    staff_id = Column(ForeignKey('account.id'), nullable=False)
-    total_amount = Column(Float, nullable=False)
+    staff_id = Column(ForeignKey('account.id'), nullable=True)
     subtotal = Column(Float, nullable=False)
     extra_fee_total = Column(Float, nullable=False)
     final_total = Column(Float, nullable=False)
-    payment_method = Column(String(50), nullable=False)
-    invoice_status = Column(SqlEnum(InvoiceStatusEnum), nullable=False)
+    note = Column(String(255))
+    payment_method = Column( SqlEnum(PaymentMethod), nullable=False)
+    invoice_status = Column(SqlEnum(InvoiceStatusEnum), nullable=False, default=InvoiceStatusEnum.PENDING)
     invoice_details = relationship("InvoiceDetail", backref="invoice", lazy=True)
+    serialize_rules = ('-invoice_details', '-invoice.customer','-invoice.staff','-invoice.cashier')

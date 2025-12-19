@@ -1,9 +1,13 @@
+import hashlib
+
 from eapp import db, app
 # from eapp.models import Category as DishCategory, Product as Dish, DishStatus
 from eapp.models import Category, Product, ProductStatus
 import random
 
+from eapp.models.ProductRecipe import ProductRecipe
 from eapp.models.Rule import RuleType
+from eapp.models.Account import Role
 
 DEFAULT_IMAGE = "https://picsum.photos/seed/picsum/200/300"
 
@@ -87,35 +91,107 @@ invoice_status_seed = [
     # {"name": "Đã hủy", "description": "Hóa đơn đã bị hủy và không còn hiệu lực."}
 ]
 
-roles = [
-    {"name": "Admin", "description": "Quản trị viên hệ thống với toàn quyền."},
-    {"name": "Cashier", "description": "Nhân viên thu ngân, chịu trách nhiệm xử lý thanh toán."},
-    {"name": "Staff", "description": "Nhân viên phục vụ và hỗ trợ khách hàng."}
-]
+
 
 accounts = [
     {
         "username": "admin",
-        "password": "123456",
+        "password": str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
         "phone": "0123456789",
         "name": "Huy dep trai",
-        "role_id": 1
+        "role": Role.ADMIN
     },
     {
         "username": "cashier",
-        "password": "123",
+        "password":str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
         "phone" : "0987654321",
         "name": "Nhân Viên Thu Ngân 1",
-        "role_id": 2
+        "role": Role.CASHIER
     },
     {
         "username": "staff",
-        "password": "staffpass",
+        "password": str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
         "phone" : "0912345678",
         "name": "Nhân Viên Phục Vụ 1",
-        "role_id": 3
+        "role": Role.STAFF
+    },
+    {
+        "username": "khaoit",
+        "password": str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
+        "phone": "0916445657",
+        "address":"quem",
+        "name": "HUy ngu",
+        "role":Role.USER
     }
 ]
+
+ingredients_data = [
+    # Nhóm cà phê
+    {"name": "Cà phê hạt rang", "unit": "gram", "price": 0.6, "description": "Dùng để xay"},
+    {"name": "Bột cà phê", "unit": "gram", "price": 0.5, "description": "Cà phê đã xay sẵn"},
+    {"name": "Sữa đặc", "unit": "ml", "price": 0.08, "description": "Pha cà phê sữa"},
+    {"name": "Sữa tươi không đường", "unit": "ml", "price": 0.1, "description": "Pha latte/cappuccino"},
+    {"name": "Bột cacao", "unit": "gram", "price": 0.3, "description": "Dùng cho mocha hoặc chocolate nóng"},
+
+    # Nhóm trà
+    {"name": "Trà đen", "unit": "gram", "price": 0.2, "description": "Pha trà đá/trà nóng"},
+    {"name": "Trà xanh", "unit": "gram", "price": 0.25, "description": "Pha trà xanh/trà sữa"},
+    {"name": "Syrup đào", "unit": "ml", "price": 0.15, "description": "Dùng cho trà đào"},
+    {"name": "Syrup dâu", "unit": "ml", "price": 0.15, "description": "Dùng cho trà dâu"},
+
+    # Nhóm topping
+    {"name": "Trân châu đen", "unit": "gram", "price": 0.2, "description": "Dùng cho trà sữa/trà trái cây"},
+    {"name": "Thạch rau câu", "unit": "gram", "price": 0.1, "description": "Dùng cho topping"},
+    {"name": "Kem tươi", "unit": "ml", "price": 0.3, "description": "Dùng trang trí/latte"},
+
+    # Nhóm phụ liệu
+    {"name": "Đường", "unit": "gram", "price": 0.05, "description": "Ngọt hóa đồ uống"},
+    {"name": "Đá viên", "unit": "gram", "price": 0, "description": "Dùng cho đồ lạnh"},
+]
+
+warehouse_data = [
+    {"name": "Kho Tổng", "location": "Tầng hầm"},
+    {"name": "Kho Quầy", "location": "Tầng trệt"}
+]
+
+stock_data = [
+    # Kho Tổng  
+    {"warehouse_id": 1, "ingredient_id": 1, "quantity": 5000},  # Cà phê hạt rang
+    {"warehouse_id": 1, "ingredient_id": 6, "quantity":3000},  # Trà đen
+    {"warehouse_id": 1, "ingredient_id": 2, "quantity": 1000},  # Cà phê hạt rang
+    {"warehouse_id": 1, "ingredient_id": 13, "quantity": 2000}, # Đường
+    {"warehouse_id": 1, "ingredient_id": 14, "quantity": 10000}, # Đá viên
+    {"warehouse_id": 1, "ingredient_id": 10, "quantity": 1000}, # Trân châu đen
+    {"warehouse_id": 1, "ingredient_id": 11, "quantity": 800},  # Thạch rau câu
+    {"warehouse_id": 1, "ingredient_id": 12, "quantity": 1500}, # Kem tươi
+]
+
+product_recipes_data = {
+    "Cà Phê Đen": [
+        {"ingredient_name": "Cà phê hạt rang", "quantity": 10, "unit": "gram"},
+        {"ingredient_name": "Đá viên", "quantity": 50, "unit": "gram"},
+    ],
+    "Cà Phê Sữa": [
+        {"ingredient_name": "Cà phê hạt rang", "quantity": 10, "unit": "gram"},
+        {"ingredient_name": "Sữa đặc", "quantity": 20, "unit": "ml"},
+        {"ingredient_name": "Đá viên", "quantity": 50, "unit": "gram"},
+    ],
+    "Bạc Sỉu": [
+        {"ingredient_name": "Cà phê hạt rang", "quantity": 5, "unit": "gram"},
+        {"ingredient_name": "Sữa tươi không đường", "quantity": 50, "unit": "ml"},
+        {"ingredient_name": "Sữa đặc", "quantity": 10, "unit": "ml"},
+        {"ingredient_name": "Đá viên", "quantity": 50, "unit": "gram"},
+    ],
+    "Latte": [
+        {"ingredient_name": "Cà phê hạt rang", "quantity": 8, "unit": "gram"},
+        {"ingredient_name": "Sữa tươi không đường", "quantity": 100, "unit": "ml"},
+    ],
+    "Trà Đào Cam Sả": [
+        {"ingredient_name": "Trà đen", "quantity": 5, "unit": "gram"},
+        {"ingredient_name": "Syrup đào", "quantity": 20, "unit": "ml"},
+        {"ingredient_name": "Đá viên", "quantity": 50, "unit": "gram"},
+    ],
+}
 
 if __name__ == "__main__":
     with app.app_context():
@@ -136,12 +212,6 @@ if __name__ == "__main__":
 
 
 
-        for role_data in roles:
-            from eapp.models.Role import Role
-            role = Role(**role_data)
-            db.session.add(role)
-
-        db.session.commit()
 
         # Seed accounts
         for acc_data in accounts:
@@ -181,5 +251,49 @@ if __name__ == "__main__":
             rule = Rule(**rule_data)
             db.session.add(rule)
         db.session.commit()
+
+        # seed ingredients
+        from eapp.models.Ingredient import Ingredient
+        for ingredient_data in ingredients_data:
+            ingredient = Ingredient(**ingredient_data)
+            db.session.add(ingredient)
+
+        # seed warehouses
+        from eapp.models.Warehouse import Warehouse
+        for warehouse_info in warehouse_data:
+            warehouse = Warehouse(**warehouse_info)
+            db.session.add(warehouse)
+        
+        #seed stocks
+        from eapp.models.Stock import Stock
+        for stock_info in stock_data:
+            stock = Stock(**stock_info)
+            db.session.add(stock)
+        
+        db.session.commit()
+
+        for product_name, ingredients_list in product_recipes_data.items():
+            product = Product.query.filter_by(name=product_name).first()
+            if not product:
+                print(f"⚠️ Không tìm thấy sản phẩm {product_name}")
+                continue
+
+            for ing_data in ingredients_list:
+                ingredient = Ingredient.query.filter_by(name=ing_data["ingredient_name"]).first()
+                if not ingredient:
+                    print(f"⚠️ Không tìm thấy nguyên liệu {ing_data['ingredient_name']}")
+                    continue
+
+                recipe = ProductRecipe(
+                    product_id=product.id,
+                    ingredient_id=ingredient.id,
+                    quantity=ing_data["quantity"],
+                    unit=ing_data["unit"]
+                )
+                db.session.add(recipe)
+
+        db.session.commit()
+        print("✅ Seed dữ liệu ProductRecipe thành công!")
+
 
         print("☕️ Seed dữ liệu quán cà phê thành công!")

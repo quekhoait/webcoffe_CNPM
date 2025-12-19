@@ -1,10 +1,9 @@
-<div class="flex gap-x-4 [&>div]:px-4 [&>div]:py-1 p-2 my-2 text-lg font-medium text-gray-700">
-    <div class="text-amber-900 bg-gray-200 rounded-2xl">
-        <span>Tất cả(3)</span>
-    </div>
-    {% for status in invoice_status %}
-    <div>
-        <span>{{ status.name }}(3)</span>
-    </div>
+<div class="flex gap-x-4 [&>div]:px-4 [&>div]:py-1 p-2 my-2 text-lg font-medium text-gray-700"
+    id="status-navigation">
+    <button class="active-status" data-status="all">
+        Tất cả(3)
+    </button>
+    {% for status, value in INVOICE_STATUS_LABEL[invoice_type].items() %}
+        <button id="{{ status.name }}" data-status="{{ status.name }}">{{ value }}(3)</button>
     {% endfor %}
 </div>

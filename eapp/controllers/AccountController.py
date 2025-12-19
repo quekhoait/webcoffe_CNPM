@@ -4,6 +4,7 @@ from eapp import app, utils
 import math, re, hashlib, cloudinary.uploader
 from eapp.dao.AccountDao import add_account, check_phone_exists, login_account, update_account_dao
 from werkzeug.security import check_password_hash
+from eapp.models.Account import Role
 
 
 def register():    
@@ -33,23 +34,35 @@ def register():
 
 
 def login():
-    phone = request.form.get("phone")
+    identifier = request.form.get("phone")
     password = request.form.get("password")
-    phone_regex = r"^0\d{9}$"
-    if not phone or not password:
+    # phone_regex = r"^0\d{9}$"
+    if not identifier or not password:
         return jsonify({"status": "error", "message": "Vui lòng nhập đầy đủ giá trị!"})
-    if not re.match(phone_regex, phone):
-        return jsonify({"status": "error", "message": "Số điện thoại không hợp lệ!"})
+    # if not re.match(phone_regex, identifier):
+    #     return jsonify({"status": "error", "message": "Số điện thoại không hợp lệ!"})
     if len(password) < 6:
         return jsonify({"status": "error", "message": "Mật khẩu phải hơn 6 ký tự!"})
     try:
-        u = login_account(phone=phone, password=password)
+        u = login_account(identifier=identifier, password=password)
         if not u:
-            return jsonify({"status": "error", "message": "Sai số điện thoại hoặc mật khẩu!"})
+            return jsonify({"status": "error", "message": "Sai số điện thoại/username hoặc mật khẩu!"})
 
         # login_user là của flask_login
         login_user(u)
-        return jsonify({"status": "success", "message": "Đăng nhập thành công!"})
+        print(u.role)
+
+        if u.role== Role.USER:
+            redirect_url = url_for("index")
+        elif u.role == Role.STAFF:
+            redirect_url = url_for("staff")
+        elif u.role == Role.CASHIER:
+            redirect_url = url_for('cashier')
+        elif u.role == Role.WAREHOUSE_KEEPER:
+            redirect_url = url_for("warehouse")
+        # elif u.role == Role.ADMIN:
+        #     return redirect(url_for("user"))
+        return jsonify({"status": "success", "message": "Đăng nhập thành công!", "redirect_url": redirect_url})
     except Exception as ex:
         app.logger.error(f'Lỗi khi đăng nhập: {ex}')
         print(ex)
@@ -57,7 +70,7 @@ def login():
 
 def logout():
     logout_user()
-    return redirect('/')
+    return redirect('/login')
 
 def check_password():
     data = request.get_json()

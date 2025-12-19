@@ -1,65 +1,52 @@
-<div class="bg-white p-6 rounded-xl shadow-lg">
+<div class="bg-white p-6 rounded-xl shadow-lg" id="my-cart-page">
   <h2 class="text-2xl font-bold mb-6 text-gray-800">Giỏ hàng hiện tại (2)</h2>
   <div class="h-[270px] overflow-y-auto">
-    <div class="flex items-start justify-between py-4 border-b border-gray-100">
+
+    {% if list_pro %}
+        {% for product in list_pro %}
+             <div class="cart-component-item flex items-start justify-between py-4 border-b border-gray-100">
       <div class="flex items-center">
-        <div
-          class="w-20 h-20 flex items-center bg-purple-700 bg-opacity-80 rounded-lg mr-3 flex-shrink-0"
-          style="
-            background-image: url('https://via.placeholder.com/48x48/8b5cf6/ffffff?text=C%C3%A0%20Ph%C3%AA');
-            background-size: cover;
-            background-position: center;
-          "
-        ></div>
+        <img class="w-20 h-20 flex items-center bg-purple-700 bg-opacity-80 rounded-lg mr-3 flex-shrink-0" src="{{product.product.image}}">
         <div class="pl-4">
-          <p class="font-semibold text-2xl text-gray-800">Cà Phê Sữa Đá</p>
-          <p class="text-xl text-gray-500">Size M, Ít đường</p>
-          <p class="text-xl font-semibold text-gray-700">75.000đ</p>
+          <p class="font-semibold text-2xl text-gray-800">{{product.product.name}}</p>
+          <p class="text-xl font-semibold text-gray-700 price">{{product.product.price}}đ</p>
         </div>
       </div>
       <div class="flex items-center space-x-2">
+        {% set quantity=product.quantity %}
         {% include 'page/quantity_control.html' %}
-         <input type="checkbox" class="!mx-6 cursor-pointer">
-        <button class="text-gray-400 hover:text-red-500 p-1">
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            ></path>
-          </svg>
+         <input type="checkbox" class="ml-auto select-cart-component mx-4">
+        <button type="button" class="btn-remove-product-cart text-gray-400 hover:text-red-500 p-1" data-product-id="{{ product.product.id }}">
+          <i class="fa-solid fa-trash-can text-2xl "    ></i>
         </button>
       </div>
     </div>
-
+        {% endfor %}
+    {% else %}
+        <div class="col-span-full text-center py-20">
+            <p class="text-3xl text-gray-400">Không tìm thấy món nào.</p>
+        </div>
+{% endif %}
   </div>
 
   <div class="mt-6 pt-4 border-t border-gray-200 space-y-2 text-2xl">
     <div class="flex justify-between text-gray-700">
       <span>Tạm tính</span>
-      <span class="font-medium text-gray-900">205.000đ</span>
+      <span class="font-medium text-gray-900" id="subTotal-cart">0đ</span>
     </div>
     <div class="flex justify-between text-gray-700">
-      <span>Phí vận chuyển</span>
-      <span class="font-medium text-gray-900">15.000đ</span>
+      <span>Phụ phí</span>
+      <span class="font-medium text-gray-900"  id="subTotal-extra">0đ</span>
     </div>
     <div class="flex justify-between text-2xl font-bold text-orange-600 pt-2">
       <span>Tổng cộng</span>
-      <span>220.000đ</span>
+      <span  id="total">0đ</span>
     </div>
   </div>
-<!--  <script src="{{ url_for('static', filename='js/quantity_control.js') }}"></script>-->
-
   <button
     class="w-full mt-6 py-3 bg-orange-600 text-white font-bold text-2xl rounded-xl hover:bg-orange-700 transition duration-200 shadow-md"
   >
     Tiến hành Thanh toán
   </button>
 </div>
+<script src="{{ url_for('static', filename='javascript/cart.js') }}"></script>

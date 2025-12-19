@@ -6,12 +6,14 @@ from .Invoice import Invoice
 from .InvoiceDetail import InvoiceDetail
 from .Product import Product,ProductStatus
 from .ProductRecipe import ProductRecipe
-from .Role import Role
 from .Rule import Rule
 from .Stock import Stock
 from .Warehouse import Warehouse
 from .WarehouseSlip import WarehouseSlip
 from .WarehouseSlipDetail import WarehouseSlipDetail
+from .Cart import Cart
+from .CartDetail import CartDetail
+from .Payment import Payment
 
 __all__ = [
     "Account",

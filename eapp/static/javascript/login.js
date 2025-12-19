@@ -12,8 +12,8 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
         document.getElementById("error-login-box").classList.remove("hidden");
         document.getElementById("error-login-text").innerText = data.message;
     } else if (data.status === "success") {
-      alert(2)
-        window.location.href = "/";
+      alert(data.redirect_url)
+        window.location.href = data.redirect_url;
     }
   })
 
