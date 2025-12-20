@@ -73,7 +73,7 @@ app.add_url_rule("/momo/return",'momo_return', momo.momo_return)
 app.add_url_rule('/dashboard/cashier','cashier',CashierController.load_cashier)
 app.add_url_rule('/cashier/status-bar', 'get_status_bar', CashierController.load_status_bar, methods=['get'])
 
-app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
+# app.add_url_rule('/product/<int:id>', 'product_detail', index.product_detail, methods=['GET'])
 
 
 app.add_url_rule('/dashboard/warehouse', 'warehouse', WarehouseController.warehouse_page)
