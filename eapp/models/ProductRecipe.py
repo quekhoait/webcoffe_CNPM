@@ -11,7 +11,6 @@ class ProductRecipe(BaseModel):
     unit = Column(String(20), nullable=False)
 
 
-    ingredient = relationship('Ingredient', backref='product_recipes', lazy=True)
     serialize_rules = ('-product', '-ingredient.product_recipes', '-ingredient.stocks')
 
     
