@@ -127,35 +127,44 @@ document.addEventListener("click", e => {
 function openModal(mode, product = null) {
     const modal = document.getElementById('productModal');
     modal.classList.remove('hidden');
-    //hiệu ứng scale
-    setTimeout(() => {
-        modal.firstElementChild.classList.remove('scale-95');
-        modal.firstElementChild.classList.add('scale-100');
-    }, 10);
+    setTimeout(() => { modal.firstElementChild.classList.remove('scale-95'); modal.firstElementChild.classList.add('scale-100'); }, 10);
 
     const container = document.getElementById('recipeContainer');
     container.innerHTML = '';
 
     if (mode === 'ADD') {
         document.getElementById('modalTitle').innerText = "Thêm Món Mới";
+        // Reset form
         document.getElementById('inpId').value = "";
         document.getElementById('inpName').value = "";
         document.getElementById('inpPrice').value = "";
         document.getElementById('inpUnit').value = "";
         document.getElementById('inpDesc').value = "";
-        document.getElementById('inpCategory').selectedIndex = 0;
         document.getElementById('previewImage').classList.add('hidden');
 
-        addRecipeRow(); //thêm dòng trống
+        // reset danh mục mới
+        document.getElementById('inpCategory').value = "";
+        document.getElementById('inpCategoryName').value = "";
+
+        addRecipeRow();
     } else {
         document.getElementById('modalTitle').innerText = "Cập Nhật Món";
         document.getElementById('inpId').value = product.id;
         document.getElementById('inpName').value = product.name;
         document.getElementById('inpPrice').value = product.price;
         document.getElementById('inpUnit').value = product.unit;
-        document.getElementById('inpCategory').value = product.category_id;
         document.getElementById('inpDesc').value = product.description;
 
+        //set danh mục mới
+        document.getElementById('inpCategory').value = product.category_id || product.dish_category_id;
+
+        if (typeof ALL_CATEGORIES !== 'undefined') {
+            const catId = product.category_id || product.dish_category_id;
+            const cat = ALL_CATEGORIES.find(c => c.id == catId);
+            document.getElementById('inpCategoryName').value = cat ? cat.name : "";
+        }
+
+        // ảnh
         if (product.image) {
             document.getElementById('previewImage').src = product.image;
             document.getElementById('previewImage').classList.remove('hidden');
@@ -163,7 +172,7 @@ function openModal(mode, product = null) {
             document.getElementById('previewImage').classList.add('hidden');
         }
 
-        //load công thức cũ
+        // công thức
         if (product.ingredients && product.ingredients.length > 0) {
             product.ingredients.forEach(r => {
                 addRecipeRow({
@@ -241,3 +250,104 @@ function deleteProduct(id) {
         if (d.success) location.reload(); else alert(d.message);
     });
 }
+
+function toggleCatDropdown() {
+    const dropdown = document.getElementById('cat-dropdown');
+    if (dropdown.classList.contains('hidden')) {
+
+        document.querySelectorAll('.ing-dropdown').forEach(d => d.classList.add('hidden'));
+        dropdown.classList.remove('hidden');
+    } else {
+        dropdown.classList.add('hidden');
+    }
+}
+
+function selectCategory(id, name) {
+
+    document.getElementById('inpCategory').value = id;
+    document.getElementById('inpCategoryName').value = name;
+
+    document.getElementById('cat-dropdown').classList.add('hidden');
+}
+
+document.addEventListener("click", e => {
+
+    if (!e.target.closest('#cat-container')) {
+        const catDrop = document.getElementById('cat-dropdown');
+        if(catDrop) catDrop.classList.add('hidden');
+    }
+
+    if (!e.target.closest('.recipe-row')) {
+        document.querySelectorAll('.ing-dropdown').forEach(el => el.classList.add('hidden'));
+    }
+});
+
+
+function toggleFilterDropdown() {
+    const d = document.getElementById('filter-dropdown');
+
+    const otherDrops = document.querySelectorAll('.ing-dropdown, #cat-dropdown');
+    otherDrops.forEach(el => el.classList.add('hidden'));
+
+    if (d.classList.contains('hidden')) {
+        d.classList.remove('hidden');
+    } else {
+        d.classList.add('hidden');
+    }
+}
+
+function selectFilter(id, name) {
+
+    document.getElementById('inpFilterName').value = name;
+    document.getElementById('filter-dropdown').classList.add('hidden');
+
+    filterTableData(name);
+}
+
+
+function filterTableData(categoryName) {
+    const rows = document.querySelectorAll('tbody tr'); // Lấy tất cả dòng trong bảng
+    const keyword = document.getElementById('searchInput').value.toLowerCase();
+
+    rows.forEach(row => {
+
+        const productName = row.querySelector('td:nth-child(1) .font-bold').innerText.toLowerCase();
+
+        const categoryCell = row.querySelector('td:nth-child(3) span');
+        const rowCategory = categoryCell ? categoryCell.innerText.trim() : "";
+
+        const matchCategory = (categoryName === 'Tất cả loại' || rowCategory === categoryName);
+        const matchKeyword = productName.includes(keyword);
+
+        if (matchCategory && matchKeyword) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+
+function searchTable() {
+
+    const currentCategory = document.getElementById('inpFilterName').value;
+    filterTableData(currentCategory);
+}
+
+
+document.addEventListener("click", e => {
+
+    if (!e.target.closest('.recipe-row')) {
+        document.querySelectorAll('.ing-dropdown').forEach(el => el.classList.add('hidden'));
+    }
+
+    if (!e.target.closest('#cat-container')) {
+        const catDrop = document.getElementById('cat-dropdown');
+        if(catDrop) catDrop.classList.add('hidden');
+    }
+
+    if (!e.target.closest('#filter-container')) {
+        const filterDrop = document.getElementById('filter-dropdown');
+        if(filterDrop) filterDrop.classList.add('hidden');
+    }
+});
