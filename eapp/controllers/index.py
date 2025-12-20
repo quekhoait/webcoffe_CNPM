@@ -5,8 +5,10 @@ from datetime import datetime
 from sqlalchemy import desc #hàm sx giảm dần
 
 from eapp.dao import CategoryDao, ProductDao
-from eapp.models import Category, Product
+from eapp.models import Category
 from flask import render_template, request
+
+from eapp.services.InventoryService import InventoryService
 
 
 #coffeeProducts = [
@@ -190,19 +192,23 @@ def load_menu():
     categories = CategoryDao.list()
 
     products = ProductDao.list(params)
-
+    product_makeable_map = InventoryService.get_product_makeable_map(products,get_current_warehouse())
     return render_template('page/menu.html',
                            products=products,
                            categories=categories,
                            # Gửi lại các tham số để View biết cái nào đang được chọn
                            current_cate_id=int(category_id) if category_id else None,
                            current_filter=filter_type,
-                           search_query=search_query)
+                           search_query=search_query,
+                           product_makeable_map=product_makeable_map)
 
 def load_profile():
     tab = request.args.get("tab", "profile")
     return render_template("page/profile.html", tab=tab)
 
+
+def get_current_warehouse():
+    return 1
 def load_my_cart():
     return render_template('page/cart.html')
 

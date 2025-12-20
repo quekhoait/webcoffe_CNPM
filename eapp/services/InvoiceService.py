@@ -109,28 +109,27 @@ class InvoiceService:
             invoice.subtotal = InvoiceService.calculate_total(invoice_data.get('invoice_items', []))
             invoice.extra_fee_total = RuleService.calulate_service_fee(invoice.subtotal)
             invoice.final_total = invoice.subtotal + invoice.extra_fee_total
-
-            InvoiceDAO.save(invoice)
-            db.session.flush()  
+            invoice.invoice_status = InvoiceStatusEnum.PENDING
 
             invoice_details = []
             for detail in invoice_data.get('invoice_items', []):
                 invoice_details.append(
                     InvoiceDetail(
-                        invoice_id=invoice.id,
                         product_id=int(detail['product_id']),
                         quantity=detail['quantity'],
                         price=detail['price']
                     )
                 )
-            InvoiceDAO.save_details(invoice_details)
 
-            if warehouse_id and used_stock:
-                InventoryService.reserve_stock_for_invoice(
-                    invoice=invoice,
-                    warehouse_id=warehouse_id,
-                    used_stock=used_stock
-                )
+            #flush
+            InvoiceDAO.create(invoice=invoice,invoice_details=invoice_details)
+            
+            #cập nhật reserveđ
+            InventoryService.reserve_stock_for_invoice(
+                invoice=invoice,
+                warehouse_id=warehouse_id,
+                used_stock=used_stock
+            )
 
             db.session.commit()
             return invoice
@@ -152,7 +151,7 @@ class InvoiceService:
 
         if new_status == InvoiceStatusEnum.IN_PROGRESS:
             invoice.invoice_status = InvoiceStatusEnum.IN_PROGRESS
-            rs = InventoryService.invoice_process(invoice,warehouse_id)
+            rs = InventoryService.start_processing_invoice(invoice,warehouse_id)
             if rs['success']:
                 result.update({
                     'success': True,
