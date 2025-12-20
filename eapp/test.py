@@ -1,5 +1,6 @@
 from eapp import app,db
-from eapp.dao import ProductDao
+from eapp.controllers import EmployeeController
+from eapp.dao import ProductDao, AccountDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.models.Product import Product
 from eapp.services.InventoryService import InventoryService
@@ -26,7 +27,8 @@ def test_start_processing_invoice():
 
 if __name__ == '__main__':
     with app.app_context():
-        test_start_processing_invoice()
+        # test_start_processing_invoice()
+        print( [ u.to_dict() for u in AccountDAO.get_all_employees() ])
         # print(ProductDao.get_product_recipe_map())
         # print(WarehouseDAO.get_stock_map(1))
         # print(InventoryService.get_product_makeable_map(ProductDao.list(),1))
