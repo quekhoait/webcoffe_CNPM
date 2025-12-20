@@ -78,3 +78,5 @@ def api_delete_product():
     if ProductDao.delete_product(data.get('id')):
         return jsonify({'success': True, 'message': 'Xóa thành công!'})
     return jsonify({'success': False, 'message': 'Lỗi xóa!'})
+
+
