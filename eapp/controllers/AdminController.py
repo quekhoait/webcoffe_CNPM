@@ -80,3 +80,24 @@ def api_delete_product():
     return jsonify({'success': False, 'message': 'Lỗi xóa!'})
 
 
+
+def api_add_category():
+    data = request.json
+    name = data.get('name')
+
+    if not name:
+        return jsonify({'success': False, 'message': 'Tên danh mục không được để trống!'})
+
+    new_cat = CategoryDao.create_category(name)
+
+    if new_cat:
+        return jsonify({
+            'success': True,
+            'message': 'Thêm danh mục thành công!',
+            'category': {
+                'id': new_cat.id,
+                'name': new_cat.name
+            }
+        })
+    else:
+        return jsonify({'success': False, 'message': 'Lỗi: Danh mục đã tồn tại hoặc lỗi server!'})
