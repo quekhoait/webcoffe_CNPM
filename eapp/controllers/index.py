@@ -8,6 +8,8 @@ from eapp.dao import CategoryDao, ProductDao
 from eapp.models import Category, Product
 from flask import render_template, request
 
+from eapp.services.InventoryService import InventoryService
+
 
 #coffeeProducts = [
 #     {
@@ -97,87 +99,6 @@ def load_about_us():
     return render_template('page/about_us.html')
 
 
-# def checkout_page():
-#     current_user = session.get('user')
-#
-#     #test
-#     if not current_user:
-#         current_user = {'id': 1, 'name': 'Khách hàng Test', 'phone': '0909000111', 'email': 'test@gmail.com'}
-#
-#     #giỏ hàng
-#     cart = session.get('cart', {})
-#     if not cart:
-#         cart = {
-#             '1': {'id': 1, 'name': 'Cafe Demo', 'price': 25000, 'quantity': 2, 'image': ''}
-#         }
-#
-#     # TongTam
-#     subtotal = sum(item['price'] * item['quantity'] for item in cart.values())
-#     # TongPhuPhi (Ví dụ = 0)
-#     surcharge = 0
-#     # TongThanhToan
-#     total_amount = subtotal + surcharge
-#
-#     #xử lý đặt hàng
-#     if request.method == 'POST':
-#         try:
-#             payment_method = request.form.get('payment_method')
-#
-#             if payment_method == 'MOMO':
-#                 order_status = 2 #đã thanh toán
-#
-#             else:
-#                 order_status = 1 #chờ xử lý
-#
-#             #tạo đơn hàng
-#             new_order = Order(
-#                 customer_id=current_user['id'],  # NguoiDung_idKhachHang
-#                 payment_method=payment_method,  # HinhThucThanhToan
-#                 subtotal=subtotal,  # TongTam
-#                 surcharge=surcharge,  # TongPhuPhi
-#                 total_amount=total_amount,  # TongThanhToan
-#                 created_date=datetime.now(),  # NgayLap
-#                 status_id=order_status # TrangThai
-#
-#             )
-#             db.session.add(new_order)
-#             db.session.flush()  # Lấy ID vừa tạo
-#
-#             # Lưu chi tiết
-#             for item in cart.values():
-#                 item_total = item['price'] * item['quantity']
-#                 detail = OrderDetail(
-#                     order_id=new_order.id,  # HoaDon_idHoaDon
-#                     dish_id=item['id'],  # Mon_idMon
-#                     quantity=item['quantity'],  # SoLuong
-#                     price=item['price'],  # DonGia
-#                     total_price=item['price'] * item['quantity'] # ThanhTien
-#                 )
-#                 db.session.add(detail)
-#
-#             db.session.commit()
-#
-#             #xóa giỏ hàng sau khi đặt thành công
-#             if session.get('cart'): session.pop('cart', None)
-#
-#             return redirect('/')
-#
-#         except Exception as ex:
-#             db.session.rollback()
-#             print(f"Lỗi DB: {ex}")
-#             return "Lỗi xử lý đơn hàng", 500
-#
-#     #hiển thị
-#     user_info = {
-#         'fullname': current_user.get('name', ''),
-#         'phone': current_user.get('phone', ''),
-#         'email': current_user.get('email', '')
-#     }
-#
-#     return render_template('page/checkout.html',
-#                            cart_items=cart.values(),
-#                            total_price=total_amount,
-#                            user_info=user_info)
 
 
 
@@ -190,19 +111,25 @@ def load_menu():
     categories = CategoryDao.list()
 
     products = ProductDao.list(params)
-
+    product_makeable_map = InventoryService.get_product_makeable_map(products,get_current_warehouse())
     return render_template('page/menu.html',
                            products=products,
                            categories=categories,
                            # Gửi lại các tham số để View biết cái nào đang được chọn
                            current_cate_id=int(category_id) if category_id else None,
                            current_filter=filter_type,
-                           search_query=search_query)
+                           search_query=search_query,
+                           product_makeable_map=product_makeable_map)
 
 def load_profile():
     tab = request.args.get("tab", "profile")
     return render_template("page/profile.html", tab=tab)
 
+
+def get_current_warehouse():
+    return 1
+def load_my_cart():
+    return render_template('page/cart.html')
 def load_my_cart():
     return render_template('page/cart.html')
 

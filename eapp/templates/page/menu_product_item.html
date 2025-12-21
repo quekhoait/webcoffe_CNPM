@@ -1,30 +1,39 @@
   {% if products %}
-        {% for product in products %}
-        <div class="bg-white rounded-2xl p-2 shadow-sm hover:shadow-xl transition duration-300 group flex flex-col h-full">
+  {% for product in products %}
+  <div class="bg-white rounded-2xl p-2 shadow-sm hover:shadow-xl transition duration-300 group flex flex-col h-full">
 
-
-            <div class="relative overflow-hidden rounded-xl mb-4 aspect-square bg-gray-100">
-                      <div class="absolute top-2 left-2 px-3 py-1 rounded-full text-sm font-semibold
+      <div class="relative overflow-hidden rounded-xl mb-4 aspect-square bg-gray-100">
+          {% if product_makeable_map[product.id] %}
+          <div class="absolute top-2 left-2 px-3 py-1 rounded-full text-sm font-semibold
              bg-green-500 text-white">
-           còn hàng
-            </div>
-                <img src="{{ product.image if product.image else 'https://via.placeholder.com/300' }}"
-                     class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            </div>
-            <div class="flex flex-col flex-grow">
-                <h3 class="text-3xl font-bold text-[#372f2b] mb-2 leading-tight">{{ product.name }}</h3>
-                <p class="text-lg text-gray-500 mb-4 flex-grow line-clamp-2">{{ product.description if product.description else '...' }}</p>
-                <div class="flex items-center justify-between mt-auto">
-                    <span class="text-3xl font-bold text-[#372f2b]">{{ "{:,.0f}".format(product.price) }}đ</span>
-                    <button onclick="addToCart({{ product.id}})" class="w-12 h-12 rounded-full bg-[#c54f36] text-white flex items-center justify-center hover:bg-[#a03d28] transition shadow-md">
-                        <i class="fa-solid fa-cart-plus text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    {% else %}
-        <div class="col-span-full text-center py-20">
-            <p class="text-3xl text-gray-400">Không tìm thấy món nào.</p>
-        </div>
-    {% endif %}
+              còn hàng
+          </div>
+          {% else %}
+          <div class="absolute top-2 left-2 px-3 py-1 rounded-full text-sm font-semibold
+             bg-red-500 text-white">
+              Hết hàng
+          </div>
+          {% endif %}
+          <img src="{{ product.image if product.image else 'https://via.placeholder.com/300' }}"
+              class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+      </div>
+
+      <div class="flex flex-col flex-grow">
+          <h3 class="text-3xl font-bold text-[#372f2b] mb-2 leading-tight">{{ product.name }}</h3>
+          <p class="text-lg text-gray-500 mb-4 flex-grow line-clamp-2">
+              {{ product.description if product.description else '...' }}</p>
+          <div class="flex items-center justify-between mt-auto">
+              <span class="text-3xl font-bold text-[#372f2b]">{{ "{:,.0f}".format(product.price) }}đ</span>
+              <button onclick="addToCart({{ product.id}})"
+                  class="w-12 h-12 rounded-full bg-[#c54f36] text-white flex items-center justify-center hover:bg-[#a03d28] transition shadow-md">
+                  <i class="fa-solid fa-cart-plus text-xl"></i>
+              </button>
+          </div>
+      </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="col-span-full text-center py-20">
+      <p class="text-3xl text-gray-400">Không tìm thấy món nào.</p>
+  </div>
+  {% endif %}

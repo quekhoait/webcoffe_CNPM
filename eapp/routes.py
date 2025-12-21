@@ -1,4 +1,5 @@
 # Cấu trúc route của các trang web bình thường
+from msilib import CAB
 
 from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
@@ -13,7 +14,6 @@ from eapp.controllers import ProductController, StaffController, index, AccountC
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
-
 app.add_url_rule('/regis','register', index.load_regis)
 app.add_url_rule('/api/regis','created_account',AccountController.register, methods=['POST'])
 app.add_url_rule('/logout','logout', AccountController.logout)

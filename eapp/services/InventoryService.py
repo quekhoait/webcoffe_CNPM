@@ -1,4 +1,5 @@
 from enum import Enum
+from unittest import result
 
 from eapp.dao import ProductDao, RuleDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
@@ -12,6 +13,7 @@ from eapp.services.SlipStrategyFactory import SlipStrategyFactory
 class IngredientStatus(Enum):
     AVAILABLE = "Còn Hàng"
     LOW_STOCK = "Sắp Hết"
+    OUT_OF_STOCK = "Hết Hàng"
 
 class InventoryService:
 
@@ -25,6 +27,7 @@ class InventoryService:
             stock_data.append({
                 'ingredient': ingredient_stock.ingredient,
                 'quantity': ingredient_stock.quantity,
+                'reserved' : ingredient_stock.reserved,
                 'status': status
             })
         return stock_data
@@ -34,41 +37,143 @@ class InventoryService:
         return RuleDAO.list({'rule_type': RuleType.INGREDIENT})
 
     @staticmethod
-    def get_ingredient_stock_status(ingredient_stock: Ingredient):
-        if ingredient_stock.quantity < InventoryService.load_rules()[0].value:
+    def get_ingredient_stock_status(ingredient_stock: Stock):
+        availabble_stock = ingredient_stock.quantity - ingredient_stock.reserved
+        if availabble_stock == 0:
+            return IngredientStatus.OUT_OF_STOCK
+        if availabble_stock < InventoryService.load_rules()[0].value:
             return IngredientStatus.LOW_STOCK
         return IngredientStatus.AVAILABLE
     
 
-    """
-        return
-        ingredient_id
-        required_quantity
-        available_quantity
 
-        ingredients 
-            ingredient_id
-            quantity
+    """
+    params
+        invoice_details:
+        [
+            {
+                product_id,
+                quantity
+            }
+        ]
+        warehouse_id
+    return
+        {
+            insufficient_ingredients 
+            [
+                {
+                    ingredient_id,
+                    required_quantity,
+                    available_quantity
+                }
+            ]
+
+            effected_products
+            [
+                product_id
+            ]
+        }
     """
     @staticmethod
-    def get_insufficient_ingredients(ingredients: list, warehouse_id: int):
-        warehouse = WarehouseDAO.get_by_id(warehouse_id=warehouse_id)
-        stocks = warehouse.stocks
+    def get_stock_shortage_by_products(product_details, warehouse_id, available_stock_map=None, product_recipe_map=None):
+        # import pdb
+        # pdb.set_trace()
+        if available_stock_map is None:
+            available_stock_map = WarehouseDAO.get_available_stock_map(warehouse_id)
+        if product_recipe_map is None:
+            product_recipe_map = ProductDao.get_product_recipe_map()
         insufficient_ingredients = []
-        for ingredient in ingredients:
-            stock = next((s for s in stocks if s.ingredient_id == ingredient['ingredient_id']), None)
-            # if stock is not None:
-                # print(stock.ingredient_id, stock.quantity)
-            if stock is None or stock.quantity < ingredient['quantity']:
-                insufficient_ingredients.append({
-                    'ingredient_id': ingredient['ingredient_id'],
-                    'required_quantity': ingredient['quantity'],
-                    'available_quantity': stock.quantity if stock else 0
-                })
-        return insufficient_ingredients
+        shortage_ingredient_id = set()
+        effected_products = []
+        required_ingredient_map = InventoryService.aggregate_ingredient_demand_by_product(product_details,product_recipe_map)
 
+        for ingredient_id, required_quantity in required_ingredient_map.items():
+            available = available_stock_map.get(ingredient_id,0)
+            #thiếu thì bỏ qua, đánh dấu
+            if available < required_quantity:
+                shortage_ingredient_id.add(ingredient_id)
+                insufficient_ingredients.append(
+                    {
+                        'ingredient_id' : ingredient_id,
+                        'required_quantity' : required_quantity,
+                        'available_quantity' : available
+                    }
+                ) 
+            else:
+                #đủ thì trừ đi cho món ở phía trước, món sau ko sài lại
+                available_stock_map[ingredient_id] -= required_quantity
+        
+        # tìm product bị ảnh hưởng
+        for product in product_details:
+            product_id = product['product_id']
+            if any(ing['ingredient_id'] in shortage_ingredient_id for ing in product_recipe_map[product_id] ):
+                effected_products.append(product_id)
+
+                
+        return {
+            'insufficient_ingredients': insufficient_ingredients,
+            'effected_products': effected_products
+        }
+
+        # for ingredient in ingredients:
+        #     stock = next((s for s in stocks if s.ingredient_id == ingredient['ingredient_id']), None)
+        #     # if stock is not None:
+        #         # print(stock.ingredient_id, stock.quantity)
+        #     if stock is None or stock.quantity < ingredient['quantity']:
+        #         insufficient_ingredients.append({
+        #             'ingredient_id': ingredient['ingredient_id'],
+        #             'required_quantity': ingredient['quantity'],
+        #             'available_quantity': stock.quantity if stock else 0
+        #         })
+        # return insufficient_ingredients
+    
 
     """
+    params
+        product_details:
+        [
+            {
+                product_id,
+                quantity
+            }
+        ]
+
+        product_recipe_map
+        {
+            product_id
+            [
+                {
+                    ingredient_id,
+                    quantity    
+                }
+            ]
+        }
+
+    return
+        total_ingredient_demand
+        {
+            ingredient_id : required_quantity
+        }
+    """
+    @staticmethod
+    def aggregate_ingredient_demand_by_product(product_details: list, product_recipe_map: dict):
+        total_ingredient_demand = {}
+        for product in product_details:
+            product_id = product['product_id']
+            # lấy nguyên liệu từng sản phẩm 
+            for ingredient in product_recipe_map[product_id]:
+                # tính tổng nguyên liệu sản phẩm cần
+                required_quantity = ingredient['quantity'] * product['quantity']
+                ingredient_id = ingredient['ingredient_id']
+                # cộng dồn ingredient giống nhau
+                if ingredient_id in total_ingredient_demand:
+                    total_ingredient_demand[ingredient_id] += required_quantity
+                else:
+                    total_ingredient_demand[ingredient_id] = required_quantity
+        return total_ingredient_demand
+
+    """
+    return
         {
             ingredient_id : 
             {
@@ -80,6 +185,7 @@ class InventoryService:
 
     @staticmethod
     def get_ingredient_list_from_invoice(invoice: Invoice):
+   
         ingredients = {}
         for item in invoice.invoice_details:
             product = item.product
@@ -191,17 +297,24 @@ class InventoryService:
 
     # tạo phiếu xuất kho cho hóa đơn
     @staticmethod
-    def invoice_process(invoice: Invoice, source_warehouse_id: int):
-        ingredients = list(InventoryService.get_ingredient_list_from_invoice(invoice=invoice).values())
-        insufficient_ingredients = InventoryService.get_insufficient_ingredients(
-            ingredients=ingredients,
-            warehouse_id=source_warehouse_id
+    def start_processing_invoice(invoice: Invoice, source_warehouse_id: int):
+
+        #check tồn kho lần nữa
+        result = InventoryService.get_stock_shortage_by_products(
+            product_details=invoice.invoice_details,
+            available_stock_map=WarehouseDAO.get_available_stock_map(source_warehouse_id),
+            product_recipe_map= ProductDao.get_product_recipe_map()
         )
-        if insufficient_ingredients:
+        if result['insufficient_ingredients']:
             return {
                 'success' : False,
-                'insufficient_ingredients' : insufficient_ingredients
+                'data' : {
+                    'insufficient_ingredients' : result['insufficient_ingredients'],
+                    'effected_products' : result['effected_products']
+                }
             }
+        
+        # tạo phiếu xuất kho cho hóa đơn / trừ nguyên thật
         slip_data = {
             'slip_type' : 'EXPORT',
             'note' : f'Xuất kho tự động cho hóa đơn #{invoice.id}',
@@ -211,6 +324,8 @@ class InventoryService:
             'source_warehouse_id' : source_warehouse_id,
             'ingredients' : ingredients
         }
+
+        # hoàn lại reserved
         return {
             'success' : True,
             'warehouse_slip' : InventoryService.create_slip(slip_data=slip_data)
@@ -311,8 +426,8 @@ class InventoryService:
         [
             {
                 product_id,
-                name,
-                price,
+                name, * ko cần
+                price, * ko cần
                 quantity
             }
         ]
@@ -334,17 +449,19 @@ class InventoryService:
         recipe_map = ProductDao.get_product_recipe_map()
 
         result = []
+        # lặp qua từng product
         for product in invoice_items:
             max_quantities = []
             is_insufficient = False
             product_id = int(product['product_id'])
-
+            # lấy quantity nguyên liệu của product yêu cầu, và nguyên liệu của công thức product ing_required: 1:20 ing_recipe 1:10
             for ing_required, ing_recipe in zip(required_ingredient_map[product_id],recipe_map[product_id]):
-                available = available_stock_map[ing_required['ingredient_id']]
                 required = ing_required['required_quanity']
+                available = available_stock_map[ing_required['ingredient_id']]
                 ing_per_product = ing_recipe['quantity']
                 max_quantities.append(int(available // ing_per_product))
 
+                # không break, ưu tiên nguyên liệu cho các món trên, đã sài thì trừ ra, món dưới thiếu thì báo 
                 if available < required:
                     is_insufficient = True
                     continue
@@ -404,9 +521,9 @@ class InventoryService:
                 for stock in warehouse.stocks:
                     stock.reserved += used_stock[stock.ingredient_id]
             else:
-                used_stock = list(InventoryService.get_ingredient_list_from_invoice(invoice).values())
+                used_stock = InventoryService.get_ingredient_list_from_invoice(invoice)
                 for stock in warehouse.stocks:
-                    stock.reserved += used_stock.get(stock.ingredient_id,0)
+                    stock.reserved += used_stock.get(stock.ingredient_id,{}).get('quantity',0)
         
 
         

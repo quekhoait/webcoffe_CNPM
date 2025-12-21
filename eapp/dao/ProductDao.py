@@ -1,3 +1,4 @@
+from eapp.models import Product, ProductRecipe, ProductRecipe, ProductStatus
 # from MySQLdb._mysql import result
 from sqlalchemy.sql.functions import current_user
 
@@ -50,70 +51,6 @@ def get_product_recipe_map():
 
     return product_recipe
 
-def list(params=None):
-    return Product.query.order_by(Product.id.desc()).all()
-
-
-def get_by_id(id):
-    return Product.query.get(id)
-
-
-def add_product(data):
-    try:
-        new_product = Product(
-            name=data.get('name'),
-            price=data.get('price'),
-            unit=data.get('unit'),
-            dish_category_id=data.get('dish_category_id'),
-            description=data.get('description'),
-            image=data.get('image')
-        )
-        db.session.add(new_product)
-        db.session.commit()
-        return True
-    except Exception as ex:
-        print(f"Lỗi thêm: {ex}")
-        db.session.rollback()
-        return False
-
-
-def update_product(product_id, data):
-    try:
-        product = Product.query.get(product_id)
-        if not product: return False
-
-        product.name = data.get('name')
-        product.price = data.get('price')
-        product.unit = data.get('unit')
-        product.dish_category_id = data.get('dish_category_id')
-        product.description = data.get('description')
-
-        if data.get('image'):
-            product.image = data.get('image')
-
-        db.session.commit()
-        return True
-    except Exception as ex:
-        print(f"Lỗi sửa: {ex}")
-        db.session.rollback()
-        return False
-
-
-def delete_product(product_id):
-    try:
-        product = Product.query.get(product_id)
-        if product:
-            #xóa công thức trước
-            ProductRecipe.query.filter_by(product_id=product_id).delete()
-
-            db.session.delete(product)
-            db.session.commit()
-            return True
-        return False
-    except Exception as ex:
-        print(f"Lỗi xóa: {ex}")
-        db.session.rollback()
-        return False
 
 def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None):
     query = (
@@ -133,3 +70,83 @@ def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None)
         Payment
     ).all()
     return result
+
+
+def add_product(data, recipes=[]):
+    try:
+        new_product = Product(
+            name=data.get('name'),
+            price=data.get('price'),
+            unit=data.get('unit'),
+            dish_category_id=data.get('dish_category_id'),
+            description=data.get('description'),
+            image=data.get('image'),
+            status=ProductStatus.ACTIVE
+        )
+        db.session.add(new_product)
+        db.session.flush()
+
+        #lưu công thức
+        for item in recipes:
+            if item.get('ingredient_id'):
+                recipe = ProductRecipe(
+                    product_id=new_product.id,
+                    ingredient_id=item['ingredient_id'],
+                    quantity=item['quantity'],
+                    unit=item['unit']
+                )
+                db.session.add(recipe)
+
+        db.session.commit()
+        return True
+    except Exception as ex:
+        print(f"Lỗi thêm: {ex}")
+        db.session.rollback()
+        return False
+
+def update_product(product_id, data, recipes=None):
+    try:
+        product = Product.query.get(product_id)
+        if not product: return False
+
+        product.name = data.get('name')
+        product.price = data.get('price')
+        product.unit = data.get('unit')
+        product.dish_category_id = data.get('dish_category_id')
+        product.description = data.get('description')
+        if data.get('image'):
+            product.image = data.get('image')
+
+        #cập nhật công thức nếu có
+        if recipes is not None:
+            #xóa công thức cũ -> thêm công thức mới
+            ProductRecipe.query.filter_by(product_id=product_id).delete()
+            for item in recipes:
+                if item.get('ingredient_id'):
+                    new_recipe = ProductRecipe(
+                        product_id=product.id,
+                        ingredient_id=item['ingredient_id'],
+                        quantity=item['quantity'],
+                        unit=item['unit']
+                    )
+                    db.session.add(new_recipe)
+
+        db.session.commit()
+        return True
+    except Exception as ex:
+        print(f"Lỗi sửa: {ex}")
+        db.session.rollback()
+        return False
+
+def delete_product(product_id):
+    try:
+        product = Product.query.get(product_id)
+        if product:
+            ProductRecipe.query.filter_by(product_id=product_id).delete()
+            db.session.delete(product)
+            db.session.commit()
+            return True
+        return False
+    except Exception as ex:
+        db.session.rollback()
+        return False
