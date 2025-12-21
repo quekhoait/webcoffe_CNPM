@@ -17,20 +17,13 @@ class BaseModel(db.Model, SerializerMixin):
     updated_date = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     def save(self):
-        try:
-            db.session.add(self)
-            db.session.commit()
-        except Exception as ex:
-            db.session.rollback()
-            raise ex
+        db.session.add(self)
+  
+   
         
     def save_all(self, objects: list):
-        try:
-            db.session.add_all(objects)
-            db.session.commit()
-        except Exception as ex:
-            db.session.rollback()
-            raise ex
+        db.session.add_all(objects)
+     
 #
 #     def __repr__(self):
 #         # Hàm hiển thị thông tin đối tượng khi debug

@@ -46,7 +46,6 @@ def update_invoice_status():
     warehouse_id = 1 #chưa biểt lấy ở đâu
     result = InvoiceService.update_invoice_status(invoice=invoice,new_status=invoice_status,warehouse_id=warehouse_id)
     # result['invoice'] = result['invoice'].to_dict() if result['invoice'] else None
-    print(result)
     return jsonify({
         'success' : result['success'],
         'message' : result['message']

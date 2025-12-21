@@ -8,7 +8,8 @@ from eapp.dao import CategoryDao, ProductDao
 from eapp.models import Category
 from flask import render_template, request
 
-from eapp.services.InventoryService import InventoryService
+from eapp.services.inventory.InventoryValidator import InventoryValidator
+
 
 
 #coffeeProducts = [
@@ -111,7 +112,7 @@ def load_menu():
     categories = CategoryDao.list()
 
     products = ProductDao.list(params)
-    product_makeable_map = InventoryService.get_product_makeable_map(products,get_current_warehouse())
+    product_makeable_map = InventoryValidator.get_product_makeable_map(products,get_current_warehouse())
     return render_template('page/menu.html',
                            products=products,
                            categories=categories,

@@ -11,4 +11,4 @@ class ExportStrategy(SlipStrategy):
             self.edit_stock(warehouse=warehouse, 
                             slip_detail=slip_detail, 
                             updater=lambda stock,quantity: setattr(stock,'quantity',stock.quantity - quantity))
-        warehouse.save_all(warehouse.stocks)
+        # warehouse.save_all(warehouse.stocks)
