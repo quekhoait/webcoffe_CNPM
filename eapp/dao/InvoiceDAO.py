@@ -1,22 +1,45 @@
-from eapp.models import Invoice
+from dataclasses import dataclass
+from typing import Optional
+
+from sqlalchemy import or_
 from eapp import app, db
+from eapp.models.Account import Account
+from eapp.models.Invoice import Invoice, PaymentMethod
 from eapp.models.InvoiceDetail import InvoiceDetail
-from eapp.services.InventoryService import InventoryService
 
-
+@dataclass
+class InvoiceFilter:
+    payment_method : Optional[str] = None
+    name : Optional[str] = None
 
 class InvoiceDAO:
     @staticmethod
-    def list(params: dict = None):
+    def list(params: InvoiceFilter = None):
         try:
             query = Invoice.query
             if params:
-                if params['invoice_type'] == 'offline': #tại quầy
-                    query = query.filter(Invoice.customer_id == None)
-                else: # online
-                    query = query.filter(Invoice.staff_id == None)
-                if params.get('invoice_status'):
-                    query = query.filter(Invoice.invoice_status == params['invoice_status'])
+                if params.payment_method == 'CASH':
+                    query = query.filter(Invoice.payment_method.__eq__(PaymentMethod.CASH))
+                elif params.payment_method == 'MOMO':
+                    query = query.filter(Invoice.payment_method.__eq__(PaymentMethod.MOMO))
+
+                if params.name:
+                    query = query.join(Account,or_(
+                        Invoice.customer_id == Account.id,
+                        Invoice.staff_id == Account.id,
+                        Invoice.cashier_id == Account.id
+                    )).filter(Account.name.ilike(f"%{params.name}%"))
+
+                
+                # if params['invoice_type'] == 'offline': #tại quầy
+                #     query = query.filter(Invoice.customer_id == None)
+                # else: # online
+                #     query = query.filter(Invoice.staff_id == None)
+                # if params.get('invoice_status'):
+                #     query = query.filter(Invoice.invoice_status == params['invoice_status'])
+                
+                # if params.get('name'):
+                    
                 
         except Exception as ex:
             print(f"Lỗi khi lấy danh sách invoice: {ex}")

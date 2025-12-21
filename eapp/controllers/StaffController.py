@@ -6,8 +6,9 @@ from eapp.dao import CategoryDao, ProductDao, RuleDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.models.Invoice import Invoice, PaymentMethod
 from eapp.models.Rule import RuleType
-from eapp.services.InventoryService import InventoryService
 from eapp.services.InvoiceService import InvoiceService
+from eapp.services.inventory.InventoryValidator import InventoryValidator
+from eapp.services.inventory.RecipeService import RecipeService
 
 
 def load_staff():
@@ -20,7 +21,7 @@ def load_staff():
     rules = RuleDAO.list({'rule_type': RuleType.SERVICE})
     total_price_tmp = InvoiceService.calculate_total(list(invoice.values()))
     total_price = InvoiceService.calculate_final_total(total_price_tmp)
-    status_map = InventoryService.get_product_makeable_map(products=products,warehouse_id=session.get('warehouse_id',1))
+    status_map = InventoryValidator.get_product_makeable_map(products=products,warehouse_id=session.get('warehouse_id',1))
     return render_template('/staff/staff.html',
                            category=category, 
                            products=products, 
@@ -80,7 +81,7 @@ def addItemToInvoice():
     item_tmp = None
     if data['is_set_quantity']:
         item_tmp = invoice.pop(product_id,None)
-    required_ingredient_map = InventoryService.get_required_ingredient_map_from_session_invoice(invoice.values())
+    required_ingredient_map = RecipeService.get_required_ingredient_map_from_session_invoice(invoice.values())
     
     available_stock = {
         key : max(0, value - required_ingredient_map.get(key, 0))
@@ -92,7 +93,7 @@ def addItemToInvoice():
     # print(WarehouseDAO.get_available_stock_map(get_current_warehouse()))
 
     #Kiểm tra kho đáp ứng được món này ko
-    makeable_product = InventoryService.get_quantity_product_makeable(
+    makeable_product = InventoryValidator.get_quantity_product_makeable(
         product_id=data['id'],
         quantity=int(data['bonus_quantity']),
         available_stock_map = available_stock
@@ -174,7 +175,7 @@ def create_invoice():
         'payment_method' : PaymentMethod.CASH,
     }
     #kiểm tra tồn kho lần nữa thì kết thúc hàm trả thông báo lỗi
-    check_result, available_stock_map = InventoryService.get_insufficient_products(invoice_items.values(),get_current_warehouse())
+    check_result, available_stock_map = InventoryValidator.get_insufficient_products(invoice_items.values(),get_current_warehouse())
 
     if check_result:
         return jsonify({

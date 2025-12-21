@@ -18,8 +18,8 @@ class TransferStrategy(SlipStrategy):
                             slip_detail=slip_detail,
                             updater=lambda stock,quantity: setattr(stock,'quantity',stock.quantity + quantity))
             
-        src_warehouse.save_all(src_warehouse.stocks)
-        dst_warehouse.save_all(dst_warehouse.stocks)
+        # src_warehouse.save_all(src_warehouse.stocks)
+        # dst_warehouse.save_all(dst_warehouse.stocks)
 
             
         

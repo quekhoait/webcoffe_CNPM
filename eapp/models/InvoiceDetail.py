@@ -9,3 +9,4 @@ class InvoiceDetail(BaseModel):
     product_id = Column(ForeignKey('product.id'), nullable=False)
     __table_args__ = (UniqueConstraint('invoice_id', 'product_id'),)
     
+    serialize_rules = ('-invoice',)

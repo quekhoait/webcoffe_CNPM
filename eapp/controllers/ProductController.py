@@ -2,7 +2,7 @@
 from flask import app, jsonify, render_template, request, session
 
 from eapp.dao import ProductDao
-from eapp.services.InventoryService import InventoryService
+from eapp.services.inventory.InventoryValidator import InventoryValidator
 
 
 
@@ -14,7 +14,7 @@ def list(filehtml):
         products = ProductDao.list(params)
         return render_template(filehtml, 
                                products=products,
-                               product_status_map=InventoryService.get_product_makeable_map(products,session.get('warehouse_id',1)))
+                               product_status_map=InventoryValidator.get_product_makeable_map(products,session.get('warehouse_id',1)))
     return view_function
 
 

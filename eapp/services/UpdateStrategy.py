@@ -8,6 +8,6 @@ class UpdateStrategy(SlipStrategy):
         warehouse = WarehouseDAO.get_by_id(warehouse_id=warehouse_slip.source_warehouse_id)
         for slip_detail in warehouse_slip.slip_details:
             self.edit_stock(warehouse,slip_detail,updater=lambda stock,quantity: setattr(stock,'quantity',quantity))
-        warehouse.save_all(warehouse.stocks)
+        # warehouse.save_all(warehouse.stocks)
 
     

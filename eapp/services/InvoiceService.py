@@ -3,10 +3,13 @@ from eapp.dao import PaymentDao
 from eapp.dao.InvoiceDAO import InvoiceDAO
 from eapp.models import InvoiceDetail, Rule
 from eapp.models import Invoice
-from eapp.models.Invoice import InvoiceStatusEnum, PaymentMethod
-from eapp.services.InventoryService import InventoryService
+from eapp.models.Invoice import INVOICE_STATUS_LABEL, InvoiceStatusEnum, PaymentMethod
 from eapp.services.RuleService import RuleService
 from eapp import app, db
+from eapp.services.inventory.InventoryFacade import InventoryFacade
+from eapp.services.inventory.RecipeService import RecipeService
+from eapp.services.inventory.StockService import StockService
+
 
 
 class InvoiceService:
@@ -125,7 +128,7 @@ class InvoiceService:
             InvoiceDAO.create(invoice=invoice,invoice_details=invoice_details)
             
             #cập nhật reserveđ
-            InventoryService.reserve_stock_for_invoice(
+            StockService.reserve_stock_for_invoice(
                 invoice=invoice,
                 warehouse_id=warehouse_id,
                 used_stock=used_stock
@@ -146,39 +149,47 @@ class InvoiceService:
             'success': False,
             'message': '',
             'invoice': None,
-            'insufficient_ingredients': None
+            'insufficient_ingredients': None,
+            'effected_products': None
         }
+        method = "offline"
+        if invoice.payment_method == PaymentMethod.MOMO:
+            method = "online"
 
-        if new_status == InvoiceStatusEnum.IN_PROGRESS:
-            invoice.invoice_status = InvoiceStatusEnum.IN_PROGRESS
-            rs = InventoryService.start_processing_invoice(invoice,warehouse_id)
-            if rs['success']:
-                result.update({
-                    'success': True,
-                    'message': 'Hóa đơn đang được xử lý',
-                    'invoice': invoice
-                })
-            else:
-                result.update({
-                'message': 'Nguyên liệu không đủ cho hóa đơn',
-                'insufficient_ingredients': rs['insufficient_ingredients']
-                })
+        valid_status, message = InvoiceService.invoice_validator(invoice.invoice_status,new_status,method)    
+        if not valid_status:
+            result['success'] = False
+            result['message'] = message
+            return result
 
-        elif new_status == InvoiceStatusEnum.COMPLETED:
-            if invoice.invoice_status != InvoiceStatusEnum.IN_PROGRESS:
-                result['message'] = 'Hóa đơn chưa được xử lý'
-            else:
+        try:
+            #xử lý hóa đơn sang in progress
+            if new_status == InvoiceStatusEnum.IN_PROGRESS:
+                rs = InventoryFacade.start_processing_invoice(invoice,warehouse_id)
+                invoice.invoice_status = InvoiceStatusEnum.IN_PROGRESS
+                if rs['success']:
+                    result.update({
+                        'success': True,
+                        'message': 'Xác thực thành công, hóa đơn đang được xử lý',
+                        'invoice': invoice
+                    })
+                else:
+                    result.update({
+                    'message': 'Nguyên liệu không đủ cho hóa đơn',
+                    'insufficient_ingredients': rs['insufficient_ingredients'],
+                    'effected_products' : rs['effected_products']    
+                    })
+
+            elif new_status == InvoiceStatusEnum.COMPLETED:
                 invoice.invoice_status = InvoiceStatusEnum.COMPLETED
                 result.update({
-                    'success': True,
+                    'success': False,
                     'message': 'Hóa đơn đã hoàn thành',
                     'invoice': invoice
                 })
 
-        elif new_status == InvoiceStatusEnum.CANCELLED:
-            if invoice.invoice_status == InvoiceStatusEnum.COMPLETED:
-                result['message'] = 'Không thể hủy hóa đơn đã hoàn thành'
-            else:
+            elif new_status == InvoiceStatusEnum.CANCELLED:
+                InventoryFacade.cancel_processing_invoice(invoice,warehouse_id)
                 invoice.invoice_status = InvoiceStatusEnum.CANCELLED
                 result.update({
                     'success': True,
@@ -186,12 +197,31 @@ class InvoiceService:
                     'invoice': invoice
                 })
 
-        else:
-            result['message'] = 'Trạng thái hóa đơn không hợp lệ'
+            else:
+                result['message'] = 'Trạng thái hóa đơn không hợp lệ'
 
-        if result['invoice']:
-            result['invoice'].save()
+            db.session.commit()
+        except Exception as ex:
+            db.session.rollback()
+            app.logger.error(f"Lỗi khi xử lý hóa đơn sang IN_PROGRESS: {str(ex)}",exc_info=True)
+            result.update({
+                'success' : False,
+                'message' : 'Lỗi hệ thống khi xử lý hóa đơn'
+            })
         return result
+    
+    @staticmethod
+    def invoice_validator(current_status:InvoiceStatusEnum, new_status:InvoiceStatusEnum,method='offline'):
+        if current_status in [InvoiceStatusEnum.CANCELLED,InvoiceStatusEnum.COMPLETED]:
+            return False, f"Hóa đơn đã {INVOICE_STATUS_LABEL[method][current_status]}, không thể thay đổi"
+        
+        change_status_map = {
+            InvoiceStatusEnum.PENDING: [InvoiceStatusEnum.IN_PROGRESS,InvoiceStatusEnum.CANCELLED],
+            InvoiceStatusEnum.IN_PROGRESS: [InvoiceStatusEnum.COMPLETED]
+        }
+        if new_status in change_status_map.get(current_status,[]):
+            return True, "Cho phép"
 
+        return False, f"Không thể chuyển hóa đơn từ đã {INVOICE_STATUS_LABEL[method][current_status]} sang {INVOICE_STATUS_LABEL[method][new_status]}"
 
     

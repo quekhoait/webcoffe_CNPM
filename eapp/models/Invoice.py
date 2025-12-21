@@ -17,13 +17,13 @@ INVOICE_STATUS_LABEL = {
         InvoiceStatusEnum.PENDING: "Chờ xử lý",
         InvoiceStatusEnum.IN_PROGRESS: "Đang phục vụ",
         InvoiceStatusEnum.COMPLETED: "Hoàn thành",
-        InvoiceStatusEnum.CANCELLED: "Đã hủy",
+        InvoiceStatusEnum.CANCELLED: "Hủy",
     },
     "online": {
         InvoiceStatusEnum.PENDING: "Chờ xử lý",
         InvoiceStatusEnum.IN_PROGRESS: "Đang giao",
         InvoiceStatusEnum.COMPLETED: "Hoàn tất",
-        InvoiceStatusEnum.CANCELLED: "Đã hủy đơn",
+        InvoiceStatusEnum.CANCELLED: "Hủy",
     }
 }
 
