@@ -27,7 +27,7 @@ class Account(BaseModel, UserMixin):
     invoice_of_staffs = relationship('Invoice',backref='staff',foreign_keys='Invoice.staff_id',lazy=True)
     invoice_of_cashiers = relationship('Invoice',backref='cashier',foreign_keys='Invoice.cashier_id',lazy=True)
 
-    serialize_rules = ('-invoice_of_customers', '-invoice_of_staffs','invoice_of_cashiers')
+    serialize_rules = ('-invoice_of_customers', '-invoice_of_staffs','-invoice_of_cashiers')
 
     def __str__(self):
         return f"Account(ID: {self.id}, Username: {self.username})"

@@ -106,6 +106,7 @@ app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminControl
 #employee_manage
 app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
 
-app.add_url_rule('/api/admin/employee/add', 'api_emp_add', EmployeeController.api_add, methods=['POST'])
-app.add_url_rule('/api/admin/employee/update', 'api_emp_update', EmployeeController.api_update, methods=['POST'])
-app.add_url_rule('/api/admin/employee/delete', 'api_emp_delete', EmployeeController.api_delete, methods=['POST'])
+app.add_url_rule('/api/admin/employee/add', 'api_add', EmployeeController.api_add, methods=['POST'])
+app.add_url_rule('/api/admin/employee/update', 'api_update', EmployeeController.api_update, methods=['POST'])
+app.add_url_rule('/api/admin/employee/delete', 'api_delete', EmployeeController.api_delete, methods=['POST'])
+

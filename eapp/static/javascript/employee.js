@@ -1,3 +1,9 @@
+const ROLE_MAPPING = {
+    'Quản lý': 'ADMIN',
+    'Thu Ngân': 'CASHIER',
+    'Nhân Viên': 'STAFF',
+    'Thủ Kho': 'WAREHOUSE_KEEPER'
+    };
 
 function openModal(mode, staff = null) {
     const modal = document.getElementById('staffModal');

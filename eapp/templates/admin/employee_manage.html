@@ -17,15 +17,15 @@
                 <h1 class="text-3xl font-extrabold text-gray-900">Quản lý Tài khoản Nhân viên</h1>
                 <p class="text-gray-500 mt-2">Xem, tìm kiếm và quản lý thông tin tất cả nhân viên trong hệ thống.</p>
             </div>
-            <button onclick="openModal('ADD')" class="bg-[#FCD34D] hover:bg-[#fbbf24] text-gray-900 font-bold py-3 px-6 rounded-xl shadow-md flex items-center gap-2 transition transform hover:-translate-y-1 cursor-pointer">
+            <button type="button" onclick="openModal('ADD')" class="bg-[#FCD34D] hover:bg-[#fbbf24] text-gray-900 font-bold py-3 px-6 rounded-xl shadow-md flex items-center gap-2 transition transform hover:-translate-y-1 cursor-pointer">
                 <i class="fa-solid fa-plus"></i> Thêm nhân viên
             </button>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm mb-8 flex gap-4 items-center">
+        <div class="bg-white p-6 rounded-2xl shadow-sm mb-8 flex gap-6 items-center">
             <div class="flex-1 relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Tìm theo tên, ID hoặc SĐT..." class="w-full pl-14 p-4 text-base bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-yellow-400 transition">
+                <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
+                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Tìm theo tên, ID hoặc SĐT..." class="w-full pl-14 p-4 text-base bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-gray-400 transition">
             </div>
             <select id="roleFilter" onchange="filterRole()" class="p-4 bg-gray-50 border-none rounded-xl outline-none cursor-pointer text-gray-700 font-medium min-w-[200px]">
                 <option value="ALL">Tất cả chức vụ</option>
@@ -38,7 +38,7 @@
 
         <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
             <table class="w-full text-left border-collapse">
-                <thead class="bg-gray-50 border-b border-gray-100 text-gray-500 text-xs font-bold uppercase tracking-wider">
+                <thead class="bg-gray-50 border-b border-gray-100 text-black-500 text-lg font-bold uppercase tracking-wider">
                     <tr>
                         <th class="p-5 pl-8">ID</th>
                         <th class="p-5">Họ và tên</th>
@@ -90,12 +90,12 @@
 
                         <td class="p-5 text-center">
                             <div class="flex justify-center gap-3">
-                                <button onclick='openModal("EDIT", {{ u | tojson }})'
+                                <button type="button" onclick='openModal("EDIT", {{ u | tojson }})'
                                         class="w-8 h-8 rounded bg-gray-100 hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition flex items-center justify-center">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
 
-                                <button onclick="deleteStaff({{ u.id }})" class="w-8 h-8 rounded bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-500 transition flex items-center justify-center">
+                                <button type="button" onclick="deleteStaff({{ u.id }})" class="w-8 h-8 rounded bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-500 transition flex items-center justify-center">
                                     <i class="fa-regular fa-trash-can"></i>
                                 </button>
                             </div>
@@ -172,6 +172,6 @@
 </div>
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='javascript/admin_staff.js') }}"></script>
+<script src="{{ url_for('static', filename='javascript/employee.js') }}"></script>
 {% endblock %}
 {% endblock %}
