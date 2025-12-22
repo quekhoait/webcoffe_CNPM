@@ -2,9 +2,10 @@ from eapp.models import Product, ProductRecipe, ProductRecipe, ProductStatus
 # from MySQLdb._mysql import result
 from sqlalchemy.sql.functions import current_user
 
-from eapp.models import Product, CartDetail, Invoice, Payment, InvoiceDetail
+from eapp.models import Product, CartDetail, Invoice, Payment, InvoiceDetail, ProductRecipe
 from sqlalchemy import desc
 from eapp import db
+
 
 def list(params: dict = None):
     try:

@@ -1,3 +1,4 @@
+from eapp import db
 from eapp.models import Stock, Warehouse, WarehouseSlip, WarehouseSlipDetail
 
 
@@ -16,3 +17,5 @@ class SlipStrategy:
                     quantity=slip_detail.quantity
                 )
             warehouse.stocks.append(new_stock)
+        print(f"====={stock.quantity} : {stock.reserved}")
+        

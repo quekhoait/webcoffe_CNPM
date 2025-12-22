@@ -1,22 +1,48 @@
-    {%for prod in list_prod %}
+{% for prod in list_prod %}
+{% set in_stock = list_prod_status.get(prod.product.id, False) %}
+{% set quantity = prod.quantity %}
+<div
+    class="flex items-center bg-gray-50 rounded-lg p-2 space-x-2 cart-component-item-popup
+           {% if not in_stock %} opacity-50 pointer-events-none {% endif %}"
+    data-product-id="{{ prod.product.id }}"
+    data-product-price="{{ prod.product.price }}"
+>
 
-    <div class="flex  items-center bg-gray-50 rounded-lg p-2 space-x-2 cart-component-item-popup"
-         data-product-price="{{ prod.product.price }}"
-         data-product-id="{{ prod.product.id }}">
-
+    <!-- IMAGE -->
     <div class="w-[60px] h-[60px] rounded-lg overflow-hidden flex-shrink-0">
-        <img src="{{ prod.product.image }}" alt="{{ prod.product.name }}" class="w-full h-full object-cover">
+        <img
+            src="{{ prod.product.image }}"
+            alt="{{ prod.product.name }}"
+            class="w-full h-full object-cover"
+        >
     </div>
+
+    <!-- INFO -->
     <div class="flex-grow">
-        <p class="text-xl font-semibold text-gray-900" >{{ prod.product.name }}</p>
-        <p class="text-lg font-bold text-red-800 price" >{{ prod.product.price }}</p>
+        <p class="text-xl font-semibold text-gray-900">
+            {{ prod.product.name }}
+        </p>
+
+        <p class="text-lg font-bold text-red-800 price">
+            {{ prod.product.price }}
+        </p>
+
+        {% if not in_stock %}
+            <span class="text-sm text-red-600 font-semibold">
+                Hết hàng
+            </span>
+        {% endif %}
     </div>
-    {% set quantity=prod.quantity %}
+
+    <!-- QUANTITY CONTROL -->
     {% include 'page/quantity_control.html' %}
 
-    <input type="checkbox" class="ml-auto select-cart-component">
-    
+    <!-- CHECKBOX -->
+    <input
+        type="checkbox"
+        class="ml-auto select-cart-component"
+        {% if not in_stock %} disabled {% endif %}
+    >
 </div>
 
-
-    {% endfor %}
+{% endfor %}

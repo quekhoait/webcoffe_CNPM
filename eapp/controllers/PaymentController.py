@@ -13,11 +13,13 @@ from eapp import db
 
 
 def load_data():
+
     if request.method == "POST":
         session["checkout_items"] = request.json
     items = session.get("checkout_items")
     if not items:
         return redirect("/cart")
+
     products = []
     total = 0
     for item in items:

@@ -1,10 +1,10 @@
 from flask import jsonify, render_template, request
-
+from eapp import app, db
 from eapp.dao.IngredientDAO import IngredientDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.models.Ingredient import Ingredient
 from eapp.models.WarehouseSlip import SlipType
-from eapp.services.InventoryService import InventoryService
+from eapp.services.inventory.StockService import StockService
 
 
 def warehouse_page():
@@ -12,7 +12,7 @@ def warehouse_page():
     warehouse = WarehouseDAO.get_by_id(warehouse_id)
     warehouses = WarehouseDAO.list()
     slip_types = [(st.name, st.value) for st in SlipType]
-    ingredient_stocks = InventoryService.load_stock(warehouse_id=warehouse_id)
+    ingredient_stocks = StockService.load_stock(warehouse_id=warehouse_id)
     ingredients = IngredientDAO.list()
     return render_template('warehouse/warehouse.html',
                            warehouse=warehouse,
@@ -41,10 +41,12 @@ slip_data:
 def create_warehouse_slip():
     slip_data = request.json
     slip_data['stock_user_id'] = 1  # TODO: Lấy user từ session
-    print(slip_data)
     try:
-        InventoryService.create_slip(slip_data)
+        StockService.create_slip(slip_data)
+        db.session.commit()
+        return jsonify({"success": True})
+
     except Exception as ex:
-        print(f"Lỗi khi tạo phiếu kho: {ex}")
-        return jsonify({"success": False, "message": str(ex)})
-    return jsonify({"success": True})
+        db.session.rollback()
+        app.logger.error(f"Lỗi khi tạo phiếu kho: {str(ex)}")
+        return jsonify({"success": False, "message": "Đã xảy ra lỗi hệ thống khi tạo phiếu kho"})

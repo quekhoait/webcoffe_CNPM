@@ -1,9 +1,15 @@
-<div class="flex gap-x-4 [&>div]:px-4 [&>div]:py-1 p-2 my-2 text-lg font-medium text-gray-700"
-    id="status-navigation">
-    <button class="active-status" data-status="all">
-        Tất cả(3)
+
+<div class="flex flex-nowrap gap-x-2 p-2 my-2 text-sm font-medium text-gray-700 overflow-x-auto border-b scrollbar-hide" 
+     id="status-navigation" 
+     style="-webkit-overflow-scrolling: touch;"> <button class="status-btn active-status whitespace-nowrap px-4 py-2 rounded-full border" data-status="all">
+        Tất cả (3)
     </button>
+
     {% for status, value in INVOICE_STATUS_LABEL[invoice_type].items() %}
-        <button id="{{ status.name }}" data-status="{{ status.name }}">{{ value }}(3)</button>
+        <button class="status-btn whitespace-nowrap px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-100 transition-all" 
+                id="{{ status.name }}" 
+                data-status="{{ status.name }}">
+            {{ value }} (0)
+        </button>
     {% endfor %}
 </div>
