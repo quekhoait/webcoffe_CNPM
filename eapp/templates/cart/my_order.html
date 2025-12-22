@@ -46,26 +46,46 @@
 
       </div>
  {% if payment.status.value == 'pending' %}
-                <button   onclick="event.stopPropagation()"
-  class="px-4 py-2 mx-2 text-xl font-medium text-red-600
+              <button
+  type="button"
+  class="btn-change-cancel px-4 py-2 mx-2 text-xl font-medium text-red-600
          border border-red-500 rounded-lg
          hover:bg-red-50
          transition"
+  data-invoice-id="{{ invoice.id }}"
 >
   Hủy đơn
 </button>
-  {% endif %}
 
-         {% if payment.status.value == 'pending' %}
-                <button type="button"
-  class="px-4 py-2 mx-2 text-xl font-medium text-red-600
+<button
+  type="button"
+  class="btn-repay-payment px-4 py-2 mx-2 text-xl font-medium text-red-600
          border border-red-500 rounded-lg
          hover:bg-red-50
-         transition" id="btn-repay-payment"  data-invoice-id="{{ invoice.id }}"
+         transition"
+  data-invoice-id="{{ invoice.id }}"
 >
   Thanh toán ngay
 </button>
+
   {% endif %}
+
+      {% if payment.status.value == 'success' and invoice.invoice_status.value == 'pending' %}
+              <button
+  type="button"
+  class="btn-change-cancel px-4 py-2 mx-2 text-xl font-medium text-red-600
+         border border-red-500 rounded-lg
+         hover:bg-red-50
+         transition"
+  data-invoice-id="{{ invoice.id }}"
+>
+ Đã nhận được
+</button>
+
+  {% endif %}
+
+
+
 
       <i
         id="arrow-{{ invoice.id }}"

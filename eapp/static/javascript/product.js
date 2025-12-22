@@ -5,6 +5,7 @@ function loadProducts(params = {}) {
     fetch('/api/get_product?' + query)
         .then(res => res.text())
         .then(html => {
+        console.log(html)
             productList.innerHTML = html
 
         })

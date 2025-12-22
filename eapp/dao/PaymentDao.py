@@ -64,6 +64,9 @@ def create_Payment_dao( invoice_id,amount):
 def get_by_momo_id(momo_id):
     return Payment.query.filter_by(momo_id=momo_id).first()
 
+def get_by_invoice_id(invoice_id):
+    return Payment.query.filter_by(invoice_id=invoice_id).all()
+
 def repay_payment_dao(invoice_id):
     payment = Payment.query.filter(
         Payment.invoice_id == invoice_id,

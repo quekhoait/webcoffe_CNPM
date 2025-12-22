@@ -33,8 +33,10 @@ app.add_url_rule('/about-us','about-us',index.load_about_us)
 app.add_url_rule('/my-cart','my-cart',CartController.load_my_cart)
 app.add_url_rule('/api/add_to_cart', 'add_to_cart', CartController.add_to_cart, methods=['POST'])
 app.add_url_rule('/api/get-cart-by-userId','get-cart-by-userId',CartController.get_cart_by_userId)
-    #xóa đơn hàng
+    #xóa giỏ hàng
 app.add_url_rule('/api/remove_prod_in_cart', 'remove_prod_in_cart', CartController.remove_product_in_cart, methods=['DELETE'])
+ #hủy đơn hàng
+app.add_url_rule('/api/delete-invoice', 'delete-invoice',ProductController.delete_invoice, methods=['POST'])
 
 # app.add_url_rule('/','index',CashierController.home)
 
