@@ -33,10 +33,11 @@ app.add_url_rule('/about-us','about-us',index.load_about_us)
 app.add_url_rule('/my-cart','my-cart',CartController.load_my_cart)
 app.add_url_rule('/api/add_to_cart', 'add_to_cart', CartController.add_to_cart, methods=['POST'])
 app.add_url_rule('/api/get-cart-by-userId','get-cart-by-userId',CartController.get_cart_by_userId)
-#xóa giỏ hàng
-app.add_url_rule('/api/remove_prod_in_cart', 'remove_prod_in_cart', CartController.remove_product_in_cart, methods=['DELETE'])
-#hủy đơn hàng
-app.add_url_rule('/api/delete-invoice', 'delete-invoice',ProductController.delete_invoice, methods=['POST'])
+# xóa giỏ hàng
+app.add_url_rule('/api/remove_prod_in_cart', 'remove_prod_in_cart', CartController.remove_product_in_cart,
+                 methods=['DELETE'])
+# hủy đơn hàng
+app.add_url_rule('/api/delete-invoice', 'delete-invoice', ProductController.delete_invoice, methods=['POST'])
 # app.add_url_rule('/','index',CashierController.home)
 
 
@@ -103,13 +104,14 @@ app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminControl
 app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminController.api_delete_product, methods=['POST'])
 
 #employee_manage
-app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
+app.add_url_rule('/dashboard/admin', 'admin', EmployeeController.index, methods=['GET'])
+# app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
 
 app.add_url_rule('/api/admin/employee/add', 'api_emp_add', EmployeeController.api_add, methods=['POST'])
 app.add_url_rule('/api/admin/employee/update', 'api_emp_update', EmployeeController.api_update, methods=['POST'])
 app.add_url_rule('/api/admin/employee/delete', 'api_emp_delete', EmployeeController.api_delete, methods=['POST'])
 
-app.add_url_rule('/admin/overview', 'overview', OverviewController.load_overview)
+# app.add_url_rule('api/admin/overview', 'overview', OverviewController.load_overview)
 
 app.add_url_rule('/api/admin/employees/add', 'api_add', EmployeeController.api_add, methods=['POST'])
 app.add_url_rule('/api/admin/employees/update', 'api_update', EmployeeController.api_update, methods=['POST'])

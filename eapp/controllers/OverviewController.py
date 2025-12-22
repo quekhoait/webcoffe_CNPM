@@ -33,7 +33,7 @@ def load_overview():
         } for item in data]
 
         return render_template(
-            'admin/overview/overview.html',
+            'admin/overview.html',
             tab=time_type,
             total_revenue=total_revenue,
             result=result
