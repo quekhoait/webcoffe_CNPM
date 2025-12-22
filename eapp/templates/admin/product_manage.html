@@ -1,3 +1,5 @@
+{% extends 'layout/base.html' %}
+{% block title %}Quản lý Món Ăn{% endblock %}
 
     <main class="flex-1 p-8 h-screen overflow-y-auto">
         <div class="flex justify-between items-start mb-8">
@@ -168,6 +170,7 @@
 </template>
 
 
+{% block scripts %}
 <script>
     const ALL_INGREDIENTS = [
         {% for ing in ingredients %}
@@ -182,5 +185,6 @@
     ];
 </script>
 <script src="{{ url_for('static', filename='javascript/admin_product.js') }}"></script>
+{% endblock %}
 
-
+{% endblock %}

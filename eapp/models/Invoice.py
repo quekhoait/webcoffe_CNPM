@@ -13,13 +13,13 @@ class InvoiceStatusEnum(str, Enum):
     CANCELLED = "cancelled"  # Đã hủy
 
 INVOICE_STATUS_LABEL = {
-    "offline": {
+    "CASH": {
         InvoiceStatusEnum.PENDING: "Chờ xử lý",
         InvoiceStatusEnum.IN_PROGRESS: "Đang phục vụ",
         InvoiceStatusEnum.COMPLETED: "Hoàn thành",
         InvoiceStatusEnum.CANCELLED: "Hủy",
     },
-    "online": {
+    "MOMO": {
         InvoiceStatusEnum.PENDING: "Chờ xử lý",
         InvoiceStatusEnum.IN_PROGRESS: "Đang giao",
         InvoiceStatusEnum.COMPLETED: "Hoàn tất",

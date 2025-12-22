@@ -19,7 +19,7 @@ class StockService:
 
     @staticmethod
     def load_rules():
-        return RuleDAO.list({'rule_type': RuleType.INGREDIENT})
+        return RuleDAO.list(RuleDAO.RuleFilter(rule_type = RuleType.INGREDIENT))
 
     @staticmethod
     def load_stock(warehouse_id: int):

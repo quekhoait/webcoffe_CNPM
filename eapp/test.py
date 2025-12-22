@@ -1,45 +1,47 @@
 from pprint import pprint
-
 from eapp import app,db
-from eapp.dao import ProductDao, CartDao
+from eapp.dao import ProductDao
 from eapp.dao.WarehouseDAO import WarehouseDAO
+from eapp.models.Account import Account
+from eapp.models.Invoice import Invoice, PaymentMethod
+from eapp.models.Payment import PaymentStatus
 from eapp.models.Product import Product
-from eapp.services.inventory import InventoryValidator
+from eapp.services.inventory.RecipeService import RecipeService
+from sqlalchemy.dialects import mysql
 
-from eapp.services.inventory.InventoryValidator import InventoryValidator
+def test_start_processing_invoice():
+    details = [
+        {
+            'product_id' : 1,
+            'quantity' : 2
+        },
 
+        {
+            'product_id' : 2,
+            'quantity' : 2
+        }
+    ]
 
-# def test_start_processing_invoice():
-#     details = [
-#         {
-#             'product_id' : 1,
-#             'quantity' : 2
-#         },
-#
-#         {
-#             'product_id' : 2,
-#             'quantity' : 2
-#         }
-#     ]
-#
-#     res = InventoryService.get_stock_shortage_by_products(
-#         product_details=details,
-#         warehouse_id=1
-#     )
-#
-#     print(res)
+    res = RecipeService.get_stock_shortage_by_products(
+        product_details=details,
+        warehouse_id=1
+    )
 
+def parse_dict(objects):
+    return [ o.to_dict() for o in objects ]
 
-def cart():
-    cart_items = CartDao.get_cart_by_userId_dao(4)
-    invoice_items = [ {'product_id' : c.product_id, 'quantity': c.quantity } for c in cart_items ]
-    print(invoice_items)
-    kq = InventoryValidator.get_insufficient_products(invoice_items,1)
-    pprint(kq)
+def test_query():
+
+    query = Invoice.query.join(Account, Invoice.customer_id == Account.id)\
+                 .filter(Account.name.like("%huy%"))\
+                 .with_entities(Invoice.order_code, Account.name)
+    print(query.statement)
+    print(query.all())
+
 if __name__ == '__main__':
     with app.app_context():
-        cart()
         # test_start_processing_invoice()
+        test_query()
         # print(ProductDao.get_product_recipe_map())
         # print(WarehouseDAO.get_stock_map(1))
         # print(InventoryService.get_product_makeable_map(ProductDao.list(),1))

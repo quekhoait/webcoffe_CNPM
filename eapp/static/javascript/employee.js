@@ -1,4 +1,3 @@
-
 function openModal(mode, staff = null) {
     const modal = document.getElementById('staffModal');
 
@@ -164,7 +163,6 @@ function applyFilters(keyword, roleVal) {
 
         const textRow = row.innerText.toLowerCase();
 
-        const roleCellText = row.cells[3].innerText.trim();
 
         const matchKeyword = textRow.includes(keyword);
         const matchRole = (roleVal === 'ALL') || (roleCellText === roleVal);

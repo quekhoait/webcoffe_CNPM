@@ -1,16 +1,24 @@
-let currentInvoiceType = 'offline'
+let currentInvoiceType = 'CASH'
 let currentInvoiceStatus = 'all'
-
+let keyword=''
+let date=''
 function loadInvoices() {
     const paramsURL = new URLSearchParams()
-    paramsURL.append('invoice_type', currentInvoiceType)
+    if (keyword){
+        paramsURL.append('keyword',keyword)
+    }
+
+    if (date){
+        paramsURL.append('date',date)
+    }
+    paramsURL.append('payment_method', currentInvoiceType)
     if (currentInvoiceStatus != 'all') {
         paramsURL.append('invoice_status', currentInvoiceStatus)
     }
     fetch('/api/invoices?' + paramsURL, {
         method: 'get'
     }).then(res => res.text()).then(data => {
-        if (currentInvoiceType == 'online') {
+        if (currentInvoiceType == 'MOMO') {
             document.querySelector('#invoice-online div').innerHTML = data
         } else {
             document.querySelector('#invoice-offline div').innerHTML = data
@@ -19,14 +27,14 @@ function loadInvoices() {
 }
 
 function LoadInvoiceOffline() {
-    currentInvoiceType = 'offline'
-    renderStatusBar({ 'invoice_type': currentInvoiceType })
+    currentInvoiceType = 'CASH'
+    renderStatusBar({ 'payment_method': currentInvoiceType })
     loadInvoices()
 }
 
 function loadInvoiceOnline() {
-    currentInvoiceType = 'online'
-    renderStatusBar({ 'invoice_type': currentInvoiceType })
+    currentInvoiceType = 'MOMO'
+    renderStatusBar({ 'payment_method': currentInvoiceType })
     loadInvoices()
 }
 
@@ -102,3 +110,12 @@ function updateInvoiceStatus(invoiceId, invoiceStatus) {
     })
 }
 
+document.getElementById('invoice-search').addEventListener('input',(e) =>{
+    keyword = e.target.value
+    loadInvoices()
+})
+
+document.getElementById('filter-date').addEventListener('change',(e) => {
+    date = e.target.value
+    loadInvoices()
+})

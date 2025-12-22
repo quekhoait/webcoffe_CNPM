@@ -4,10 +4,24 @@ from cloudinary.provisioning import users
 
 from flask import render_template, jsonify, request
 from eapp.dao import AccountDAO
+from cloudinary.provisioning import users
+
+from flask import render_template, jsonify, request
+from eapp.dao import AccountDAO
 from eapp.models.Account import Role
 
 
 
+
+def load_employee():
+    try:
+        users = AccountDAO.get_all_employees()
+        users = [ u.to_dict() for u in users ]
+    except Exception as e:
+        print(f"Lỗi: {e}")
+        users = []
+
+    return render_template('admin/employee_manage.html', users=users, roles=Role)
 
 
 def api_add():

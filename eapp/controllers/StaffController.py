@@ -18,7 +18,7 @@ def load_staff():
     category = CategoryDao.list()
     products = ProductDao.list()
     invoice = session.get('invoice', {})
-    rules = RuleDAO.list({'rule_type': RuleType.SERVICE})
+    rules = RuleDAO.list(RuleDAO.RuleFilter({'rule_type': RuleType.SERVICE}))
     total_price_tmp = InvoiceService.calculate_total(list(invoice.values()))
     total_price = InvoiceService.calculate_final_total(total_price_tmp)
     status_map = InventoryValidator.get_product_makeable_map(products=products,warehouse_id=session.get('warehouse_id',1))
@@ -82,6 +82,8 @@ def addItemToInvoice():
     if data['is_set_quantity']:
         item_tmp = invoice.pop(product_id,None)
     required_ingredient_map = RecipeService.get_required_ingredient_map_from_session_invoice(invoice.values())
+    
+    # 10 
     
     available_stock = {
         key : max(0, value - required_ingredient_map.get(key, 0))

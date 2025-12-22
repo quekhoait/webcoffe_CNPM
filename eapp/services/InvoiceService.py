@@ -153,11 +153,11 @@ class InvoiceService:
             'insufficient_ingredients': None,
             'effected_products': None
         }
-        method = "offline"
-        if invoice.payment_method == PaymentMethod.MOMO:
-            method = "online"
+        # method = "offline"
+        # if invoice.payment_method == PaymentMethod.MOMO:
+        #     method = "online"
 
-        valid_status, message = InvoiceService.invoice_validator(invoice.invoice_status,new_status,method)    
+        valid_status, message = InvoiceService.invoice_validator(invoice.invoice_status,new_status,invoice.payment_method.name)    
         if not valid_status:
             result['success'] = False
             result['message'] = message
@@ -196,7 +196,8 @@ class InvoiceService:
                     for payment in payments:
                         payment.status = PaymentStatus.failed
                 invoice.invoice_status = InvoiceStatusEnum.CANCELLED
-                result.update({
+
+                result.update({ 
                     'success': True,
                     'message': 'Hủy hóa đơn thành công',
                     'invoice': invoice
@@ -216,7 +217,7 @@ class InvoiceService:
         return result
     
     @staticmethod
-    def invoice_validator(current_status:InvoiceStatusEnum, new_status:InvoiceStatusEnum,method='offline'):
+    def invoice_validator(current_status:InvoiceStatusEnum, new_status:InvoiceStatusEnum,method='CASH'):
         if current_status in [InvoiceStatusEnum.CANCELLED,InvoiceStatusEnum.COMPLETED]:
             return False, f"Hóa đơn đã {INVOICE_STATUS_LABEL[method][current_status]}, không thể thay đổi"
         
