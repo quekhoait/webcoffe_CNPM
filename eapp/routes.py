@@ -1,5 +1,5 @@
 # Cấu trúc route của các trang web bình thường
-from msilib import CAB
+# from msilib import CAB
 
 from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
@@ -15,8 +15,11 @@ from eapp.controllers import ProductController, StaffController, index, AccountC
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
+
 app.add_url_rule('/regis','register', index.load_regis)
 app.add_url_rule('/api/regis','created_account',AccountController.register, methods=['POST'])
+
+
 app.add_url_rule('/logout','logout', AccountController.logout)
 
 app.add_url_rule('/profile','profile', index.load_profile)
@@ -107,14 +110,11 @@ app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminControl
 app.add_url_rule('/dashboard/admin', 'admin', EmployeeController.index, methods=['GET'])
 # app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
 
-app.add_url_rule('/api/admin/employee/add', 'api_emp_add', EmployeeController.api_add, methods=['POST'])
-app.add_url_rule('/api/admin/employee/update', 'api_emp_update', EmployeeController.api_update, methods=['POST'])
-app.add_url_rule('/api/admin/employee/delete', 'api_emp_delete', EmployeeController.api_delete, methods=['POST'])
-
 # app.add_url_rule('api/admin/overview', 'overview', OverviewController.load_overview)
 
 app.add_url_rule('/api/admin/employees/add', 'api_add', EmployeeController.api_add, methods=['POST'])
 app.add_url_rule('/api/admin/employees/update', 'api_update', EmployeeController.api_update, methods=['POST'])
 app.add_url_rule('/api/admin/employees/delete', 'api_delete', EmployeeController.api_delete, methods=['POST'])
 app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.api_add_category, methods=['POST'])
+
 
