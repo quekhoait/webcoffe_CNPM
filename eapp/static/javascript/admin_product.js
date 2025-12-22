@@ -85,11 +85,8 @@ function addRecipeRow(data = null) {
 function showDropdown(input, dropdown) {
     //đóng các dropdown khác
     document.querySelectorAll('.ing-dropdown').forEach(d => d.classList.add('hidden'));
-
     dropdown.classList.remove("hidden");
-
     dropdown.style.zIndex = "9999";
-
     renderListComboBox(input.value, dropdown);
 }
 
@@ -313,7 +310,7 @@ function filterTableData(categoryName) {
 
         const productName = row.querySelector('td:nth-child(1) .font-bold').innerText.toLowerCase();
 
-        const categoryCell = row.querySelector('td:nth-child(3) span');
+        const categoryCell = row.querySelector('td:nth-child(3)');
         const rowCategory = categoryCell ? categoryCell.innerText.trim() : "";
 
         const matchCategory = (categoryName === 'Tất cả loại' || rowCategory === categoryName);
@@ -351,3 +348,50 @@ document.addEventListener("click", e => {
         if(filterDrop) filterDrop.classList.add('hidden');
     }
 });
+
+async function addQuickCategory() {
+    const nameInput = document.getElementById('inpNewCatName');
+    const name = nameInput.value.trim();
+
+    if (!name) {
+        alert("Vui lòng nhập tên danh mục mới!");
+        nameInput.focus();
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/admin/category/add', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ name: name })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            alert("Thêm danh mục thành công!");
+
+            const newCat = { id: data.category.id, name: data.category.name };
+            if (typeof ALL_CATEGORIES !== 'undefined') {
+                ALL_CATEGORIES.push(newCat);
+            }
+
+            const dropdown = document.getElementById('cat-dropdown');
+            const newOption = document.createElement('div');
+            newOption.className = "p-3 hover:bg-yellow-50 cursor-pointer border-b border-gray-50 text-gray-700 transition";
+            newOption.innerText = newCat.name;
+            newOption.onclick = function() { selectCategory(newCat.id, newCat.name); };
+            dropdown.appendChild(newOption);
+
+            selectCategory(newCat.id, newCat.name);
+
+            // 4. Xóa ô nhập
+            nameInput.value = "";
+        } else {
+            alert("Lỗi: " + data.message);
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Lỗi kết nối Server!");
+    }
+}

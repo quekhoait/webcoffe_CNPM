@@ -14,7 +14,7 @@
     <main class="flex-1 p-8 h-screen overflow-y-auto">
         <div class="flex justify-between items-start mb-8">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Quản lý Sản phẩm</h1>
+                <h1 class="text-3xl font-extrabold text-gray-900">Quản lý Sản phẩm</h1>
                 <p class="text-gray-500 mt-1">Quản lý danh sách các sản phẩm của cửa hàng.</p>
             </div>
             <button type="button" onclick="openModal('ADD')" class="bg-[#5D4037] hover:bg-[#4E342E] text-white font-bold py-2.5 px-6 rounded-lg shadow-md flex items-center gap-2 transition transform hover:-translate-y-1 cursor-pointer">
@@ -52,7 +52,7 @@
 
         <div class="bg-white rounded-xl shadow- overflow-hidden border border-gray-100">
             <table class="w-full text-left border-collapse">
-                <thead class="bg-white border-b border-gray-100 text-black-400 text-lg font-bold">
+                <thead class="bg-gray-50 border-b border-gray-100 text-black-500 text-lg font-bold">
                     <tr>
                         <th class="p-5 font-bold pl-8">Sản phẩm</th>
                         <th class="p-5 font-bold">Giá</th>
@@ -98,53 +98,64 @@
             <h2 id="modalTitle" class="text-2xl font-bold text-gray-900">Thêm Món Mới</h2>
             <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 text-3xl">&times;</button>
         </div>
-        <div class="flex-1 overflow-y-auto p-8">
-            <input type="hidden" id="inpId">
-            <div class="grid grid-cols-2 gap-8">
-                <div class="space-y-4">
-                    <h3 class="font-bold text-gray-700 border-b pb-2 uppercase text-lg">1. Thông tin món</h3>
-                    <div><label class="block text-gray-700 font-bold mb-2">Tên món</label><input type="text" id="inpName" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-gray-700 font-bold mb-2 text-lg">Danh mục</label>
+            <div class="flex-1 overflow-y-auto p-8">
+                <input type="hidden" id="inpId">
+                <div class="grid grid-cols-2 gap-8">
 
-                            <div class="relative" id="cat-container">
-                                <div class="flex items-center border border-gray-300 rounded-xl bg-white overflow-hidden focus-within:ring-2 focus-within:ring-yellow-500 cursor-pointer" onclick="toggleCatDropdown()">
-                                    <input type="text" id="inpCategoryName" class="w-full p-4 text-lg outline-none bg-white cursor-pointer" placeholder="Chọn danh mục..." readonly>
-
-                                    <input type="hidden" id="inpCategory">
-
-                                    <button type="button" class="px-4 text-gray-500 hover:text-gray-800 border-l bg-gray-50 h-full text-lg">▼</button>
-                                </div>
-
-                                <div id="cat-dropdown" class="absolute w-full bg-white border border-gray-200 rounded-xl shadow-2xl hidden max-h-60 overflow-y-auto mt-2 text-lg z-50">
-                                    {% for c in categories %}
-                                    <div class="p-3 hover:bg-yellow-50 cursor-pointer border-b border-gray-50 text-gray-700 transition"
-                                         onclick="selectCategory({{ c.id }}, '{{ c.name }}')">
-                                        {{ c.name }}
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-gray-700 border-b pb-2 uppercase text-lg">1. Thông tin món</h3>
+                        <div><label class="block text-gray-700 font-bold mb-2">Tên món</label><input type="text" id="inpName" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 font-bold mb-2 text-lg">Danh mục</label>
+                                <div class="relative" id="cat-container">
+                                    <div class="flex items-center border border-gray-300 rounded-xl bg-white overflow-hidden focus-within:ring-2 focus-within:ring-yellow-500 cursor-pointer" onclick="toggleCatDropdown()">
+                                        <input type="text" id="inpCategoryName" class="w-full p-4 text-lg outline-none bg-white cursor-pointer" placeholder="Chọn danh mục..." readonly>
+                                        <input type="hidden" id="inpCategory">
+                                        <button type="button" class="px-4 text-gray-500 hover:text-gray-800 border-l bg-gray-50 h-full text-lg">▼</button>
                                     </div>
-                                    {% endfor %}
+                                    <div id="cat-dropdown" class="absolute w-full bg-white border border-gray-200 rounded-xl shadow-2xl hidden max-h-60 overflow-y-auto mt-2 text-lg z-50">
+                                        {% for c in categories %}
+                                        <div class="p-3 hover:bg-yellow-50 cursor-pointer border-b border-gray-50 text-gray-700 transition" onclick="selectCategory({{ c.id }}, '{{ c.name }}')">
+                                            {{ c.name }}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div><label class="block text-gray-700 font-bold mb-2">Đơn vị tính</label><input type="text" id="inpUnit" placeholder="Ly, Cái..." class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></div>
+                        </div>
+                        <div><label class="block text-gray-700 font-bold mb-2">Giá bán</label><input type="number" id="inpPrice" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400 font-bold text-green-600"></div>
+                        <div><label class="block text-gray-700 font-bold mb-2">Hình ảnh</label><input type="file" id="inpImage" class="w-full p-2 border rounded-lg"><img id="previewImage" class="w-32 h-32 mt-2 rounded-lg border object-cover hidden"></div>
+                        <div><label class="block text-gray-700 font-bold mb-2">Mô tả</label><textarea id="inpDesc" rows="3" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></textarea></div>
+                    </div>
+
+                    <div class="space-y-6"> <div class="space-y-4">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <h3 class="font-bold text-gray-700 uppercase text-lg">2. Công thức</h3>
+                                <button type="button" onclick="addRecipeRow()" class="text-lg bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 font-bold">+ Thêm NL</button>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 min-h-[200px]">
+                                <div id="recipeContainer" class="space-y-3 overflow-visible"></div>
+                                <div class="text-xs text-gray-500 italic mt-4 text-center">* Nhập tên để tìm kiếm nguyên liệu nhanh.</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 pt-4 border-t border-gray-200">
+                            <h3 class="font-bold text-gray-700 uppercase text-lg">3. Thêm danh mục</h3>
+                            <div class="bg-yellow-50/50 p-4 rounded-xl border border-yellow-200">
+                                <div class="flex gap-2">
+                                    <input type="text" id="inpNewCatName" placeholder="Nhập tên danh mục mới..." class="flex-1 p-3 border border-gray-300 rounded-lg outline-none focus:border-yellow-400 bg-white">
+                                    <button type="button" onclick="addQuickCategory()" class="bg-[#5D4037] hover:bg-[#4E342E] text-white font-bold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">
+                                        <i class="fa-solid fa-plus"></i> Thêm
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div><label class="block text-gray-700 font-bold mb-2">Đơn vị tính</label><input type="text" id="inpUnit" placeholder="Ly, Cái..." class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></div>
-                    </div>
-                    <div><label class="block text-gray-700 font-bold mb-2">Giá bán</label><input type="number" id="inpPrice" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400 font-bold text-green-600"></div>
-                    <div><label class="block text-gray-700 font-bold mb-2">Hình ảnh</label><input type="file" id="inpImage" class="w-full p-2 border rounded-lg"><img id="previewImage" class="w-32 h-32 mt-2 rounded-lg border object-cover hidden"></div>
-                    <div><label class="block text-gray-700 font-bold mb-2">Mô tả</label><textarea id="inpDesc" rows="3" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></textarea></div>
-                </div>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center border-b pb-2">
-                        <h3 class="font-bold text-gray-700 uppercase text-lg">2. Công thức</h3>
-                        <button onclick="addRecipeRow()" class="text-lg bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 font-bold">+ Thêm NL</button>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 min-h-[300px]">
-                        <div id="recipeContainer" class="space-y-3 overflow-visible"></div>
-                        <div class="text-xs text-gray-500 italic mt-4 text-center">* Nhập tên để tìm kiếm nguyên liệu nhanh.</div>
+
                     </div>
                 </div>
             </div>
-        </div>
         <div class="p-6 border-t bg-gray-50 flex justify-end gap-3">
             <button onclick="closeModal()" class="px-6 py-2 rounded-lg border hover:bg-gray-50">Hủy</button>
             <button onclick="saveProduct()" class="px-6 py-2 rounded-lg bg-[#FCD34D] font-bold hover:bg-[#fbbf24]">Lưu</button>

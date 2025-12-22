@@ -1,16 +1,15 @@
 
 function openModal(mode, staff = null) {
     const modal = document.getElementById('staffModal');
-    const modalInner = modal.firstElementChild;
 
     modal.classList.remove('hidden');
-    setTimeout(() => {
-        modalInner.classList.remove('scale-95');
-        modalInner.classList.add('scale-100');
+
+    setTimeout(() => { 
+        modal.firstElementChild.classList.remove('scale-95'); 
+        modal.firstElementChild.classList.add('scale-100'); 
     }, 10);
 
     if (mode === 'ADD') {
-
         document.getElementById('modalTitle').innerText = "Thêm Nhân Viên Mới";
 
         document.getElementById('inpId').value = "";
@@ -20,12 +19,11 @@ function openModal(mode, staff = null) {
         document.getElementById('inpAddress').value = "";
         document.getElementById('inpRole').value = "STAFF";
         document.getElementById('inpPassword').value = "";
-
+        
         document.getElementById('passNote').innerText = "(Mặc định: 123456)";
         document.getElementById('statusContainer').classList.add('hidden');
-
+        
     } else {
-
         document.getElementById('modalTitle').innerText = "Cập Nhật Thông Tin";
 
         document.getElementById('inpId').value = staff.id;
@@ -34,12 +32,17 @@ function openModal(mode, staff = null) {
         document.getElementById('inpEmail').value = staff.email || "";
         document.getElementById('inpAddress').value = staff.address || "";
 
+        const roleMap = {
+            'Quản lý': 'ADMIN', 'ADMIN': 'ADMIN',
+            'Thu Ngân': 'CASHIER', 'CASHIER': 'CASHIER',
+            'Nhân Viên': 'STAFF', 'STAFF': 'STAFF',
+            'Thủ Kho': 'WAREHOUSE_KEEPER', 'WAREHOUSE_KEEPER': 'WAREHOUSE_KEEPER'
+        };
+        document.getElementById('inpRole').value = roleMap[staff.role] || 'STAFF';
 
-        document.getElementById('inpRole').value = staff.role;
-
-        document.getElementById('inpPassword').value = "";
+        document.getElementById('inpPassword').value = ""; 
         document.getElementById('passNote').innerText = "(Để trống nếu không đổi)";
-
+        
         document.getElementById('statusContainer').classList.remove('hidden');
         document.getElementById('inpActive').checked = staff.status;
     }
@@ -47,13 +50,12 @@ function openModal(mode, staff = null) {
 
 function closeModal() {
     const modal = document.getElementById('staffModal');
-    const modalInner = modal.firstElementChild;
-    modalInner.classList.add('scale-95');
-    modalInner.classList.remove('scale-100');
+
+    modal.firstElementChild.classList.add('scale-95');
+    modal.firstElementChild.classList.remove('scale-100');
+
     setTimeout(() => { modal.classList.add('hidden'); }, 200);
 }
-
-
 
 async function saveStaff() {
     const id = document.getElementById('inpId').value;
@@ -69,15 +71,15 @@ async function saveStaff() {
         alert("Vui lòng nhập Tên và Số điện thoại!");
         return;
     }
-
+    
     const phoneRegex = /^0\d{9}$/;
     if (!phoneRegex.test(phone)) {
-        alert("Số điện thoại không hợp lệ (10 số, bắt đầu bằng 0)!");
+        alert("Số điện thoại không hợp lệ (Phải bắt đầu bằng 0 và có 10 số)!");
         return;
     }
 
-    const url = id ? '/api/admin/staff/update' : '/api/admin/staff/add';
-
+    const url = id ? '/api/admin/employees/update' : '/api/admin/employees/add';
+    
     const data = {
         id: id,
         name: name,
@@ -95,24 +97,25 @@ async function saveStaff() {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
-
+        
         const result = await res.json();
+        
         if (result.success) {
             alert(result.message);
-            location.reload();
+            location.reload(); 
         } else {
             alert("Lỗi: " + result.message);
         }
     } catch (err) {
-        alert("Lỗi kết nối Server!");
+        alert("Lỗi kết nối đến Server!");
         console.error(err);
     }
 }
 
 function deleteStaff(id) {
-    if (!confirm("Bạn có chắc chắn muốn KHÓA tài khoản này?")) return;
-
-    fetch('/api/admin/staff/delete', {
+    if (!confirm("Bạn có chắc chắn muốn KHÓA tài khoản nhân viên này không?")) return;
+    
+    fetch('/api/admin/employee/delete', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({id: id})
@@ -125,6 +128,10 @@ function deleteStaff(id) {
         } else {
             alert("Lỗi: " + data.message);
         }
+    })
+    .catch(err => {
+        alert("Lỗi hệ thống!");
+        console.error(err);
     });
 }
 
@@ -132,10 +139,48 @@ function deleteStaff(id) {
 function searchTable() {
     const input = document.getElementById('searchInput');
     const filter = input.value.toLowerCase().trim();
+
+    const currentRole = document.getElementById('roleFilter').value || 'ALL';
+    applyFilters(filter, currentRole);
+}
+
+function toggleFilterDropdown() {
+    document.getElementById('filter-dropdown').classList.toggle('hidden');
+}
+
+function selectFilter(val, name) {
+    document.getElementById('inpFilterName').value = name;
+    document.getElementById('roleFilter').value = val;
+    document.getElementById('filter-dropdown').classList.add('hidden');
+
+    const currentSearch = document.getElementById('searchInput').value.toLowerCase().trim();
+    applyFilters(currentSearch, val);
+}
+
+function applyFilters(keyword, roleVal) {
     const rows = document.querySelectorAll('#staffTableBody tr');
 
     rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(filter) ? "" : "none";
+
+        const textRow = row.innerText.toLowerCase();
+
+        const roleCellText = row.cells[3].innerText.trim();
+
+        const matchKeyword = textRow.includes(keyword);
+        const matchRole = (roleVal === 'ALL') || (roleCellText === roleVal);
+
+        if (matchKeyword && matchRole) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
     });
 }
+
+document.addEventListener('click', function(e) {
+    const container = document.getElementById('filter-container');
+    if (container && !container.contains(e.target)) {
+        const dropdown = document.getElementById('filter-dropdown');
+        if (dropdown) dropdown.classList.add('hidden');
+    }
+});
