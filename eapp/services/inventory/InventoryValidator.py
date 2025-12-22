@@ -200,8 +200,6 @@ class InventoryValidator:
     def get_insufficient_products(invoice_items: list, warehouse_id):
         available_stock_map = WarehouseDAO.get_available_stock_map(warehouse_id)
         required_ingredient_map = RecipeService.calculate_required_ingredients(invoice_items)
-        pprint(available_stock_map)
-        pprint(required_ingredient_map)
         recipe_map = ProductDao.get_product_recipe_map()
         result = []
         # lặp qua từng product

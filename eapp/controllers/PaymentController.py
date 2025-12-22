@@ -9,13 +9,17 @@ from flask import render_template, request, session, redirect
 from flask_login import current_user, login_required
 from eapp.dao import ProductDao
 from eapp import db
+from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp.services.inventory.StockService import StockService
 from eapp.controllers import index
 
 def load_data():
 
     if request.method == "POST":
-        session["checkout_items"] = request.json
+        invoice_items = session["checkout_items"] = request.json
+        result = InventoryValidator.get_insufficient_products(invoice_items,1)
+        print(invoice_items)
+        print(result)
     items = session.get("checkout_items")
     if not items:
         return redirect("/cart")
@@ -56,6 +60,8 @@ def created_payment():
     note = data.get("note")
     payment_method = data.get("payment_method")
     cart_items = session.get("checkout_items")
+    import pdb
+    pdb.set_trace()
     if not cart_items:
         return jsonify({"status": "error", "message": "Giỏ hàng trống"})
 

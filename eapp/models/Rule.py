@@ -3,8 +3,8 @@ from sqlalchemy import Boolean, Column, Float, Integer, String, Enum as SqlEnum
 from eapp.models import BaseModel
 
 class RuleType(Enum):
-    SERVICE = "service"
-    INGREDIENT = "ingredient"
+    SERVICE = "Phí phục vụ"
+    INGREDIENT = "Tồn nguyên liệu"
 
 class Rule(BaseModel):
     name = Column(String(100), nullable=False, unique=True)

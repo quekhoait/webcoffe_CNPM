@@ -5,7 +5,7 @@ from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
-from eapp.controllers import AccountController, CashierController, ProductController, StaffController, \
+from eapp.controllers import AccountController, CashierController, ProductController, RuleController, StaffController, \
     WarehouseController, index, \
     CartController, PaymentController, OverviewController
 
@@ -122,3 +122,6 @@ app.add_url_rule('/api/admin/employees/update', 'api_update', EmployeeController
 app.add_url_rule('/api/admin/employees/delete', 'api_delete', EmployeeController.api_delete, methods=['POST'])
 app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.api_add_category, methods=['POST'])
 
+
+#rule
+app.add_url_rule('/rule', 'rule', RuleController.index, methods=['get'])

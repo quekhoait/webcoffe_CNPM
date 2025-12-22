@@ -95,12 +95,13 @@ def demo():
     kq = InventoryValidator.get_insufficient_products(data,1)
     print(kq)
     print(WarehouseDAO.get_available_stock_map(1))
+    pprint(ProductDao.get_product_recipe_map())
 
 
 if __name__ == '__main__':
     with app.app_context():
         # test_start_processing_invoice()
-        test_query()
+        demo()
         # print(ProductDao.get_product_recipe_map())
         # print(WarehouseDAO.get_stock_map(1))
         # print(InventoryService.get_product_makeable_map(ProductDao.list(),1))

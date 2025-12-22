@@ -3,17 +3,17 @@
   <div class="bg-white rounded-2xl p-2 shadow-sm hover:shadow-xl transition duration-300 group flex flex-col h-full">
 
       <div class="relative overflow-hidden rounded-xl mb-4 aspect-square bg-gray-100">
-<!--          {% if product_makeable_map[product.id] %}-->
-<!--          <div class="absolute top-2 left-2 px-3 py-1 rounded-full text-sm font-semibold-->
-<!--             bg-green-500 text-white">-->
-<!--              còn hàng-->
-<!--          </div>-->
-<!--          {% else %}-->
-<!--          <div class="absolute top-2 left-2 px-3 py-1 rounded-full text-sm font-semibold-->
-<!--             bg-red-500 text-white">-->
-<!--              Hết hàng-->
-<!--          </div>-->
-<!--          {% endif %}-->
+          {% if product_makeable_map[product.id] %}
+          <div class="absolute top-2 left-2 px-3 py-1 rounded-full text-sm font-semibold
+            bg-green-500 text-white">
+              còn hàng
+          </div>
+          {% else %}
+          <div class="absolute top-2 left-2 px-3 py-1 rounded-full text-sm font-semibold
+            bg-red-500 text-white">
+              Hết hàng
+          </div>
+          {% endif %}
           <img src="{{ product.image if product.image else 'https://via.placeholder.com/300' }}"
               class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
       </div>
