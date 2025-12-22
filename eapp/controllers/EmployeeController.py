@@ -1,11 +1,11 @@
 from flask import render_template, jsonify
-from eapp.dao import AccountDao
+from eapp.dao import AccountDAO
 from eapp.models.Account import Role
 
 
 def index():
     try:
-        users = AccountDao.get_all_employees()
+        users = AccountDAO.get_all_employees()
     except Exception as e:
         users = []
 
