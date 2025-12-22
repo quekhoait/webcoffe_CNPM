@@ -85,11 +85,8 @@ function addRecipeRow(data = null) {
 function showDropdown(input, dropdown) {
     //đóng các dropdown khác
     document.querySelectorAll('.ing-dropdown').forEach(d => d.classList.add('hidden'));
-
     dropdown.classList.remove("hidden");
-
     dropdown.style.zIndex = "9999";
-
     renderListComboBox(input.value, dropdown);
 }
 

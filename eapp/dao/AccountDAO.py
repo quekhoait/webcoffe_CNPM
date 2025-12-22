@@ -99,7 +99,7 @@ def delete_employee_dao(user_id):
 
     user = Account.query.get(user_id)
     if user:
-        #xóa vĩnh viễn (lỗi khóa ngoại đã có hóa đơn)
+        #xóa vĩnh viễn thì sẽ lỗi khóa ngoại đã có hóa đơn
         # db.session.delete(user)
 
         #khóa tài khoản
