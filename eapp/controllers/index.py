@@ -134,7 +134,8 @@ def load_my_cart():
 def load_my_cart():
     return render_template('page/cart.html')
 
-
+def load_overview():
+    return render_template('admin/overview/overview.html')
 
 
 

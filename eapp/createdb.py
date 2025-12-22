@@ -192,6 +192,13 @@ product_recipes_data = {
         {"ingredient_name": "Đá viên", "quantity": 50, "unit": "gram"},
     ],
 }
+from eapp.models import Invoice, InvoiceDetail
+from eapp.models.Invoice import InvoiceStatusEnum, PaymentMethod
+from _datetime import datetime
+
+
+
+
 
 if __name__ == "__main__":
     with app.app_context():
@@ -294,6 +301,87 @@ if __name__ == "__main__":
 
         db.session.commit()
         print("✅ Seed dữ liệu ProductRecipe thành công!")
+
+        invoice1 = Invoice(
+            order_code="INV001",
+            cashier_id=1,
+            customer_id=2,
+            staff_id=1,
+            subtotal=120000,
+            extra_fee_total=10000,
+            final_total=130000,
+            note="Khách mua tại quầy",
+            payment_method=PaymentMethod.CASH,
+            invoice_status=InvoiceStatusEnum.COMPLETED,
+            created_date=datetime.now()
+        )
+
+        invoice1_details = [
+            InvoiceDetail(
+                product_id=1,
+                quantity=2,
+                price=50000
+            ),
+            InvoiceDetail(
+                product_id=2,
+                quantity=1,
+                price=20000
+            )
+        ]
+
+        invoice1.invoice_details = invoice1_details
+
+        # ===== Invoice 2 =====
+        invoice2 = Invoice(
+            order_code="INV002",
+            cashier_id=None,
+            customer_id=3,
+            staff_id=2,
+            subtotal=80000,
+            extra_fee_total=0,
+            final_total=80000,
+            note="Đơn online",
+            payment_method=PaymentMethod.MOMO,
+            invoice_status=InvoiceStatusEnum.COMPLETED,
+            created_date=datetime.now()
+        )
+
+        invoice2.invoice_details = [
+            InvoiceDetail(
+                product_id=3,
+                quantity=2,
+                price=40000
+            )
+        ]
+
+        # ===== Invoice 3 =====
+        invoice3 = Invoice(
+            order_code="INV003",
+            cashier_id=1,
+            customer_id=4,
+            staff_id=1,
+            subtotal=150000,
+            extra_fee_total=15000,
+            final_total=165000,
+            note="Khách VIP",
+            payment_method=PaymentMethod.CASH,
+            invoice_status=InvoiceStatusEnum.COMPLETED,
+            created_date = datetime(2025, 9, 15, 10, 30, 0)
+        )
+
+        invoice3.invoice_details = [
+            InvoiceDetail(
+                product_id=1,
+                quantity=3,
+                price=50000
+            )
+        ]
+
+        # ===== Add vào DB =====
+        db.session.add_all([invoice1, invoice2, invoice3])
+        db.session.commit()
+
+        print("✅ Seed invoice data thành công!")
 
 
         print("☕️ Seed dữ liệu quán cà phê thành công!")

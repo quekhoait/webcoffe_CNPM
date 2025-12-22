@@ -5,8 +5,9 @@ from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
-from eapp.controllers import AccountController, CashierController, ProductController, StaffController, WarehouseController, index, \
-    CartController, PaymentController
+from eapp.controllers import AccountController, CashierController, ProductController, StaffController, \
+    WarehouseController, index, \
+    CartController, PaymentController, OverviewController
 
 from eapp.Momo import momo
 from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index, AdminController, EmployeeController
@@ -106,3 +107,5 @@ app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.
 app.add_url_rule('/api/admin/employee/add', 'api_emp_add', EmployeeController.api_add, methods=['POST'])
 app.add_url_rule('/api/admin/employee/update', 'api_emp_update', EmployeeController.api_update, methods=['POST'])
 app.add_url_rule('/api/admin/employee/delete', 'api_emp_delete', EmployeeController.api_delete, methods=['POST'])
+
+app.add_url_rule('/admin/overview', 'overview', OverviewController.load_overview)
