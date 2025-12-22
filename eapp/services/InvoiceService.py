@@ -4,6 +4,7 @@ from eapp.dao.InvoiceDAO import InvoiceDAO
 from eapp.models import InvoiceDetail, Rule
 from eapp.models import Invoice
 from eapp.models.Invoice import INVOICE_STATUS_LABEL, InvoiceStatusEnum, PaymentMethod
+from eapp.models.Payment import PaymentStatus
 from eapp.services.RuleService import RuleService
 from eapp import app, db
 from eapp.services.inventory.InventoryFacade import InventoryFacade
@@ -190,6 +191,10 @@ class InvoiceService:
 
             elif new_status == InvoiceStatusEnum.CANCELLED:
                 InventoryFacade.cancel_processing_invoice(invoice,warehouse_id)
+                payments = PaymentDao.get_by_invoice_id(invoice.id)
+                if payments:
+                    for payment in payments:
+                        payment.status = PaymentStatus.failed
                 invoice.invoice_status = InvoiceStatusEnum.CANCELLED
 
                 result.update({ 

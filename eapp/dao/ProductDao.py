@@ -1,8 +1,9 @@
 from eapp.models import Product, ProductRecipe, ProductRecipe, ProductStatus
+from eapp.models import Product, ProductRecipe, ProductRecipe, ProductStatus
 # from MySQLdb._mysql import result
 from sqlalchemy.sql.functions import current_user
 
-from eapp.models import Product, CartDetail, Invoice, Payment, InvoiceDetail
+from eapp.models import Product, CartDetail, Invoice, Payment, InvoiceDetail, ProductRecipe
 from sqlalchemy import desc
 from eapp import db
 
@@ -72,6 +73,28 @@ def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None)
 
 
 def add_product(data, recipes=[]):
+
+def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None):
+    query = (
+        Invoice.query
+        .join(Payment, Payment.invoice_id == Invoice.id)
+        .join(InvoiceDetail, InvoiceDetail.invoice_id == Invoice.id)
+        .join(Product, Product.id == InvoiceDetail.product_id)
+        .filter(Invoice.customer_id == user_id)
+    )
+    if invoice_status is not None:
+        query = query.filter(Invoice.invoice_status == invoice_status)
+    if payment_status is not None:
+        query = query.filter(Payment.status == payment_status)
+    result = query.with_entities(
+        Product,
+        Invoice,
+        Payment
+    ).all()
+    return result
+
+
+def add_product(data, recipes=[]):
     try:
         new_product = Product(
             name=data.get('name'),
@@ -81,8 +104,23 @@ def add_product(data, recipes=[]):
             description=data.get('description'),
             image=data.get('image'),
             status=ProductStatus.ACTIVE
+            image=data.get('image'),
+            status=ProductStatus.ACTIVE
         )
         db.session.add(new_product)
+        db.session.flush()
+
+        #lưu công thức
+        for item in recipes:
+            if item.get('ingredient_id'):
+                recipe = ProductRecipe(
+                    product_id=new_product.id,
+                    ingredient_id=item['ingredient_id'],
+                    quantity=item['quantity'],
+                    unit=item['unit']
+                )
+                db.session.add(recipe)
+
         db.session.flush()
 
         #lưu công thức
@@ -104,6 +142,7 @@ def add_product(data, recipes=[]):
         return False
 
 def update_product(product_id, data, recipes=None):
+def update_product(product_id, data, recipes=None):
     try:
         product = Product.query.get(product_id)
         if not product: return False
@@ -115,6 +154,20 @@ def update_product(product_id, data, recipes=None):
         product.description = data.get('description')
         if data.get('image'):
             product.image = data.get('image')
+
+        #cập nhật công thức nếu có
+        if recipes is not None:
+            #xóa công thức cũ -> thêm công thức mới
+            ProductRecipe.query.filter_by(product_id=product_id).delete()
+            for item in recipes:
+                if item.get('ingredient_id'):
+                    new_recipe = ProductRecipe(
+                        product_id=product.id,
+                        ingredient_id=item['ingredient_id'],
+                        quantity=item['quantity'],
+                        unit=item['unit']
+                    )
+                    db.session.add(new_recipe)
 
         #cập nhật công thức nếu có
         if recipes is not None:
@@ -149,6 +202,7 @@ def delete_product(product_id):
     except Exception as ex:
         db.session.rollback()
         return False
+
 def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None):
     query = (
         Invoice.query

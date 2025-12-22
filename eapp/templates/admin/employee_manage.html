@@ -1,15 +1,4 @@
-{% extends 'layout/base.html' %}
-
-{% block header %}{% endblock %}
-{% block footer %}{% endblock %}
-
-{% block title %}Quản lý Nhân viên{% endblock %}
-
-{% block content %}
 <div class="flex min-h-screen bg-[#F9FAFB] font-sans">
-
-    {% include 'admin/employee_sidebar.html' %}
-
     <main class="flex-1 p-8 h-screen overflow-y-auto">
         <div class="flex justify-between items-start mb-8">
             <div>
@@ -176,5 +165,4 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='javascript/employee.js') }}"></script>
-{% endblock %}
 {% endblock %}

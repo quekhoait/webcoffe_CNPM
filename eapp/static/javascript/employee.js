@@ -141,7 +141,7 @@ function searchTable() {
     const filter = input.value.toLowerCase().trim();
 
     const currentRole = document.getElementById('roleFilter').value || 'ALL';
-    applyFilters(filter, currentRole);
+    applyFilters(filter, currentRole);ss
 }
 
 function toggleFilterDropdown() {
@@ -164,7 +164,7 @@ function applyFilters(keyword, roleVal) {
 
         const textRow = row.innerText.toLowerCase();
 
-        const roleCellText = row.cells[2].innerText.trim(); 
+        const roleCellText = row.cells[3].innerText.trim();
 
         const matchKeyword = textRow.includes(keyword);
         const matchRole = (roleVal === 'ALL') || (roleCellText === roleVal);

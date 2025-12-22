@@ -1,11 +1,13 @@
 # Cấu trúc route của các trang web bình thường
+from msilib import CAB
 
 from flask import Flask, render_template
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
-from eapp.controllers import AccountController, CashierController, ProductController, RuleController, StaffController, WarehouseController, index, \
-    CartController, PaymentController
+from eapp.controllers import AccountController, CashierController, ProductController, StaffController, \
+    WarehouseController, index, \
+    CartController, PaymentController, OverviewController
 
 from eapp.Momo import momo
 from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index, AdminController, EmployeeController
@@ -15,7 +17,6 @@ from eapp.controllers import ProductController, StaffController, index, AccountC
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
-
 app.add_url_rule('/regis','register', index.load_regis)
 app.add_url_rule('/api/regis','created_account',AccountController.register, methods=['POST'])
 
@@ -36,9 +37,11 @@ app.add_url_rule('/about-us','about-us',index.load_about_us)
 app.add_url_rule('/my-cart','my-cart',CartController.load_my_cart)
 app.add_url_rule('/api/add_to_cart', 'add_to_cart', CartController.add_to_cart, methods=['POST'])
 app.add_url_rule('/api/get-cart-by-userId','get-cart-by-userId',CartController.get_cart_by_userId)
-    #xóa đơn hàng
-app.add_url_rule('/api/remove_prod_in_cart', 'remove_prod_in_cart', CartController.remove_product_in_cart, methods=['DELETE'])
-
+# xóa giỏ hàng
+app.add_url_rule('/api/remove_prod_in_cart', 'remove_prod_in_cart', CartController.remove_product_in_cart,
+                 methods=['DELETE'])
+# hủy đơn hàng
+app.add_url_rule('/api/delete-invoice', 'delete-invoice', ProductController.delete_invoice, methods=['POST'])
 # app.add_url_rule('/','index',CashierController.home)
 
 
@@ -105,13 +108,17 @@ app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminControl
 app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminController.api_delete_product, methods=['POST'])
 
 #employee_manage
-app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
+app.add_url_rule('/dashboard/admin', 'admin', EmployeeController.index, methods=['GET'])
+# app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
+
+app.add_url_rule('/api/admin/employee/add', 'api_emp_add', EmployeeController.api_add, methods=['POST'])
+app.add_url_rule('/api/admin/employee/update', 'api_emp_update', EmployeeController.api_update, methods=['POST'])
+app.add_url_rule('/api/admin/employee/delete', 'api_emp_delete', EmployeeController.api_delete, methods=['POST'])
+
+# app.add_url_rule('api/admin/overview', 'overview', OverviewController.load_overview)
 
 app.add_url_rule('/api/admin/employees/add', 'api_add', EmployeeController.api_add, methods=['POST'])
 app.add_url_rule('/api/admin/employees/update', 'api_update', EmployeeController.api_update, methods=['POST'])
 app.add_url_rule('/api/admin/employees/delete', 'api_delete', EmployeeController.api_delete, methods=['POST'])
 app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.api_add_category, methods=['POST'])
-
-#rule_manage
-app.add_url_rule('/admin/rule', 'admin_rule_index', RuleController.index, methods=['GET'])
 
