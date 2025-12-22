@@ -1,7 +1,8 @@
 from dataclasses import dataclass
+from datetime import date, datetime, timedelta
 from typing import Optional
 
-from sqlalchemy import or_
+from sqlalchemy import and_, exists, or_
 from eapp import app, db
 from eapp.models.Account import Account
 from eapp.models.Invoice import Invoice, PaymentMethod
@@ -10,8 +11,10 @@ from eapp.models.InvoiceDetail import InvoiceDetail
 @dataclass
 class InvoiceFilter:
     payment_method : Optional[str] = None
-    name : Optional[str] = None
-
+    keyword : Optional[str] = None
+    date : Optional[str] = None
+    invoice_status : Optional[str] = None
+    # order_code : Optional[str] = None
 class InvoiceDAO:
     @staticmethod
     def list(params: InvoiceFilter = None):
@@ -23,26 +26,28 @@ class InvoiceDAO:
                 elif params.payment_method == 'MOMO':
                     query = query.filter(Invoice.payment_method.__eq__(PaymentMethod.MOMO))
 
-                if params.name:
-                    query = query.join(Account,or_(
-                        Invoice.customer_id == Account.id,
-                        Invoice.staff_id == Account.id,
-                        Invoice.cashier_id == Account.id
-                    )).filter(Account.name.ilike(f"%{params.name}%"))
+                if params.keyword:
+                    kw = f"%{params.keyword}%"
+                    query = query.filter(or_(
+                        Invoice.order_code.ilike(kw),
+                        exists().where(
+                            Account.id.in_([Invoice.customer_id,Invoice.staff_id,Invoice.cashier_id])
+                        ).where(Account.name.ilike(kw))
+                    ))
+                
+                if params.invoice_status:
+                    query = query.filter(Invoice.invoice_status.__eq__(params.invoice_status))
 
-                
-                # if params['invoice_type'] == 'offline': #tại quầy
-                #     query = query.filter(Invoice.customer_id == None)
-                # else: # online
-                #     query = query.filter(Invoice.staff_id == None)
-                # if params.get('invoice_status'):
-                #     query = query.filter(Invoice.invoice_status == params['invoice_status'])
-                
-                # if params.get('name'):
-                    
+                if params.date:
+                    start = datetime.strptime(params.date,'%Y-%m-%d')
+                    end = start + timedelta(days=1)
+                    query = query.filter(
+                        and_(Invoice.created_date >= start,
+                             Invoice.created_date < end)
+                    )
                 
         except Exception as ex:
-            print(f"Lỗi khi lấy danh sách invoice: {ex}")
+            app.logger.error(f"Lỗi khi lấy danh sách invoice: {ex}")
             return []
         return query.all()
     

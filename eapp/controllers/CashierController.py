@@ -1,7 +1,7 @@
 from sre_constants import IN
 from flask import jsonify, render_template, request, session
 
-from eapp.dao.InvoiceDAO import InvoiceDAO
+from eapp.dao.InvoiceDAO import InvoiceDAO, InvoiceFilter
 from eapp.models import Account
 from eapp.models.Invoice import INVOICE_STATUS_LABEL, InvoiceStatusEnum
 from eapp.services.InvoiceService import InvoiceService
@@ -11,13 +11,13 @@ from flask_login import login_user, logout_user, current_user, login_required
 def load_cashier():
     user = current_user
     invoice = InvoiceDAO.get_by_id(10)
-    invoices = InvoiceDAO.list()
-    invoice_type = 'offline'
+    invoices = InvoiceDAO.list(InvoiceFilter(payment_method="CASH"))
+    payment_method = 'CASH'
     return render_template('cashier/cashier.html',
                            user=user,
                            invoices = invoices,
                            INVOICE_STATUS_LABEL=INVOICE_STATUS_LABEL,
-                           invoice_type=invoice_type,
+                           payment_method=payment_method,
                            invoice=invoice,
                            warehouse_id = session.get('warehouse_id',1))
 
@@ -25,19 +25,19 @@ def load_status_bar():
     data = request.args.to_dict()
 
     return render_template('cashier/cashier_invoice_status.html',
-                           invoice_type=data['invoice_type'],
+                           payment_method=data['payment_method'],
                            INVOICE_STATUS_LABEL=INVOICE_STATUS_LABEL)
 
 
 #API INVOICE
 def load_invoices():
     data = request.args.to_dict()
-
-    invoices = InvoiceDAO.list(params=data)
+    filter = InvoiceFilter(**data)
+    invoices = InvoiceDAO.list(filter)
     return render_template('cashier/cashier_invoice_item.html',
                            invoices=invoices,
                            INVOICE_STATUS_LABEL=INVOICE_STATUS_LABEL,
-                           invoice_type=data['invoice_type'])
+                           payment_method=data['payment_method'])
 
 def update_invoice_status():
     params = request.json

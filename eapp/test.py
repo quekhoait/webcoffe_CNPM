@@ -1,13 +1,53 @@
 from pprint import pprint
 from eapp import app,db
 from eapp.dao import ProductDao
+from eapp.dao.InvoiceDAO import InvoiceDAO, InvoiceFilter
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.models.Account import Account
-from eapp.models.Invoice import Invoice, PaymentMethod
+from eapp.models.Invoice import Invoice, InvoiceStatusEnum, PaymentMethod
 from eapp.models.Payment import PaymentStatus
 from eapp.models.Product import Product
 from eapp.services.inventory.RecipeService import RecipeService
 from sqlalchemy.dialects import mysql
+
+"""
+<!-- Đang chọn -->
+<div data-status="selecting" class="active-invoice-card invoice-card p-4 rounded-xl shadow-md ">
+    <!-- Mã đơn + trạng thái -->
+    <div class="flex justify-between items-center">
+        <span class="text-2xl font-extrabold tracking-wide text-amber-900">
+            #000001
+        </span>
+
+        <span class="text-lg font-semibold text-amber-900 px-3 py-1 bg-amber-200/70 rounded-full shadow">
+            Chờ xử lý
+        </span>
+    </div>
+
+    <!-- Khách + thời gian -->
+    <div class="flex justify-between items-center text-gray-700">
+        <span class="text-lg font-medium">
+            Ho Mai Huong
+        </span>
+
+        <span class="text-lg px-2 py-0.5 rounded-md bg-white text-amber-700 font-semibold tracking-wide">
+            10:32
+        </span>
+    </div>
+
+    <!-- Tổng + phương thức -->
+    <div class="flex justify-between items-end pt-1">
+        <span class="text-2xl text-amber-900 font-extrabold leading-none">
+            999.999 USD
+        </span>
+
+        <span  data-method="cash" class="payment-method">
+            Tiền mặt
+        </span>
+    </div>
+</div>
+
+"""
 
 def test_start_processing_invoice():
     details = [
@@ -38,10 +78,14 @@ def test_query():
     print(query.statement)
     print(query.all())
 
+
+
 if __name__ == '__main__':
     with app.app_context():
-        # test_start_processing_invoice()
-        test_query()
+        fil = InvoiceFilter(keyword="huy")
+        print(fil)
+        pprint(parse_dict(InvoiceDAO.list(fil)))
+        
         # print(ProductDao.get_product_recipe_map())
         # print(WarehouseDAO.get_stock_map(1))
         # print(InventoryService.get_product_makeable_map(ProductDao.list(),1))

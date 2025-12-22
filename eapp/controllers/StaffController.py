@@ -83,6 +83,8 @@ def addItemToInvoice():
         item_tmp = invoice.pop(product_id,None)
     required_ingredient_map = RecipeService.get_required_ingredient_map_from_session_invoice(invoice.values())
     
+    # 10 
+    
     available_stock = {
         key : max(0, value - required_ingredient_map.get(key, 0))
         for key, value in WarehouseDAO.get_available_stock_map(get_current_warehouse()).items()     

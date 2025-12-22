@@ -103,6 +103,12 @@ class InventoryValidator:
             }]
             makeable_quantity
         }
+
+        available_stock_map
+        {
+            ingredient_id : quantity
+        }
+
     """
     # kiểm tra xem product này đủ không, ko thì trả về lý do ko đủ
     @staticmethod
