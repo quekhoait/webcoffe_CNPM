@@ -1,0 +1,175 @@
+{% extends 'layout/base.html' %}
+{% block title %}Quản lý Nhân viên{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-[#F9FAFB] pt-[100px] pb-10 px-6">
+    <div class="max-w-7xl mx-auto mb-8 flex justify-between items-center">
+        <h1 class="text-4xl font-bold text-gray-900">Quản lý Tài khoản</h1>
+        <button onclick="openModal('ADD')" class="bg-[#FCD34D] hover:bg-[#fbbf24] text-gray-900 font-bold py-3 px-6 rounded-lg shadow flex items-center gap-2 text-xl transition">
+            <i class="fa-solid fa-plus"></i> Thêm nhân viên
+        </button>
+    </div>
+
+    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+        <table class="w-full text-left">
+            <thead class="bg-gray-50 border-b border-gray-100 text-gray-500 font-medium text-lg uppercase">
+                <tr>
+                    <th class="p-5">ID</th>
+                    <th class="p-5">Họ tên</th>
+                    <th class="p-5">SĐT</th>
+                    <th class="p-5">Chức vụ</th> <th class="p-5">Trạng thái</th>
+                    <th class="p-5 text-center">Hành động</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-xl text-gray-700">
+                {% for u in users %}
+
+                {% set u_json = {
+                    'id': u.id,
+                    'username': u.username,
+                    'name': u.name if u.name else '',
+                    'phone': u.phone,
+                    'email': u.email if u.email else '',
+                    'address': u.address if u.address else '',
+                    'role': u.role.name,
+                    'role_value': u.role.value,
+                    'status': u.status,
+                    'avatar': u.avatar
+                } %}
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-5 text-gray-400">#{{ u.id }}</td>
+                    <td class="p-5 font-bold flex items-center gap-3">
+                        <img src="{{ u.avatar }}" class="w-10 h-10 rounded-full border">
+                        {{ u.name }}
+                    </td>
+                    <td class="p-5">{{ u.phone }}</td>
+                    <td class="p-5">
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-md text-sm font-bold">
+                            {{ u.role.value }}
+                        </span>
+                    </td>
+                    <td class="p-5">
+                        {% if u.status %}
+                            <span class="text-green-600 font-bold">Hoạt động</span>
+                        {% else %}
+                            <span class="text-red-500">Đã khóa</span>
+                        {% endif %}
+                    </td>
+                    <td class="p-5 text-center">
+                        <button onclick='openModal("EDIT", {{ u_json | tojson }})' class="text-blue-500 hover:text-blue-700 mx-2">
+                            <i class="fa-solid fa-pen-to-square text-2xl"></i>
+                        </button>
+                        <button onclick="deleteAccount({{ u.id }})" class="text-red-400 hover:text-red-600 mx-2">
+                            <i class="fa-solid fa-trash text-2xl"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="empModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm">
+    <div class="bg-white w-[800px] rounded-xl p-8 shadow-2xl">
+        <div class="flex justify-between items-center mb-6">
+            <h2 id="modalTitle" class="text-2xl font-bold text-gray-900">Thêm Mới</h2>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 text-3xl">&times;</button>
+        </div>
+
+        <input type="hidden" id="inpId">
+
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Họ và tên</label>
+                <input type="text" id="inpName" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400">
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Số điện thoại (Username)</label>
+                <input type="text" id="inpPhone" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400">
+            </div>
+            <div class="col-span-2">
+                <label class="block text-gray-700 font-medium mb-2">Email</label>
+                <input type="email" id="inpEmail" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400">
+            </div>
+            <div class="col-span-2">
+                <label class="block text-gray-700 font-medium mb-2">Địa chỉ</label>
+                <input type="text" id="inpAddress" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400">
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Chức vụ</label>
+                <select id="inpRole" class="w-full p-3 border rounded-lg outline-none bg-white">
+                    {% for r in roles %}
+                        <option value="{{ r.name }}">{{ r.value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Mật khẩu</label>
+                <input type="password" id="inpPass" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400">
+            </div>
+        </div>
+
+        <div class="mt-8 flex justify-end gap-3 border-t pt-4">
+            <button onclick="closeModal()" class="px-6 py-2 rounded-lg border hover:bg-gray-50">Hủy</button>
+            <button onclick="saveAccount()" class="px-6 py-2 rounded-lg bg-[#FCD34D] font-bold hover:bg-[#fbbf24]">Lưu</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(mode, user = null) {
+        document.getElementById('empModal').classList.remove('hidden');
+        if(mode === 'ADD') {
+            document.getElementById('modalTitle').innerText = "Thêm Nhân Viên";
+            document.getElementById('inpId').value = "";
+            document.getElementById('inpName').value = "";
+            document.getElementById('inpPhone').value = "";
+            document.getElementById('inpEmail').value = "";
+            document.getElementById('inpAddress').value = "";
+            document.getElementById('inpPass').value = "";
+
+            document.getElementById('inpRole').selectedIndex = 0;
+        } else {
+            document.getElementById('modalTitle').innerText = "Cập Nhật";
+            document.getElementById('inpId').value = user.id;
+            document.getElementById('inpName').value = user.name;
+            document.getElementById('inpPhone').value = user.phone;
+            document.getElementById('inpEmail').value = user.email;
+            document.getElementById('inpAddress').value = user.address;
+
+            document.getElementById('inpRole').value = user.role;
+
+            document.getElementById('inpPass').value = "";
+        }
+    }
+
+
+    async function saveAccount() {
+        let id = document.getElementById('inpId').value;
+        let url = id ? '/api/admin/employee/update' : '/api/admin/employee/add';
+
+        let formData = new FormData();
+        if(id) formData.append('id', id);
+        formData.append('name', document.getElementById('inpName').value);
+        formData.append('phone', document.getElementById('inpPhone').value);
+        formData.append('email', document.getElementById('inpEmail').value);
+        formData.append('address', document.getElementById('inpAddress').value);
+        formData.append('role', document.getElementById('inpRole').value);
+        formData.append('password', document.getElementById('inpPass').value);
+
+        try {
+            let response = await fetch(url, { method: 'POST', body: formData });
+            let result = await response.json();
+            if (result.success) {
+                alert(result.message);
+                location.reload();
+            } else {
+                alert('Lỗi: ' + result.message);
+            }
+        } catch (err) {
+            alert('Lỗi kết nối server!');
+        }
+    }
+</script>
+{% endblock %}

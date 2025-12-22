@@ -27,3 +27,14 @@ class Product(BaseModel):
     serialize_rules = ('-cart_details', '-ingredients.product')
     def __str__(self):
         return self.name
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'price': self.price,
+            'unit': self.unit,
+            'description': self.description,
+            'image': self.image,
+            'dish_category_id': self.dish_category_id
+        }
