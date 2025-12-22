@@ -7,6 +7,8 @@ from eapp.models.Account import Account
 from eapp.models.Invoice import Invoice, InvoiceStatusEnum, PaymentMethod
 from eapp.models.Payment import PaymentStatus
 from eapp.models.Product import Product
+from eapp.services.inventory import StockService
+from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp.services.inventory.RecipeService import RecipeService
 from sqlalchemy.dialects import mysql
 
@@ -78,14 +80,28 @@ def test_query():
     print(query.statement)
     print(query.all())
 
+def demo():
+    data = [
+        {
+            'product_id' : 1,
+            'quantity' : 150
+        },
+        {
+            'product_id' : 2,
+            'quantity' : 50
+        }
+    ]
+    kq = InventoryValidator.get_insufficient_products(data,1)
+    print(kq)
+    print(WarehouseDAO.get_available_stock_map(1))
 
 
 if __name__ == '__main__':
     with app.app_context():
-        fil = InvoiceFilter(keyword="huy")
-        print(fil)
-        pprint(parse_dict(InvoiceDAO.list(fil)))
-        
+        # fil = InvoiceFilter(keyword="huy")
+        # print(fil)
+        # pprint(parse_dict(InvoiceDAO.list(fil)))
+        demo()
         # print(ProductDao.get_product_recipe_map())
         # print(WarehouseDAO.get_stock_map(1))
         # print(InventoryService.get_product_makeable_map(ProductDao.list(),1))

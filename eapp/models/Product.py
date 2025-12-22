@@ -24,17 +24,7 @@ class Product(BaseModel):
 
     ingredients = relationship('ProductRecipe', backref='product', lazy=True)
     invoice_details = relationship('InvoiceDetail', backref='product', lazy=True)
-    serialize_rules = ('-cart_details', '-ingredients.product')
+    serialize_rules = ('-cart_details', '-ingredients.product', '-invoice_details')
     def __str__(self):
         return self.name
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'price': self.price,
-            'unit': self.unit,
-            'description': self.description,
-            'image': self.image,
-            'dish_category_id': self.dish_category_id
-        }

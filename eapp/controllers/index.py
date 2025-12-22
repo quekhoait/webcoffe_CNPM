@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy import desc #hàm sx giảm dần
 
 from eapp.dao import CategoryDao, ProductDao
-from eapp.models import Category, Product
+from eapp.models import Category
 from flask import render_template, request
 
 from eapp.services.inventory.InventoryValidator import InventoryValidator
@@ -212,6 +212,8 @@ def load_my_cart():
 
 def get_current_warehouse():
     return 1
+def load_my_cart():
+    return render_template('page/cart.html')
 
 
 

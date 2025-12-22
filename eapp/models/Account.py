@@ -11,6 +11,12 @@ class Role(Enum):
     WAREHOUSE_KEEPER="Thủ Kho"
     ADMIN="Quản lý"
 
+class Role(Enum):
+    USER="Người Dùng"
+    STAFF="Nhân Viên"
+    CASHIER="Thu Ngân"
+    WAREHOUSE_KEEPER="Thủ Kho"
+    ADMIN="Quản lý"
 class Account(BaseModel, UserMixin):
     username = Column(String(100), nullable=False, unique=True)
     phone = Column(String(25), nullable=False, unique=True)
