@@ -18,7 +18,7 @@ def index():
     except Exception as e:
         users = []
 
-    return render_template('admin/employee_manage.html', users=users, roles=Role)
+    return render_template('admin/admin.html', users=users, roles=Role)
 
 
 def api_add():

@@ -1,16 +1,4 @@
-{% extends 'layout/base.html' %}
-
-{% block header %}{% endblock %}
-{% block footer %}{% endblock %}
-
-{% block title %}Báo cáo Doanh thu{% endblock %}
-
-{% block content %}
-<div class="flex min-h-screen bg-[#F9FAFB]">
-
-    {% include 'admin/manageproduct_sidebar.html' %}
-
-    <main class="flex-1 p-8 h-screen overflow-y-auto">
+ <main class="flex-1 p-8 h-screen overflow-y-auto">
         <div class="container-fluid p-4">
             <!-- HEADER -->
             <div class="d-flex justify-content-between align-items-start mb-4">
@@ -179,7 +167,7 @@
 
         </div>
     </main>
-</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 <!--Mở form-->
@@ -257,4 +245,3 @@ new Chart(ctx, {
 
 </script>
 
-{% endblock %}

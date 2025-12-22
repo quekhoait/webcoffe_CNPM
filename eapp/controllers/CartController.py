@@ -1,4 +1,4 @@
-from flask import app, jsonify, render_template, request, session
+from flask import app, jsonify, render_template, request, session, redirect, url_for
 # from sklearn.gaussian_process.kernels import Product
 
 from eapp.dao import CartDao
@@ -28,6 +28,7 @@ def add_to_cart():
 def get_cart_by_userId():
     user_id = current_user.id
     cart_items = CartDao.get_cart_by_userId_dao(user_id)
+
     warehouse_id = session.get('warehouse_id', 1)
     # Lấy tồn kho 1 lần
     available_stock_map = InventoryValidator.get_product_makeable_map(cart_items,session.get('warehouse_id',1))
@@ -45,8 +46,6 @@ def get_cart_by_userId():
             "in_stock": check["makeable_quantity"] >= quantity,
             "makeable_quantity": check["makeable_quantity"]
         }
-    print(cart_items)
-    print(list_prod_status)
     return render_template(
         'page/cart_component_item.html',
         list_prod=cart_items,
@@ -67,8 +66,9 @@ def load_my_cart():
     user_id = current_user.id
     # Lấy sản phẩm trong giỏ hàng
     cart_item = CartDao.get_cart_by_userId_dao(user_id)
-    # Lấy đơn hàng
-    tab = request.args.get("tab", "order_all")
+    tab = request.args.get('tab')
+    if not tab:
+        return redirect(url_for('my-cart', tab='order_all'))
     invoice_status = None
     payment_status = None
 
@@ -85,6 +85,7 @@ def load_my_cart():
 
     elif tab == "cancelled":
         invoice_status = InvoiceStatusEnum.CANCELLED
+        payment_status = PaymentStatus.failed
 
     list_prod = ProductDao.get_product_by_status_dao(
         user_id=current_user.id,

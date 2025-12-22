@@ -1,0 +1,25 @@
+{% extends "layout/base.html" %}
+
+{% block header %}
+{% endblock%}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+
+{% endblock %}
+{% block content %}
+ <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-[20%] bg-[#2a1e15]">
+        {% include "admin/manageproduct_sidebar.html" %}
+    </aside>
+
+    <!-- Main content -->
+    <main class="w-[80%] flex-1 p-6">
+        {% include "admin/employee_manage.html" %}
+<!--         {% include "admin/overview.html" %}-->
+    </main>
+
+</div>
+{% endblock %}

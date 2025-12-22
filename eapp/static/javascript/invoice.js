@@ -105,7 +105,6 @@ function removeItemFromInvoice(id) {
 }
 
 function submitInvoice() {
-
     orderItem = document.querySelector('.list-order-item')
     if (!orderItem || orderItem.children.length === 0) {
         alert("Hóa đơn phải có ít nhất 1 món")
@@ -187,5 +186,6 @@ function isInvalidValue(currentValue, newValue) {
     }
     return message
 }
+
 
 

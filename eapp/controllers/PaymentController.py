@@ -9,8 +9,8 @@ from flask import render_template, request, session, redirect
 from flask_login import current_user, login_required
 from eapp.dao import ProductDao
 from eapp import db
-
-
+from eapp.services.inventory.StockService import StockService
+from eapp.controllers import index
 
 def load_data():
 
@@ -77,10 +77,16 @@ def created_payment():
         payment_method=payment_method,
         note=note
     )
+
     for item in cart_items:
         prod=ProductDao.get_by_id(item["product_id"])
         PaymentDao.create_InvoiceDetail_dao(prod.id, invoice.id, int(item["quantity"]),prod.price)
 
+    StockService.reserve_stock_for_invoice(
+        invoice=invoice,
+        warehouse_id=index.get_current_warehouse()
+
+    )
     momo_order_id = f"{invoice.order_code}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
     payment=PaymentDao.create_Payment_dao(
         invoice_id=invoice.id,
