@@ -1,15 +1,3 @@
-{% extends 'layout/base.html' %}
-
-{% block header %}{% endblock %}
-{% block footer %}{% endblock %}
-
-{% block title %}Quản lý Sản phẩm{% endblock %}
-
-{% block content %}
-<div class="flex min-h-screen bg-[#F9FAFB]">
-
-    {% include 'admin/manageproduct_sidebar.html' %}
-
 
     <main class="flex-1 p-8 h-screen overflow-y-auto">
         <div class="flex justify-between items-start mb-8">
@@ -179,7 +167,7 @@
     </div>
 </template>
 
-{% block scripts %}
+
 <script>
     const ALL_INGREDIENTS = [
         {% for ing in ingredients %}
@@ -194,6 +182,5 @@
     ];
 </script>
 <script src="{{ url_for('static', filename='javascript/admin_product.js') }}"></script>
-{% endblock %}
 
-{% endblock %}
+
