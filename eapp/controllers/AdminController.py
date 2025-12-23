@@ -5,7 +5,7 @@ from eapp.dao import ProductDao, CategoryDao
 from eapp.dao.IngredientDAO import IngredientDAO
 
 
-def index():
+def load_product():
     products_db = ProductDao.list()
     products = [p.to_dict() for p in products_db]
 

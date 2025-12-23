@@ -1,12 +1,4 @@
-{% extends 'layout/base.html' %}
 
-{% block header %}{% endblock %}
-{% block footer %}{% endblock %}
-
-{% block title %}Quản lý Sản phẩm{% endblock %}
-
-{% block content %}
-<div class="min-h-screen bg-[#F9FAFB] pt-[100px] pb-10 px-6">
 
     <main class="flex-1 p-8 h-screen overflow-y-auto">
         <div class="flex justify-between items-start mb-8">
@@ -87,7 +79,6 @@
             </table>
         </div>
     </main>
-</div>
 
 <div id="productModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center backdrop-blur-lg">
     <div class="bg-white w-[1000px] h-[90vh] rounded-xl p-0 shadow-2xl flex flex-col overflow-hidden">
@@ -176,7 +167,7 @@
     </div>
 </template>
 
-{% block scripts %}
+
 <script>
     const ALL_INGREDIENTS = [
         {% for ing in ingredients %}
@@ -191,6 +182,5 @@
     ];
 </script>
 <script src="{{ url_for('static', filename='javascript/admin_product.js') }}"></script>
-{% endblock %}
 
-{% endblock %}
+

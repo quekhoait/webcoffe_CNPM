@@ -4,10 +4,10 @@ from datetime import datetime
 
 from sqlalchemy import desc #hàm sx giảm dần
 
-from eapp.dao import CategoryDao, ProductDao
-from eapp.models import Category
+from eapp.dao import CategoryDao, ProductDao, AccountDAO
+from eapp.models import Category, Product
 from flask import render_template, request
-
+from eapp.models.Account import Role
 from eapp.services.inventory.InventoryValidator import InventoryValidator
 
 
@@ -57,8 +57,22 @@ def get_current_warehouse():
 def load_my_cart():
     return render_template('page/cart.html')
 
-def load_overview():
-    return render_template('admin/overview.html')
+
+def load_admin():
+    return render_template('admin/admin.html')
+
+def load_employee():
+    try:
+        users = AccountDAO.get_all_employees()
+        # users = AccountDAO.get_all_employees()
+        # chuyen doi tuong user thanh json (dict)
+        # ra hieu dong nay ne sep
+        users = [ u.to_dict() for u in AccountDAO.get_all_employees() ]
+
+    except Exception as e:
+        users = []
+    return render_template('admin/employee_manage.html', users=users, roles=Role)
+
 
 
 

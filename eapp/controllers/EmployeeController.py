@@ -11,7 +11,7 @@ from eapp.models.Account import Role
 
 def index():
     try:
-        users = AccountDao.get_all_employees()
+        users = AccountDAO.get_all_employees()
     except Exception as e:
         print(f"Lỗi: {e}")
         users = []

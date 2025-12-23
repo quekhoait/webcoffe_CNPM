@@ -60,8 +60,6 @@ def created_payment():
     note = data.get("note")
     payment_method = data.get("payment_method")
     cart_items = session.get("checkout_items")
-    import pdb
-    pdb.set_trace()
     if not cart_items:
         return jsonify({"status": "error", "message": "Giỏ hàng trống"})
 
