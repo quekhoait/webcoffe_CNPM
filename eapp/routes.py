@@ -6,8 +6,7 @@ from flask import Flask, render_template
 # from eapp.dao.Product import get_product
 from eapp import app
 from eapp.controllers import AccountController, CashierController, ProductController, StaffController, \
-    WarehouseController, index, \
-    CartController, PaymentController, OverviewController
+    WarehouseController, index, CartController, PaymentController, OverviewController
 
 from eapp.Momo import momo
 from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index, AdminController, EmployeeController
@@ -100,15 +99,19 @@ app.add_url_rule('/api/get-rule-calulate','get-rule-calulate',CartController.tin
 
 
 #product_manage
-app.add_url_rule('/admin/products', 'admin_product_index', AdminController.index, methods=['GET'])
+
 
 app.add_url_rule('/api/admin/product/add', 'api_add_product', AdminController.api_add_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminController.api_update_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminController.api_delete_product, methods=['POST'])
 
 #employee_manage
-app.add_url_rule('/dashboard/admin', 'admin', EmployeeController.index, methods=['GET'])
-# app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
+app.add_url_rule('/dashboard/admin', 'admin',index.load_admin)
+app.add_url_rule('/dashboard/admin/overview', 'overview',OverviewController.load_overview)
+app.add_url_rule('/dashboard/admin/products', 'admin_products',AdminController.load_product, methods=['GET'])
+app.add_url_rule('/dashboard/admin/employees', 'admin_employee', index.load_employee, methods=['GET'])
+
+
 
 
 # app.add_url_rule('api/admin/overview', 'overview', OverviewController.load_overview)
@@ -118,4 +121,4 @@ app.add_url_rule('/api/admin/employees/update', 'api_update', EmployeeController
 app.add_url_rule('/api/admin/employees/delete', 'api_delete', EmployeeController.api_delete, methods=['POST'])
 app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.api_add_category, methods=['POST'])
 
-app.add_url_rule('/admin/overview', 'overview', OverviewController.load_overview)
+
