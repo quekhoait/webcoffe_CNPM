@@ -1,3 +1,5 @@
+{% extends 'page/cart.html' %}
+{% block cart_content %}
 {% if list_order %}
   {% for product, invoice, payment in list_order %}
   <div
@@ -109,7 +111,7 @@
           <img src="{{ item.product.image }}" alt="{{ item.product.name }}" class="w-full h-full object-cover">
         </div>
         <span class="ml-4">
-          {{ item.quantity }}x {{ item.product.name }}
+         {{ item.product.name }} x {{ item.quantity }}
         </span>
       </div>
        <span class="font-medium text-2xl text-gray-800">
@@ -127,7 +129,7 @@
     </div>
   </div>
   {% endfor %}
-{% else %}
-  <p class="text-xl text-gray-500">Không có đơn hàng</p>
+
 {% endif %}
 <script src="{{ url_for('static', filename='javascript/cart.js') }}"></script>
+{% endblock %}

@@ -44,7 +44,12 @@ function openModal(mode, staff = null) {
         document.getElementById('passNote').innerText = "(Để trống nếu không đổi)";
         
         document.getElementById('statusContainer').classList.remove('hidden');
-        document.getElementById('inpActive').checked = staff.status;
+        if(staff.status === false){
+            document.getElementById('statusContainer').querySelector('span').innerText="Ngừng hoạt động"
+        }else{
+            document.getElementById('statusContainer').querySelector('span').innerText="Đang hoạt động"
+        }
+
     }
 }
 
@@ -114,14 +119,14 @@ async function saveStaff() {
 
 function deleteStaff(id) {
     if (!confirm("Bạn có chắc chắn muốn KHÓA tài khoản nhân viên này không?")) return;
-    
-    fetch('/api/admin/employee/delete', {
+    fetch('/api/admin/employees/delete', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({id: id})
     })
     .then(res => res.json())
     .then(data => {
+        console.log(data)
         if(data.success) {
             alert(data.message);
             location.reload();
@@ -130,7 +135,30 @@ function deleteStaff(id) {
         }
     })
     .catch(err => {
-        alert("Lỗi hệ thống!");
+        alert("Lỗi hệ thống!" + err.message);
+        console.error(err);
+    });
+}
+
+function openStaff(id) {
+    if (!confirm("Bạn có chắc chắn muốn mở khóa tài khoản nhân viên này không?")) return;
+    fetch('/api/admin/employees/open', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: id})
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+        if(data.success) {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert("Lỗi: " + data.message);
+        }
+    })
+    .catch(err => {
+        alert("Lỗi hệ thống!" + err.message);
         console.error(err);
     });
 }

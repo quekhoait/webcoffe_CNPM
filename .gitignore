@@ -213,3 +213,4 @@ node_modules/
 #eapp/static/css/output.css
 package-lock.json
 package.json
+.idea/

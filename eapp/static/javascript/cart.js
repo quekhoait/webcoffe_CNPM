@@ -67,6 +67,19 @@ document.querySelectorAll(".btn-change-cancel").forEach(btn => {
     });
 });
 
+////Tìm kiếm đơn hàng
+function searchOrder() {
+    const keyword = document.getElementById('input_search_order').value;
+
+    const tab = "{{ request.args.get('tab', 'order_all') }}"; // giữ tab hiện tại
+    // Gửi request tới server với query string search và tab
+    fetch(`/my-cart?tab=${tab}&search=${encodeURIComponent(keyword)}`)
+        .then(response => response.text())
+        .then(html => {
+            // Cập nhật phần chứa danh sách sản phẩm
+            document.querySelector('#order-list-container').innerHTML = html;
+        });
+}
 
 
 

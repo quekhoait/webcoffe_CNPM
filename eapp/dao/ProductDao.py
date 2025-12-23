@@ -52,7 +52,7 @@ def get_product_recipe_map():
     return product_recipe
 
 
-def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None):
+def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None, search_key=None):
     query = (
         Invoice.query
         .join(Payment, Payment.invoice_id == Invoice.id)
@@ -60,16 +60,21 @@ def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None)
         .join(Product, Product.id == InvoiceDetail.product_id)
         .filter(Invoice.customer_id == user_id)
     )
+
     if invoice_status is not None:
         query = query.filter(Invoice.invoice_status == invoice_status)
     if payment_status is not None:
         query = query.filter(Payment.status == payment_status)
+    if search_key:  # thêm điều kiện tìm kiếm
+        query = query.filter(Product.name.ilike(f"%{search_key}%"))
+
     result = query.with_entities(
         Product,
         Invoice,
         Payment
     ).all()
     return result
+
 
 
 def add_product(data, recipes=[]):
@@ -80,12 +85,10 @@ def add_product(data, recipes=[]):
             unit=data.get('unit'),
             dish_category_id=data.get('dish_category_id'),
             description=data.get('description'),
-            image=data.get('image'),
-            status=ProductStatus.ACTIVE
+            image=data.get('image')
         )
         db.session.add(new_product)
         db.session.flush()
-
         #lưu công thức
         for item in recipes:
             if item.get('ingredient_id'):
@@ -150,3 +153,5 @@ def delete_product(product_id):
     except Exception as ex:
         db.session.rollback()
         return False
+
+

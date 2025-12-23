@@ -48,5 +48,5 @@ def create_warehouse_slip():
 
     except Exception as ex:
         db.session.rollback()
-        app.logger.error(f"Lỗi khi tạo phiếu kho: {str(ex)}")
+        app.logger.error(f"Lỗi khi tạo phiếu kho: {str(ex)}", exc_info=True)
         return jsonify({"success": False, "message": "Đã xảy ra lỗi hệ thống khi tạo phiếu kho"})

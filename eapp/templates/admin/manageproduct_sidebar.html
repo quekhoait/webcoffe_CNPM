@@ -21,23 +21,21 @@
     <nav class="flex-1 px-8 space-y-3">
 
         <!-- Tổng quan -->
-        <a href="#"
+        <a href="/dashboard/admin/overview"
            class="nav-item active flex items-center gap-3 px-6 py-4 rounded-2xl
                   text-lg text-gray-900 bg-gray-100 font-semibold
                   shadow-sm transition-all duration-200"
-           data-url="/dashboard/admin/overview"
-           onclick="loadPage(event, this)">
+           data-url="/dashboard/admin/overview">
             <i class="fa-solid fa-table-cells-large text-2xl w-8"></i>
             <span>Tổng quan</span>
         </a>
 
         <!-- Sản phẩm -->
-        <a href="#"
+        <a href="/dashboard/admin/products"
            class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl
                   text-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900
                   transition-all duration-200"
-           data-url="/dashboard/admin/products"
-           onclick="loadPage(event, this)">
+           data-url="/dashboard/admin/products">
             <i class="fa-solid fa-mug-hot text-2xl w-8"></i>
             <span>Sản phẩm</span>
         </a>
@@ -48,7 +46,7 @@
                   text-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900
                   transition-all duration-200"
            data-url="/dashboard/admin/employees"
-           onclick="loadPage(event, this)">
+       >
             <i class="fa-solid fa-users text-2xl w-8"></i>
             <span>Nhân viên</span>
         </a>
@@ -58,21 +56,9 @@
            class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl
                   text-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900
                   transition-all duration-200"
-           data-url="/dashboard/admin/rule"
-           onclick="loadPage(event, this)">
+           data-url="/dashboard/admin/rule">
             <i class="fa-solid fa-file-lines text-2xl w-8"></i>
             <span>Quy định</span>
-        </a>
-
-        <!-- Kho hàng -->
-        <a href="/dashboard/admin/warehouse"
-           class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl
-                  text-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900
-                  transition-all duration-200"
-           data-url="/dashboard/admin/warehouse"
-           onclick="loadPage(event, this)">
-            <i class="fa-solid fa-warehouse text-2xl w-8"></i>
-            <span>Kho hàng</span>
         </a>
 
     </nav>
@@ -88,38 +74,3 @@
     </div>
 
 </aside>
-<script>
-    function loadPage(event, el) {
-    event.preventDefault();
-    console.log(el)
-    document.querySelectorAll('.nav-item')
-        .forEach(item => {
-            item.classList.remove(
-                'active',
-                'bg-gray-100',
-                'text-gray-900',
-                'font-semibold',
-                'shadow-sm'
-            );
-            item.classList.add('text-gray-500');
-        });
-
-    el.classList.add(
-        'active',
-        'bg-gray-100',
-        'text-gray-900',
-        'font-semibold',
-        'shadow-sm'
-    );
-    el.classList.remove('text-gray-500');
-
-    fetch(el.dataset.url)
-        .then(res => res.text())
-        .then(html => {
-        console.log(html)
-            document.getElementById('main-content').innerHTML = html;
-        });
-
-    history.pushState(null, '', el.dataset.url);
-}
-</script>

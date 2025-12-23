@@ -17,5 +17,4 @@ class SlipStrategy:
                     quantity=slip_detail.quantity
                 )
             warehouse.stocks.append(new_stock)
-        print(f"====={stock.quantity} : {stock.reserved}")
         

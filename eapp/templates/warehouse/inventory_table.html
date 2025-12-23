@@ -41,7 +41,7 @@
             {% else %}
             <!-- Còn hàng -->
             <tr class="border-b border-gray-50 bg-green-50 hover:bg-green-100">
-                <td class="py-4 pl-2 font-medium">{{ stock.ingredient.name }}</td>
+                <td class="py-4 pl-2 font-medium">{{ stock.ingredient.name }}  - {{ stock.ingredient.id }}</td>
                 <td class="py-4 text-center font-bold">{{ stock.quantity }}</td>
                 <td class="py-4 text-center font-bold">{{ stock.reserved }}</td>
                 <td class="py-4 text-center font-bold">{{ stock.quantity - stock.reserved }}</td>
