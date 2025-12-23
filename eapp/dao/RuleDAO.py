@@ -13,7 +13,7 @@ def list(params: RuleFilter = None):
 
         if params:
             if params.rule_type:
-                query = query.filter(Rule.rule_type == RuleType[params.rule_type])
+                query = query.filter(Rule.rule_type == params.rule_type)
 
         return query.all()
     except Exception as ex:

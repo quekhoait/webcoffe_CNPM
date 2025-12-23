@@ -122,18 +122,25 @@ function hideDropdown(dropdown) {
 
 function renderListComboBox(keyword, dropdown) {
     const kw = keyword.toLowerCase();
-    const results = ingredients.filter(i => i.name.toLowerCase().includes(kw));
+    const selectedIds = getSelectedIngredientIds();
+
+    const results = ingredients.filter(i =>
+        i.name.toLowerCase().includes(kw) &&
+        !selectedIds.includes(String(i.id))
+    );
 
     dropdown.innerHTML =
         results.length === 0
             ? `<div class="p-3 text-gray-500">Không tìm thấy</div>`
             : results.map(i => `
                 <div class="p-3 hover:bg-gray-100 cursor-pointer"
-                    data-id="${i.id}" data-value="${i.name}">
+                    data-id="${i.id}"
+                    data-value="${i.name}">
                     ${i.name} (${i.unit})
                 </div>
             `).join("");
 }
+
 
 document.getElementById('toggle-edit-button').addEventListener('click', e => {
     buttons = document.querySelectorAll('#ingredients-container .ingredient-row .delete-row')
@@ -212,3 +219,8 @@ function createWarehouseSlip(){
     )
 }
 
+function getSelectedIngredientIds() {
+    return Array.from(document.querySelectorAll(".ingredient-row input[type=text]"))
+        .map(input => input.dataset.id)
+        .filter(Boolean); // loại null / undefined
+}
