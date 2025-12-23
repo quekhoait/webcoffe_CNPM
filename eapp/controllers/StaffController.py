@@ -18,7 +18,7 @@ def load_staff():
     category = CategoryDao.list()
     products = ProductDao.list()
     invoice = session.get('invoice', {})
-    rules = RuleDAO.list(RuleDAO.RuleFilter({'rule_type': RuleType.SERVICE}))
+    rules = RuleDAO.list(RuleDAO.RuleFilter(rule_type=RuleType.SERVICE))
     total_price_tmp = InvoiceService.calculate_total(list(invoice.values()))
     total_price = InvoiceService.calculate_final_total(total_price_tmp)
     status_map = InventoryValidator.get_product_makeable_map(products=products,warehouse_id=session.get('warehouse_id',1))

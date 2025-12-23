@@ -75,6 +75,15 @@
             <span>Kho hàng</span>
         </a>
 
+        <a href="/admin/employees" class="flex items-center px-6 py-4 text-gray-600 hover:bg-gray-100 rounded-2xl transition group text-lg">
+            <i class="fa-solid fa-users w-10 text-gray-400 group-hover:text-gray-600 text-2xl"></i>
+            <span>Nhân viên</span>
+        </a>
+
+        <a href="/admin/reports" class="flex items-center px-6 py-4 text-gray-600 hover:bg-gray-100 rounded-2xl transition group text-lg">
+            <i class="fa-solid fa-chart-column w-10 text-gray-400 group-hover:text-gray-600 text-2xl"></i>
+            <span>Báo cáo</span>
+        </a>
     </nav>
 
     <!-- Logout -->
@@ -88,38 +97,3 @@
     </div>
 
 </aside>
-<script>
-    function loadPage(event, el) {
-    event.preventDefault();
-    console.log(el)
-    document.querySelectorAll('.nav-item')
-        .forEach(item => {
-            item.classList.remove(
-                'active',
-                'bg-gray-100',
-                'text-gray-900',
-                'font-semibold',
-                'shadow-sm'
-            );
-            item.classList.add('text-gray-500');
-        });
-
-    el.classList.add(
-        'active',
-        'bg-gray-100',
-        'text-gray-900',
-        'font-semibold',
-        'shadow-sm'
-    );
-    el.classList.remove('text-gray-500');
-
-    fetch(el.dataset.url)
-        .then(res => res.text())
-        .then(html => {
-        console.log(html)
-            document.getElementById('main-content').innerHTML = html;
-        });
-
-    history.pushState(null, '', el.dataset.url);
-}
-</script>

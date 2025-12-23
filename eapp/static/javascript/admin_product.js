@@ -85,8 +85,11 @@ function addRecipeRow(data = null) {
 function showDropdown(input, dropdown) {
     //đóng các dropdown khác
     document.querySelectorAll('.ing-dropdown').forEach(d => d.classList.add('hidden'));
+
     dropdown.classList.remove("hidden");
+
     dropdown.style.zIndex = "9999";
+
     renderListComboBox(input.value, dropdown);
 }
 
@@ -310,6 +313,7 @@ function filterTableData(categoryName) {
 
         const productName = row.querySelector('td:nth-child(1) .font-bold').innerText.toLowerCase();
 
+        const categoryCell = row.querySelector('td:nth-child(3) span');
         const rowCategory = categoryCell ? categoryCell.innerText.trim() : "";
 
         const matchCategory = (categoryName === 'Tất cả loại' || rowCategory === categoryName);

@@ -13,6 +13,7 @@ from eapp.services.inventory.StockService import StockService
 from eapp.controllers import index
 
 def load_data():
+
     if request.method == "POST":
         session["checkout_items"] = request.json
     items = session.get("checkout_items")
@@ -55,7 +56,6 @@ def created_payment():
     note = data.get("note")
     payment_method = data.get("payment_method")
     cart_items = session.get("checkout_items")
-    print(cart_items)
     if not cart_items:
         return jsonify({"status": "error", "message": "Giỏ hàng trống"})
 

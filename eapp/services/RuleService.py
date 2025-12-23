@@ -7,7 +7,7 @@ class RuleService:
 
     @staticmethod
     def calulate_service_fee(total : float) -> float:
-        rules = RuleDAO.list(RuleDAO.RuleFilter({'rule_type': RuleType.SERVICE}))
+        rules = RuleDAO.list(RuleDAO.RuleFilter(rule_type= RuleType.SERVICE))
         fee = 0
         for rule in rules:
             if rule.unit == "%":

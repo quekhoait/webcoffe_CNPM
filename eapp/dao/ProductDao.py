@@ -71,8 +71,6 @@ def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None)
     ).all()
     return result
 
-def get_by_id(id):
-    return Product.query.get(id)
 
 def add_product(data, recipes=[]):
     try:
@@ -85,6 +83,19 @@ def add_product(data, recipes=[]):
             image=data.get('image')
         )
         db.session.add(new_product)
+        db.session.flush()
+
+        #lưu công thức
+        for item in recipes:
+            if item.get('ingredient_id'):
+                recipe = ProductRecipe(
+                    product_id=new_product.id,
+                    ingredient_id=item['ingredient_id'],
+                    quantity=item['quantity'],
+                    unit=item['unit']
+                )
+                db.session.add(recipe)
+
         db.session.commit()
         return True
     except Exception as ex:
@@ -102,7 +113,6 @@ def update_product(product_id, data, recipes=None):
         product.unit = data.get('unit')
         product.dish_category_id = data.get('dish_category_id')
         product.description = data.get('description')
-
         if data.get('image'):
             product.image = data.get('image')
 
@@ -131,33 +141,13 @@ def delete_product(product_id):
     try:
         product = Product.query.get(product_id)
         if product:
-            #xóa công thức trước
             ProductRecipe.query.filter_by(product_id=product_id).delete()
-
             db.session.delete(product)
             db.session.commit()
             return True
         return False
     except Exception as ex:
-        print(f"Lỗi xóa: {ex}")
         db.session.rollback()
         return False
 
-def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None):
-    query = (
-        Invoice.query
-        .join(Payment, Payment.invoice_id == Invoice.id)
-        .join(InvoiceDetail, InvoiceDetail.invoice_id == Invoice.id)
-        .join(Product, Product.id == InvoiceDetail.product_id)
-        .filter(Invoice.customer_id == user_id)
-    )
-    if invoice_status is not None:
-        query = query.filter(Invoice.invoice_status == invoice_status)
-    if payment_status is not None:
-        query = query.filter(Payment.status == payment_status)
-    result = query.with_entities(
-        Product,
-        Invoice,
-        Payment
-    ).all()
-    return result
+
