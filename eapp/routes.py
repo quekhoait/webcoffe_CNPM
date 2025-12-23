@@ -96,7 +96,6 @@ app.add_url_rule('/api/get-rule-calulate','get-rule-calulate',CartController.tin
 
 
 #product_manage
-app.add_url_rule('/admin/products', 'admin_product_index', AdminController.index, methods=['GET'])
 
 app.add_url_rule('/api/admin/product/add', 'api_add_product', AdminController.api_add_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminController.api_update_product, methods=['POST'])
@@ -118,5 +117,5 @@ app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.
 
 
 #rule_manage
-app.add_url_rule('/admin/rule', 'admin_rule_index', RuleController.index, methods=['GET'])
+# app.add_url_rule('/admin/rule', 'admin_rule_index', RuleController.index, methods=['GET'])
 

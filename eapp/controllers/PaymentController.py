@@ -13,7 +13,6 @@ from eapp.services.inventory.StockService import StockService
 from eapp.controllers import index
 
 def load_data():
-
     if request.method == "POST":
         session["checkout_items"] = request.json
     items = session.get("checkout_items")

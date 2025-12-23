@@ -4,10 +4,10 @@ from datetime import datetime
 
 from sqlalchemy import desc #hàm sx giảm dần
 
-from eapp.dao import CategoryDao, ProductDao
+from eapp.dao import CategoryDao, ProductDao, AccountDAO
 from eapp.models import Category
 from flask import render_template, request
-
+from eapp.models.Account import Role
 from eapp.services.inventory.InventoryValidator import InventoryValidator
 
 

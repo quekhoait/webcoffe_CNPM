@@ -1,6 +1,6 @@
 function openModal(mode, staff = null) {
     const modal = document.getElementById('staffModal');
-
+    console.log(modal)
     modal.classList.remove('hidden');
 
     setTimeout(() => { 

@@ -24,4 +24,8 @@
 
 </div>
 {% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='javascript/employee.js') }}"></script>
 <script src="{{ url_for('static', filename='javascript/admin_product.js') }}"></script>
+ {% endblock %}
