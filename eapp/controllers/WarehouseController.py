@@ -1,10 +1,11 @@
+from pprint import pprint
 from flask import jsonify, render_template, request
 from eapp import app, db
 from eapp.dao.IngredientDAO import IngredientDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.models.Ingredient import Ingredient
 from eapp.models.WarehouseSlip import SlipType
-from eapp.services.inventory.StockService import StockService
+from eapp.services.inventory.StockService import IngredientStatus, StockService
 
 
 def warehouse_page():
@@ -14,12 +15,18 @@ def warehouse_page():
     slip_types = [(st.name, st.value) for st in SlipType]
     ingredient_stocks = StockService.load_stock(warehouse_id=warehouse_id)
     ingredients = IngredientDAO.list()
+    low_stock_list = [
+    item for item in ingredient_stocks
+    if item["status"] in [IngredientStatus.LOW_STOCK,IngredientStatus.OUT_OF_STOCK]
+]
+    pprint(low_stock_list)
     return render_template('warehouse/warehouse.html',
                            warehouse=warehouse,
                             slip_types=slip_types,
                            ingredient_stocks=ingredient_stocks,
                            ingredients=ingredients,
-                           warehouses=warehouses)
+                           warehouses=warehouses,
+                           low_stock_list=low_stock_list)
 
 #API
 def get_ingredients():

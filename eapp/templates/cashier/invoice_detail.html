@@ -83,10 +83,12 @@
                 <p class="font-medium">{{ invoice.subtotal }}₫</p>
             </div>
 
+            {% for rule in rules %}
             <div class="flex justify-between text-gray-700 text-base">
-                <p>Giảm giá</p>
-                <p class="font-medium text-red-500">0₫</p>
+                <p class="capitalize">{{ rule.name }}</p>
+                <p class="font-medium text-gray-500">{{ rule.value }} {{ rule.unit }}</p>
             </div>
+            {% endfor %}
 
             <hr class="border-t border-gray-100 pt-2">
 

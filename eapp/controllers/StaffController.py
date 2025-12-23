@@ -13,8 +13,6 @@ from eapp.services.admin import admin_required
 
 # @admin_required
 def load_staff():
-    # if 'available_stock_tmp' not in session:
-    #     session['available_stock_tmp'] = WarehouseDAO.get_available_stock_map(get_current_warehouse())
     user = current_user
     category = CategoryDao.list()
     products = ProductDao.list()
