@@ -1,3 +1,5 @@
+{% extends 'admin/admin.html' %}
+{% block admin_content %}
 <div class="flex min-h-screen bg-[#F9FAFB] font-sans">
     <main class="flex-1 p-8 h-screen overflow-y-auto">
         <div class="flex justify-between items-start mb-8">
@@ -98,9 +100,15 @@
                                 <button type="button" onclick='openModal("EDIT", {{ u | tojson }})' class="text-gray-400 hover:text-blue-600 transition text-lg">
                                     <i class="fa-solid fa-pen"></i>
                                 </button>
-                                <button type="button" onclick="deleteStaff({{ u.id }})" class="text-gray-400 hover:text-red-500 transition text-lg">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
+                                {% if u.status %}
+                                <div class="flex items-center gap-2 text-green-600 font-bold text-xs cursor-pointer" onclick="deleteStaff({{ u.id }})">
+                                   Khóa
+                                </div>
+                            {% else %}
+                                <div class="flex items-center gap-2 text-red-500 font-bold text-xs cursor-pointer" onclick="openStaff({{ u.id }})">
+                                    Mở khóa
+                                </div>
+                            {% endif %}
                             </div>
                         </td>
                     </tr>
@@ -146,17 +154,19 @@
                         <label class="block text-gray-700 font-bold mb-2">Mật khẩu <span id="passNote" class="font-normal text-xs text-gray-400 ml-1">(Mặc định: 123456)</span></label>
                         <input type="password" id="inpPassword" placeholder="••••••••" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400 bg-white">
                     </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Kho làm việc</label>
+                        <select id="inpWarehouse" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400 bg-white cursor-pointer">
+                            <option value="warehouse_main">Kho Tổng</option>
+                            <option value="warehouse_1">Kho 1 </option>
+                        </select>
+                    </div>
                 </div>
                 <div id="statusContainer" class="hidden pt-2">
                      <label class="flex items-center gap-3 cursor-pointer select-none">
-                        <input type="checkbox" id="inpActive" class="w-5 h-5 text-yellow-500 rounded focus:ring-yellow-400 border-gray-300 accent-[#5D4037]">
                         <span class="text-gray-700 font-medium">Đang hoạt động</span>
                      </label>
                 </div>
-            </div>
-            <div>
-                <label class="block text-gray-700 font-medium mb-2">Mật khẩu</label>
-                <input type="password" id="inpPass" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400">
             </div>
         </div>
 
@@ -166,3 +176,7 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='javascript/employee.js') }}"></script>
+{% endblock %}

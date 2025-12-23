@@ -80,12 +80,21 @@ def api_update():
 
 
 def api_delete():
-    data = request.json
+    data = request.get_json()
     try:
-        if AccountDAO.delete_employee_dao(data['id']):
+        if AccountDAO.delete_employee_dao(data.get('id')):
             return jsonify({'success': True, 'message': 'Đã khóa tài khoản nhân viên!'})
         else:
             return jsonify({'success': False, 'message': 'Lỗi khi xóa!'})
     except Exception as e:
         return jsonify({'success': False, 'message': 'Lỗi hệ thống: ' + str(e)})
 
+def api_open():
+    data = request.get_json()
+    try:
+        if AccountDAO.open_employee_dao(data.get('id')):
+            return jsonify({'success': True, 'message': 'Đã mở khóa tài khoản nhân viên!'})
+        else:
+            return jsonify({'success': False, 'message': 'Lỗi khi mở!'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': 'Lỗi hệ thống: ' + str(e)})

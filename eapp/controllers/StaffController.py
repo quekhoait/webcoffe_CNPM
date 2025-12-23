@@ -9,8 +9,9 @@ from eapp.models.Rule import RuleType
 from eapp.services.InvoiceService import InvoiceService
 from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp.services.inventory.RecipeService import RecipeService
+from eapp.services.admin import admin_required
 
-
+# @admin_required
 def load_staff():
     # if 'available_stock_tmp' not in session:
     #     session['available_stock_tmp'] = WarehouseDAO.get_available_stock_map(get_current_warehouse())

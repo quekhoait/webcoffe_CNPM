@@ -21,69 +21,46 @@
     <nav class="flex-1 px-8 space-y-3">
 
         <!-- Tổng quan -->
-        <a href="#"
+        <a href="/dashboard/admin/overview"
            class="nav-item active flex items-center gap-3 px-6 py-4 rounded-2xl
                   text-lg text-gray-900 bg-gray-100 font-semibold
                   shadow-sm transition-all duration-200"
-           data-url="/dashboard/admin/overview"
-           onclick="loadPage(event, this)">
+           data-url="/dashboard/admin/overview">
             <i class="fa-solid fa-table-cells-large text-2xl w-8"></i>
             <span>Tổng quan</span>
         </a>
 
         <!-- Sản phẩm -->
-        <a href="#"
+        <a href="/dashboard/admin/products"
            class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl
                   text-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900
                   transition-all duration-200"
-           data-url="/dashboard/admin/products"
-           onclick="loadPage(event, this)">
+           data-url="/dashboard/admin/products">
             <i class="fa-solid fa-mug-hot text-2xl w-8"></i>
             <span>Sản phẩm</span>
         </a>
 
         <!-- Nhân viên -->
-        <a href="#"
+        <a href="/dashboard/admin/employees"
            class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl
                   text-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900
                   transition-all duration-200"
            data-url="/dashboard/admin/employees"
-           onclick="loadPage(event, this)">
+       >
             <i class="fa-solid fa-users text-2xl w-8"></i>
             <span>Nhân viên</span>
         </a>
 
         <!-- Quy định -->
-        <a href="#"
+        <a href="/dashboard/admin/rule"
            class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl
                   text-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900
                   transition-all duration-200"
-           data-url="/dashboard/admin/rule"
-           onclick="loadPage(event, this)">
+           data-url="/dashboard/admin/rule">
             <i class="fa-solid fa-file-lines text-2xl w-8"></i>
             <span>Quy định</span>
         </a>
 
-        <!-- Kho hàng -->
-        <a href="/dashboard/admin/warehouse"
-           class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl
-                  text-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900
-                  transition-all duration-200"
-           data-url="/dashboard/admin/warehouse"
-           onclick="loadPage(event, this)">
-            <i class="fa-solid fa-warehouse text-2xl w-8"></i>
-            <span>Kho hàng</span>
-        </a>
-
-        <a href="/admin/employees" class="flex items-center px-6 py-4 text-gray-600 hover:bg-gray-100 rounded-2xl transition group text-lg">
-            <i class="fa-solid fa-users w-10 text-gray-400 group-hover:text-gray-600 text-2xl"></i>
-            <span>Nhân viên</span>
-        </a>
-
-        <a href="/admin/reports" class="flex items-center px-6 py-4 text-gray-600 hover:bg-gray-100 rounded-2xl transition group text-lg">
-            <i class="fa-solid fa-chart-column w-10 text-gray-400 group-hover:text-gray-600 text-2xl"></i>
-            <span>Báo cáo</span>
-        </a>
     </nav>
 
     <!-- Logout -->

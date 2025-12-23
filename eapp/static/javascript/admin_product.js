@@ -123,7 +123,7 @@ document.addEventListener("click", e => {
         document.querySelectorAll('.ing-dropdown').forEach(el => el.classList.add('hidden'));
     }
 });
-
+//Mở model product
 function openModal(mode, product = null) {
     const modal = document.getElementById('productModal');
     modal.classList.remove('hidden');
@@ -194,6 +194,7 @@ function closeModal() {
 }
 
 async function saveProduct() {
+
     let fd = new FormData();
     fd.append('id', document.getElementById('inpId').value);
     fd.append('name', document.getElementById('inpName').value);
@@ -218,11 +219,16 @@ async function saveProduct() {
         }
     });
     fd.append('recipes', JSON.stringify(recipes));
+        console.log(fd.get('recipes'))
+        if (!fd.get('name') ||!fd.get('price') ||!fd.get('unit') || !fd.get('category_id')||!fd.get('description')) {
+            showAlert("error", "Thông báo", "Vui lòng nhập đầy đủ thông tin món!");
+            return;
+        }
+        if(recipes.length===0){
+              showAlert("error", "Thông báo","Chưa ghi công thức!");
+            return;
+        }
 
-    if (!document.getElementById('inpName').value || !document.getElementById('inpPrice').value) {
-        alert("Vui lòng nhập tên món và giá bán!");
-        return;
-    }
 
     const url = fd.get('id') ? '/api/admin/product/update' : '/api/admin/product/add';
 
@@ -231,7 +237,7 @@ async function saveProduct() {
         const data = await res.json();
         if (data.success) {
             alert(data.message);
-            location.reload();
+            window.location.reload();
         } else {
             alert('Lỗi: ' + data.message);
         }

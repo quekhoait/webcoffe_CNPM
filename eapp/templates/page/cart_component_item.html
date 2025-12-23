@@ -1,3 +1,9 @@
+    {% if message  %}
+     <div class="pt-4 space-y-4 h-[270px] overflow-y-auto pr-2" >
+   <p class="text-red-500 text-center text-xl font-bold mb-2">{{ message }}</p>
+</div>
+
+    {%  else %}
 {% for prod in list_prod %}
 {% set in_stock = list_prod_status.get(prod.product.id, False) %}
 {% set quantity = prod.quantity %}
@@ -46,3 +52,4 @@
 </div>
 
 {% endfor %}
+    {% endif %}

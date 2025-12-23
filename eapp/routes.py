@@ -1,11 +1,13 @@
 # Cấu trúc route của các trang web bình thường
 
 from flask import Flask, render_template
+from jinja2.nodes import Or
+
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
 from eapp import app
 from eapp.controllers import AccountController, CashierController, ProductController, RuleController, StaffController, WarehouseController, index, \
-    CartController, PaymentController
+    CartController, PaymentController, OverviewController
 
 from eapp.Momo import momo
 from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index, AdminController, EmployeeController
@@ -100,19 +102,17 @@ app.add_url_rule('/api/get-rule-calulate','get-rule-calulate',CartController.tin
 
 
 #product_manage
-app.add_url_rule('/admin/products', 'admin_product_index', AdminController.index, methods=['GET'])
+
 
 app.add_url_rule('/api/admin/product/add', 'api_add_product', AdminController.api_add_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminController.api_update_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminController.api_delete_product, methods=['POST'])
 
 #employee_manage
-app.add_url_rule('/dashboard/admin', 'admin', EmployeeController.index, methods=['GET'])
+
 # app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
 
 
-# app.add_url_rule('api/admin/overview', 'overview', OverviewController.load_overview)
-app.add_url_rule('/dashboard/admin', 'admin',index.load_admin)
 app.add_url_rule('/dashboard/admin/overview', 'overview',OverviewController.load_overview)
 app.add_url_rule('/dashboard/admin/products', 'admin_products',AdminController.load_product, methods=['GET'])
 app.add_url_rule('/dashboard/admin/employees', 'admin_employee', index.load_employee, methods=['GET'])
@@ -122,6 +122,7 @@ app.add_url_rule('/dashboard/admin/employees', 'admin_employee', index.load_empl
 app.add_url_rule('/api/admin/employees/add', 'api_add', EmployeeController.api_add, methods=['POST'])
 app.add_url_rule('/api/admin/employees/update', 'api_update', EmployeeController.api_update, methods=['POST'])
 app.add_url_rule('/api/admin/employees/delete', 'api_delete', EmployeeController.api_delete, methods=['POST'])
+app.add_url_rule('/api/admin/employees/open', 'api_open', EmployeeController.api_open, methods=['POST'])
 app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.api_add_category, methods=['POST'])
 
 

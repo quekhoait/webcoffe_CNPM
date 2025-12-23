@@ -1,10 +1,10 @@
 {% extends 'layout/base.html' %} {% block title %}Giỏ hàng{% endblock %} {%
 block content %}
 <div class="w-full min-h-[100vh] bg-[--primary-color] pt-[100px] pb-10">
-  <div class="w-[86%] mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="w-[86%]  mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col lg:flex-row gap-8">
       <div class="flex-1 lg:w-2/3 space-y-8">
-        <div class="bg-white p-6 rounded-xl shadow-lg">
+        <div class="bg-white p-6 rounded-xl shadow-lg min-h-[200px]">
           <h2 class="text-4xl font-bold mb-10 text-gray-800">
             Đơn hàng của tôi
           </h2>
@@ -63,24 +63,31 @@ class="pb-2 text-2xl font-medium text-gray-500 hover:text-gray-700
               </p>
             </div>
 
-            <div class="relative w-full md:w-96 flex-shrink-0">
+
               <input
-                type="text"
-                placeholder="Tìm kiếm đơn hàng..."
-                class="w-full pl-10 pr-4 py-2 border border-gray-200 bg-white rounded-lg focus:ring-orange-500 focus:border-orange-500 text-2xl"
-              />
-              <i
-                class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
-              ></i>
-            </div>
+    type="text"
+    name="search"
+    id="input_search_order"
+    placeholder="Tìm kiếm sản phẩm..."
+    value="{{ request.args.get('search', '') }}"
+    class="w-full pl-10 pr-4 py-2 border border-gray-200 bg-white rounded-lg focus:ring-orange-500 focus:border-orange-500 text-2xl"
+    oninput="searchOrder()"
+/>
+
+
           </div>
 
-          <!--                    Các đơn hàng đang vvaf đã thanh toán-->
-   {% if list_order %}
-    {% set cart = list_order %}
-    {% include 'cart/my_order.html' %}
-{% endif %}
-
+<div id="order-list-container">
+    {% if list_order %}
+        {% block cart_content %}
+        <!-- nội dung con -->
+        {% endblock %}
+    {% else %}
+        <div class="col-span-full text-center py-20">
+            <p class="text-3xl text-gray-400">Không tìm thấy đơn hàng nào.</p>
+        </div>
+    {% endif %}
+</div>
           <!--============================-->
         </div>
         <!--                Giỏ hàng hiện tại-->

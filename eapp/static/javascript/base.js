@@ -136,10 +136,9 @@ function addToCart(productId, quantity=1) {
     .then(response => response.json())
     .then(data => {
         if (data.status == "success") {
-        alert(1)
             showAlert("success", "Thông báo", data.message);
         } else {
-            alert('Lỗi: ' + data.message);
+            showAlert('error', "Thông báo", data.message)
         }
     })
     .catch(err => console.error(err));
