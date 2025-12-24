@@ -319,7 +319,7 @@ function filterTableData(categoryName) {
 
         const productName = row.querySelector('td:nth-child(1) .font-bold').innerText.toLowerCase();
 
-        const categoryCell = row.querySelector('td:nth-child(3) span');
+        const categoryCell = row.querySelector('td:nth-child(3)');
         const rowCategory = categoryCell ? categoryCell.innerText.trim() : "";
 
         const matchCategory = (categoryName === 'Tất cả loại' || rowCategory === categoryName);
