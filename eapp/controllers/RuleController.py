@@ -5,7 +5,7 @@ from eapp.dao import RuleDAO
 from eapp.models.Rule import Rule, RuleType
 
 
-def index():
+def load_rule():
     rules = RuleDAO.list()
     rule_types = RuleType
     if request.method == 'POST':
@@ -26,7 +26,7 @@ def index():
         RuleDAO.create(rule)
         return redirect(url_for('rule'))
 
-    return render_template('rule/rule.html',
+    return render_template('admin/rule.html',
                         rules=rules,
                         rule_types=rule_types)
 

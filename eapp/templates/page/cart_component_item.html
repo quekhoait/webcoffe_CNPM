@@ -1,12 +1,17 @@
-    {% if message  %}
-     <div class="pt-4 space-y-4 h-[270px] overflow-y-auto pr-2" >
-   <p class="text-red-500 text-center text-xl font-bold mb-2">{{ message }}</p>
+{% if message %}
+<div class="pt-4 space-y-4 h-[270px] overflow-y-auto pr-2">
+    <p class="text-red-500 text-center text-xl font-bold mb-2">
+        {{ message }}
+    </p>
 </div>
+{% else %}
 
-    {%  else %}
 {% for prod in list_prod %}
-{% set in_stock = list_prod_status.get(prod.product.id, False) %}
+{% set status = list_prod_status.get(prod.product.id) %}
+{% set in_stock = status.in_stock if status else False %}
+{% set makeable_quantity = status.makeable_quantity if status else 0 %}
 {% set quantity = prod.quantity %}
+
 <div
     class="flex items-center bg-gray-50 rounded-lg p-2 space-x-2 cart-component-item-popup
            {% if not in_stock %} opacity-50 pointer-events-none {% endif %}"
@@ -35,7 +40,11 @@
 
         {% if not in_stock %}
             <span class="text-sm text-red-600 font-semibold">
-                Hết hàng
+                Không đủ số lượng (còn {{ makeable_quantity }})
+            </span>
+        {% else %}
+            <span class="text-sm text-red-600 font-semibold">
+               Số lượng (còn {{ makeable_quantity }})
             </span>
         {% endif %}
     </div>
@@ -52,4 +61,4 @@
 </div>
 
 {% endfor %}
-    {% endif %}
+{% endif %}

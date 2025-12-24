@@ -188,16 +188,28 @@ function calculateSubtotal(items, cart) {
 }
 
 
+
 function setupCheckboxEvents(items, subtotalElementId, cart) {
     items.forEach(item => {
         const checkbox = item.querySelector('.select-cart-component');
         if (!checkbox) return;
 
         checkbox.addEventListener("change", () => {
-            const total = calculateSubtotal(items, cart);
+            const checkedCount = document.querySelectorAll(
+                '.select-cart-component:checked'
+            ).length;
+
+            if (checkedCount > 10) {
+                checkbox.checked = false; // ❗ hủy tick
+                showAlert("warning", "Thông báo", "Số lượng không quá 10 món");
+                return;
+            }
+
+            calculateSubtotal(items, cart);
         });
     });
 }
+
 
 
 

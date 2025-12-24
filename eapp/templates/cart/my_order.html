@@ -29,6 +29,8 @@
         text-orange-600
     {% elif invoice.invoice_status.value == 'pending' and payment.status.value == 'success' %}
         text-orange-600
+        {% elif invoice.invoice_status.value == 'in_progress' and payment.status.value == 'success' %}
+        text-orange-600
     {% elif invoice.invoice_status.value == 'completed' and payment.status.value == 'success' %}
         text-green-700
     {% elif invoice.invoice_status.value == 'cancelled' %}
@@ -38,7 +40,9 @@
     {% if payment.status.value == 'pending' %}
         Chờ thanh toán
     {% elif invoice.invoice_status.value == 'pending' and payment.status.value == 'success' %}
-        Đang xử lý
+        Đang xử
+          {% elif invoice.invoice_status.value == 'in_progress' and payment.status.value == 'success' %}
+        Đang giao
     {% elif invoice.invoice_status.value == 'completed' %}
         Hoàn thành
     {% elif invoice.invoice_status.value == 'cancelled' %}

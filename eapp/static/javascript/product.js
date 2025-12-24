@@ -34,8 +34,18 @@ document.getElementById("btn_payment").addEventListener("click", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(selectedItems)
     })
-    .then(() => {
-         window.location.href = "/payment";
+  .then(res => res.json())
+    .then(data => {
+        if (data.status === "error") {
+            showAlert("error", "Không thể thanh toán", data.message);
+            return;
+        }
+        // ✅ OK
+        window.location.href = "/payment";
+    })
+    .catch(err => {
+        console.error(err);
+        showAlert("error", "Lỗi", data.message);
     });
 
 });

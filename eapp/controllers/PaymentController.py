@@ -20,9 +20,18 @@ def load_data():
     if request.method == "POST":
         invoice_items = session["checkout_items"] = request.json
         print(invoice_items)
-        result = InventoryValidator.get_insufficient_products(invoice_items,1)
-        print("invoic:", invoice_items)
-        print("res:", result)
+        insufficient_products, remain_stock = InventoryValidator.get_insufficient_products(invoice_items, 1)
+        print("insufficient:", insufficient_products)
+        print("remain_stock:", remain_stock)
+        if len(insufficient_products) >0 :
+            return jsonify({
+                "status": "error",
+                "message": "Không thể cung cấp đủ",
+                "products": insufficient_products
+            })
+        return jsonify({
+            "status": "success"
+        })
     items = session.get("checkout_items")
     if not items:
         return redirect("/cart")
@@ -63,8 +72,6 @@ def created_payment():
     note = data.get("note")
     payment_method = data.get("payment_method")
     cart_items = session.get("checkout_items")
-    import pdb
-    pdb.set_trace()
     if not cart_items:
         return jsonify({"status": "error", "message": "Giỏ hàng trống"})
 
