@@ -9,6 +9,7 @@ from eapp.models import Category
 from flask import render_template, request
 from eapp.models.Account import Role
 from eapp.services.inventory.InventoryValidator import InventoryValidator
+from eapp.models import Product, ProductStatus
 
 
 
@@ -94,10 +95,26 @@ def load_regis():
     return render_template('page/register.html')
 
 def load_home():
-    return render_template('page/home.html')
+    categories = Category.query.limit(4).all()
+
+    featured_products = Product.query.filter_by(status=ProductStatus.ACTIVE) \
+        .order_by(Product.rating_score.desc()) \
+        .limit(8).all()
+
+    menu_products = Product.query.filter_by(status=ProductStatus.ACTIVE).limit(10).all()
+
+    return render_template('page/home.html',
+                           categories=categories,
+                           featured_products=featured_products,
+                           menu_products=menu_products)
+    # products = ProductDao.list()
+    # return render_template('page/home.html', products=products)
+
 
 def load_about_us():
+
     return render_template('page/about_us.html')
+
 
 
 
