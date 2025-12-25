@@ -132,3 +132,6 @@ app.add_url_rule('/api/admin/employees/open', 'api_open', EmployeeController.api
 app.add_url_rule('/dashboard/admin/rule', 'rule', RuleController.load_rule, methods=['get'])
 app.add_url_rule("/rules/<int:rule_id>", 'delete-rule', RuleController.delete_rule, methods=['delete'])
 app.add_url_rule("/rule/<int:rule_id>/update",'update-rule',RuleController.update_rule, methods=["POST"])
+
+#warehouse
+app.add_url_rule('/dashboard/admin/ware-house', 'admin_warehouse', WarehouseController.load_warehouse, methods=['get'])

@@ -62,3 +62,7 @@ def create_warehouse_slip():
             "success": False, 
             "message": str(ex) if str(ex) else "Đã xảy ra lỗi hệ thống khi tạo phiếu kho"
         })
+
+def load_warehouse():
+    return render_template('admin/warehouse.html',
+                          )
