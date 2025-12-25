@@ -1,3 +1,4 @@
+import pdb
 from pprint import pprint
 from eapp.dao import ProductDao
 from eapp.dao.WarehouseDAO import WarehouseDAO
@@ -114,7 +115,7 @@ class InventoryValidator:
     # kiểm tra xem product này đủ không, ko thì trả về lý do ko đủ
     @staticmethod
     def get_quantity_product_makeable(product_id,quantity,available_stock_map):
-
+        print("av: ", available_stock_map)
         recipe_map = ProductDao.get_product_recipe_map()
         recipe = recipe_map.get(product_id, [])
 
@@ -125,7 +126,6 @@ class InventoryValidator:
                 "ingredient_insufficient": [],
                 "makeable_quantity": 0
             }
-
         max_quantities = []
         ingredient_insufficient = []
         result = {}
@@ -150,8 +150,9 @@ class InventoryValidator:
                         'required' : required
                     }
                 )
-        
+
         makeable_quantity = min(max_quantities)
+
         return {
             'product_id' : product_id,
             'quantity' : quantity,
@@ -173,8 +174,8 @@ class InventoryValidator:
         result = {}
         for product in products:
             result[product.id] = not InventoryValidator.is_product_insufficient(product.id,recipe_map,available_stock_map)
-        return result        
-    
+        return result
+
     """
         params
         [
@@ -218,7 +219,6 @@ class InventoryValidator:
                 if available < required:
                     is_insufficient = True
                     continue
-
   
                 available_stock_map[ing_required['ingredient_id']] = available_stock_map[ing_required['ingredient_id']] - required
             if is_insufficient:

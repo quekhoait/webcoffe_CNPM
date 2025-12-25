@@ -1,9 +1,11 @@
 from sre_constants import IN
 from flask import jsonify, render_template, request, session
 
+from eapp.dao import RuleDAO
 from eapp.dao.InvoiceDAO import InvoiceDAO, InvoiceFilter
 from eapp.models import Account
 from eapp.models.Invoice import INVOICE_STATUS_LABEL, InvoiceStatusEnum
+from eapp.models.Rule import Rule, RuleType
 from eapp.services.InvoiceService import InvoiceService
 from flask_login import login_user, logout_user, current_user, login_required
 
@@ -12,6 +14,7 @@ def load_cashier():
     user = current_user
     invoice = InvoiceDAO.get_by_id(10)
     invoices = InvoiceDAO.list(InvoiceFilter(payment_method="CASH"))
+    rules = RuleDAO.list(RuleDAO.RuleFilter(rule_type=RuleType.SERVICE))
     payment_method = 'CASH'
     return render_template('cashier/cashier.html',
                            user=user,
@@ -19,7 +22,8 @@ def load_cashier():
                            INVOICE_STATUS_LABEL=INVOICE_STATUS_LABEL,
                            payment_method=payment_method,
                            invoice=invoice,
-                           warehouse_id = session.get('warehouse_id',1))
+                           warehouse_id = session.get('warehouse_id',1),
+                           rules=rules)
 
 def load_status_bar():
     data = request.args.to_dict()
@@ -55,7 +59,9 @@ def load_invoice_detail():
     invoice_id = request.args.get('invoice_id')
     invoice = InvoiceDAO.get_by_id(invoice_id)
     
+    rules = RuleDAO.list(RuleDAO.RuleFilter(rule_type=RuleType.SERVICE))
 
     return render_template('cashier/invoice_detail.html',
-                           invoice=invoice)
+                           invoice=invoice,
+                           rules=rules)
 

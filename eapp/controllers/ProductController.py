@@ -23,10 +23,11 @@ def list(filehtml):
 def get_product():
     params = request.args.to_dict()
     dishes = ProductDao.list(params)
-    product_makeable_map = InventoryValidator.get_product_makeable_map(dishes, index.get_current_warehouse())
+    # product_makeable_map = InventoryValidator.get_product_makeable_map(dishes, index.get_current_warehouse())
     return render_template('page/menu_product_item.html',
                            products=dishes,
-                           product_makeable_map=product_makeable_map)
+                           # product_makeable_map=product_makeable_map
+                           )
 
 
 def delete_invoice():

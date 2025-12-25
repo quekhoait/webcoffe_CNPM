@@ -1,7 +1,10 @@
 from flask import app, jsonify, render_template, request, session, redirect, url_for
-# from sklearn.gaussian_process.kernels import Product
 
+
+# from sklearn.gaussian_process.kernels import Product
+from eapp.controllers import index
 from eapp.dao import CartDao
+from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.services import  RuleService
 from flask_login import login_required, current_user
 from eapp.dao import ProductDao
@@ -32,7 +35,6 @@ def add_to_cart():
         })
 
 def get_cart_by_userId():
-    # Nếu chưa login
     if not current_user.is_authenticated:
         return render_template(
             'page/cart_component_item.html',
@@ -41,16 +43,18 @@ def get_cart_by_userId():
             message="Vui lòng đăng nhập để xem giỏ hàng"
         )
 
-    # Nếu đã login
     user_id = current_user.id
     cart_items = CartDao.get_cart_by_userId_dao(user_id)
 
     warehouse_id = session.get('warehouse_id', 1)
 
-    # Lấy tồn kho 1 lần
-    available_stock_map = InventoryValidator.get_product_makeable_map(cart_items, warehouse_id)
+    # 🔹 Lấy tồn kho 1 lần cho toàn bộ cart
+    available_stock_map = InventoryValidator.get_product_makeable_map(
+        cart_items, warehouse_id
+    )
 
     list_prod_status = {}
+
     for cart in cart_items:
         product_id = cart.product.id
         quantity = cart.quantity
@@ -58,11 +62,8 @@ def get_cart_by_userId():
         check = InventoryValidator.get_quantity_product_makeable(
             product_id,
             quantity,
-            available_stock_map
+            WarehouseDAO.get_available_stock_map(warehouse_id)
         )
-
-        # Log thông tin sản phẩm
-        logger.info(f"User {user_id} - Product {product_id} makeable_quantity: {check['makeable_quantity']}")
 
         list_prod_status[product_id] = {
             "in_stock": check["makeable_quantity"] >= quantity,
@@ -73,9 +74,8 @@ def get_cart_by_userId():
         'page/cart_component_item.html',
         list_prod=cart_items,
         list_prod_status=list_prod_status,
-        message=None  # Không có thông báo nếu đã login
+        message=None
     )
-
 
 def tinhTien():
     total = request.get_json().get("subTotal")
@@ -101,6 +101,10 @@ def load_my_cart():
 
     elif tab == "pending_processing":
         invoice_status = InvoiceStatusEnum.PENDING
+        payment_status = PaymentStatus.success
+
+    elif tab == "pending_inprogress":
+        invoice_status = InvoiceStatusEnum.IN_PROGRESS
         payment_status = PaymentStatus.success
 
     elif tab == "completed":

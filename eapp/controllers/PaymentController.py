@@ -8,20 +8,30 @@ from eapp.services.RuleService import RuleService
 from flask import render_template, request, session, redirect
 from flask_login import current_user, login_required
 from eapp.dao import ProductDao
-from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp import db
+from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp.services.inventory.StockService import StockService
 from eapp.controllers import index
 from flask_login import login_required
 
 # @login_required
 def load_data():
+
     if request.method == "POST":
         invoice_items = session["checkout_items"] = request.json
         print(invoice_items)
-        result = InventoryValidator.get_insufficient_products(invoice_items,1)
-        print("invoic:", invoice_items)
-        print("res:", result)
+        insufficient_products, remain_stock = InventoryValidator.get_insufficient_products(invoice_items, 1)
+        print("insufficient:", insufficient_products)
+        print("remain_stock:", remain_stock)
+        if len(insufficient_products) >0 :
+            return jsonify({
+                "status": "error",
+                "message": "Không thể cung cấp đủ",
+                "products": insufficient_products
+            })
+        return jsonify({
+            "status": "success"
+        })
     items = session.get("checkout_items")
     if not items:
         return redirect("/cart")
@@ -50,6 +60,7 @@ def load_data():
         total = final_total,
     )
 
+
 """
     [{}]
         product_id
@@ -61,7 +72,6 @@ def created_payment():
     note = data.get("note")
     payment_method = data.get("payment_method")
     cart_items = session.get("checkout_items")
-    print()
     if not cart_items:
         return jsonify({"status": "error", "message": "Giỏ hàng trống"})
 
@@ -91,6 +101,7 @@ def created_payment():
     StockService.reserve_stock_for_invoice(
         invoice=invoice,
         warehouse_id=index.get_current_warehouse()
+
     )
     momo_order_id = f"{invoice.order_code}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
     payment=PaymentDao.create_Payment_dao(
