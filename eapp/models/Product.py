@@ -18,8 +18,6 @@ class Product(BaseModel):
     status = Column(SQLEnum(ProductStatus),default=ProductStatus.ACTIVE, nullable=False)
     description = Column(String(200))
     image = Column(String(200))
-    rating_score = Column(Float, default=5)
-    rating_count = Column(Integer, default=0)
     dish_category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
 
     ingredients = relationship('ProductRecipe', backref='product', lazy=True)

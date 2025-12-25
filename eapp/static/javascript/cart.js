@@ -3,8 +3,6 @@
 document.querySelectorAll(".btn-remove-product-cart").forEach(btn => {
     btn.addEventListener("click", function () {
         const productId = this.dataset.productId;
-        console.log("id:", productId);
-
         fetch("/api/remove_prod_in_cart", {
             method: "DELETE",
             headers: {
@@ -67,16 +65,36 @@ document.querySelectorAll(".btn-change-cancel").forEach(btn => {
     });
 });
 
+// xác nhận đơn hàng
+document.querySelectorAll(".btn-change-complete").forEach(btn => {
+    btn.addEventListener("click", function(event) {
+
+         event.stopImmediatePropagation();
+        fetch("/api/success-invoice", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ invoice_id: this.dataset.invoiceId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === "success") {
+            showAlert("success", "Thông báo", "Đơn hàng đã xác nhận")
+                location.reload();
+            } else {
+                alert(data.message);
+            }
+        });
+    });
+});
+
 ////Tìm kiếm đơn hàng
 function searchOrder() {
     const keyword = document.getElementById('input_search_order').value;
 
-    const tab = "{{ request.args.get('tab', 'order_all') }}"; // giữ tab hiện tại
-    // Gửi request tới server với query string search và tab
+    const tab = "{{ request.args.get('tab', 'order_all') }}";
     fetch(`/my-cart?tab=${tab}&search=${encodeURIComponent(keyword)}`)
         .then(response => response.text())
         .then(html => {
-            // Cập nhật phần chứa danh sách sản phẩm
             document.querySelector('#order-list-container').innerHTML = html;
         });
 }

@@ -13,8 +13,8 @@
 
         <div class="bg-white p-6 rounded-2xl shadow-sm mb-8 flex gap-6 items-center">
             <div class="flex-1 relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
-                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-14 p-4 text-lg bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-gray-200 transition">
+                <i class="fa-solid fa-magnifying-glass absolute left-5 top-[75%] -translate-y-1/2 text-gray-400 text-2xl"></i>
+                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-14 p-4 !pl-16 text-2xl bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-gray-200 transition">
             </div>
 
             <div class="relative min-w-[250px]" id="filter-container">
@@ -24,7 +24,7 @@
                 </div>
 
                 <div id="filter-dropdown" class="absolute top-full right-0 w-full bg-white border border-gray-100 rounded-xl shadow-xl mt-2 hidden max-h-60 overflow-y-auto z-40">
-                    <div class="p-4 hover:bg-yellow-50 cursor-pointer text-lg text-gray-700 border-b border-gray-50 transition"
+                    <div class="p-4 hover:bg-yellow-50 cursor-pointer text-2xl text-gray-700 border-b border-gray-50 transition"
                          onclick="selectFilter('all', 'Tất cả loại')">
                         Tất cả loại
                     </div>
@@ -41,7 +41,7 @@
 
         <div class="bg-white rounded-xl shadow- overflow-hidden border border-gray-100">
             <table class="w-full text-left border-collapse">
-                <thead class="bg-gray-50 border-b border-gray-100 text-black-500 text-lg font-bold">
+                <thead class="bg-gray-50 border-b border-gray-100 text-black-500 text-2xl font-bold">
                     <tr>
                         <th class="p-5 font-bold pl-8">Sản phẩm</th>
                         <th class="p-5 font-bold">Giá</th>
@@ -58,19 +58,19 @@
                     <tr class="hover:bg-gray-50 transition group">
                         <td class="p-5 pl-8">
                             <div class="flex items-center gap-4">
-                                <img src="{{ p.image }}" onerror="this.src='https://via.placeholder.com/150'" class="w-12 h-12 rounded-lg object-cover shadow-lg">
+                                <img src="{{ p.image }}"  class="w-12 h-12 rounded-lg object-cover shadow-lg">
                                 <div>
-                                    <div class="font-bold text-gray-900 text-base">{{ p.name }}</div>
-                                    <div class="text-lg text-gray-400 line-clamp-1 max-w-[250px]">{{ p.description or 'Chưa có mô tả' }}</div>
+                                    <div class="font-bold text-gray-900 text-2xl">{{ p.name }}</div>
+                                    <div class="text-xl text-gray-400 line-clamp-1 max-w-[250px]">{{ p.description or 'Chưa có mô tả' }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="p-5 font-bold text-gray-900">{{ "{:,.0f}".format(p.price) }}đ</td>
-                        <td class="p-5 text-gray-600 font-bold">{{ p.category.name if p.category else 'Chưa phân loại' }}</td>
+                        <td class="p-5 font-bold text-xl text-gray-900">{{ "{:,.0f}".format(p.price) }}đ</td>
+                        <td class="p-5 text-gray-600 text-xl font-bold">{{ p.category.name if p.category else 'Chưa phân loại' }}</td>
                         <td class="p-5 text-center">
                             <div class="flex justify-center gap-3">
-                                <button onclick='openModal("EDIT", {{ p | tojson }})' class="text-gray-400 hover:text-blue-600 transition"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deleteProduct({{ p.id }})" class="text-gray-400 hover:text-red-500 transition"><i class="fa-regular fa-trash-can"></i></button>
+                                <button onclick='openModal("EDIT", {{ p | tojson }})' class="text-gray-400 hover:text-blue-600 text-xl transition"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteProduct({{ p.id }})" class="text-gray-400 hover:text-red-500 text-xltransition"><i class="fa-regular fa-trash-can"></i></button>
                             </div>
                         </td>
                     </tr>

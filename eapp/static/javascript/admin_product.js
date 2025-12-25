@@ -212,10 +212,10 @@ async function saveProduct() {
 
         let id = row.querySelector('.ing-id').value;
         let qty = row.querySelector('.ing-qty').value;
-        let unit = row.querySelector('.ing-unit').value;
+
 
         if (id && qty > 0) {
-            recipes.push({ ingredient_id: id, quantity: qty, unit: unit });
+            recipes.push({ ingredient_id: id, quantity: qty });
         }
     });
     fd.append('recipes', JSON.stringify(recipes));
@@ -231,12 +231,14 @@ async function saveProduct() {
 
 
     const url = fd.get('id') ? '/api/admin/product/update' : '/api/admin/product/add';
-
+  showAlert("loading", "Đang lưu", "Vui lòng chờ...");
     try {
         const res = await fetch(url, { method: 'POST', body: fd });
         const data = await res.json();
+
         if (data.success) {
-            alert(data.message);
+
+             showAlert("success", "Thông báo", "Lưu thành công");
             window.location.reload();
         } else {
             alert('Lỗi: ' + data.message);

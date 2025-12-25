@@ -1,0 +1,64 @@
+<aside class="w-full bg-white shadow-md hidden md:flex flex-col h-screen sticky top-0 font-medium">
+
+    <!-- User info -->
+    <div class="p-10 mb-2">
+        <div class="flex items-center gap-5">
+            <img src="https://res.cloudinary.com/ds11ggie4/image/upload/v1764250180/user_liifdm.png"
+                 class="w-16 h-16 rounded-full border border-gray-200">
+            <div>
+                <h4 class="font-bold text-gray-900 text-xl">
+                    The Coffee House
+                </h4>
+                <p class="text-base text-gray-500">
+                    Quản trị viên
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+   <nav class="flex-1 px-8 space-y-3">
+    {# Định nghĩa các class để tái sử dụng cho gọn #}
+    {% set active_classes = "bg-gray-100 text-gray-900 font-semibold shadow-sm" %}
+    {% set inactive_classes = "text-gray-500 hover:bg-gray-100 hover:text-gray-900" %}
+
+    <a href="{{ url_for('overview') }}"
+       class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl text-lg transition-all duration-200
+              {{ active_classes if request.path == url_for('overview') else inactive_classes }}">
+        <i class="fa-solid fa-table-cells-large text-2xl w-8"></i>
+        <span>Báo cáo</span>
+    </a>
+
+    <a href="{{ url_for('admin_products') }}"
+       class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl text-lg transition-all duration-200
+              {{ active_classes if request.path.startswith('/dashboard/admin/products') else inactive_classes }}">
+        <i class="fa-solid fa-mug-hot text-2xl w-8"></i>
+        <span>Sản phẩm</span>
+    </a>
+
+    <a href="{{ url_for('admin_employee') }}"
+       class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl text-lg transition-all duration-200
+              {{ active_classes if request.path.startswith('/dashboard/admin/employees') else inactive_classes }}">
+        <i class="fa-solid fa-users text-2xl w-8"></i>
+        <span>Nhân viên</span>
+    </a>
+
+    <a href="{{ url_for('rule') }}"
+       class="nav-item flex items-center gap-3 px-6 py-4 rounded-2xl text-lg transition-all duration-200
+              {{ active_classes if request.path == url_for('rule') else inactive_classes }}">
+        <i class="fa-solid fa-file-lines text-2xl w-8"></i>
+        <span>Quy định</span>
+    </a>
+</nav>
+
+    <!-- Logout -->
+    <div class="p-8 border-t border-gray-100 mt-auto">
+        <a href="/logout"
+           class="flex items-center gap-3 px-6 py-4 text-red-500
+                  hover:bg-red-50 rounded-2xl transition text-lg font-semibold">
+            <i class="fa-solid fa-arrow-right-from-bracket text-2xl w-8"></i>
+            <span>Đăng xuất</span>
+        </a>
+    </div>
+
+</aside>

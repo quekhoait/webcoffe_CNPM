@@ -86,13 +86,37 @@ def tinhTien():
         "final_total": total + extra_total
     })
 
+from flask import request, render_template
+
 def load_my_cart():
     user_id = current_user.id
-    # Lấy sản phẩm trong giỏ hàng
-    cart_item = CartDao.get_cart_by_userId_dao(user_id)
-    tab = request.args.get('tab')
-    if not tab:
-        return redirect(url_for('my-cart', tab='order_all'))
+
+    # ====== CART ======
+    cart_items = CartDao.get_cart_by_userId_dao(user_id)
+    warehouse_id = session.get('warehouse_id', 1)
+
+    available_stock_map = InventoryValidator.get_product_makeable_map(
+        cart_items, warehouse_id
+    )
+
+    list_prod_status = {}
+    for cart in cart_items:
+        product_id = cart.product.id
+        quantity = cart.quantity
+
+        check = InventoryValidator.get_quantity_product_makeable(
+            product_id,
+            quantity,
+            WarehouseDAO.get_available_stock_map(warehouse_id)
+        )
+
+        list_prod_status[product_id] = {
+            "in_stock": check["makeable_quantity"] >= quantity,
+            "makeable_quantity": check["makeable_quantity"]
+        }
+
+    # ====== TAB ======
+    tab = request.args.get('tab', 'order_all')
     invoice_status = None
     payment_status = None
 
@@ -114,15 +138,24 @@ def load_my_cart():
     elif tab == "cancelled":
         invoice_status = InvoiceStatusEnum.CANCELLED
         payment_status = PaymentStatus.failed
+
     search_key = request.args.get('search', '').strip()
 
-    list_prod = ProductDao.get_product_by_status_dao(
-        user_id=current_user.id,
+    list_order = ProductDao.get_product_by_status_dao(
+        user_id=user_id,
         invoice_status=invoice_status,
         payment_status=payment_status,
         search_key=search_key
     )
-    return render_template("cart/my_order.html", tab=tab, list_pro=cart_item, list_order=list_prod)
+
+    return render_template(
+        "cart/my_order.html",
+        tab=tab,
+        list_pro=cart_items,
+        list_prod_status=list_prod_status,
+        list_order=list_order
+    )
+
 
 def remove_product_in_cart():
     product_id=request.get_json().get('product_id')

@@ -1,21 +1,26 @@
-<aside class="w-64 bg-white shadow-md hidden md:block">
-    <div class="p-6">
+<aside class="w-[16%] bg-white p-8 shadow-md border-r border-gray-200 hidden md:block">
+    <div class="flex flex-col h-screen  bg-white ">
         <div class="flex items-center gap-3 mb-8">
-            <img src="https://via.placeholder.com/40" class="rounded-full">
+            <div class="w-[30px]">
+                <img src="https://res.cloudinary.com/ds11ggie4/image/upload/v1764250180/user_liifdm.png" class="rounded-full">
+            </div>
             <div>
-                <h4 class="font-bold text-gray-800">Quản Lý</h4>
-                <p class="text-xs text-gray-500">Admin</p>
+                <h4 class="font-bold text-3xl text-gray-800">Nhân viên kho</h4>
+                <p class="text-2xl text-gray-500">Nhân viên </p>
             </div>
         </div>
-        <nav class="space-y-2">
-            <a href="/"
-                class="block px-4 py-3 text-gray-600 hover:bg-yellow-50 hover:text-yellow-600 rounded-lg transition"><i
-                    class="fa-solid fa-house mr-3"></i>Trang chủ</a>
-            <a href="/admin/warehouse" class="block px-4 py-3 bg-yellow-100 text-yellow-700 font-bold rounded-lg"><i
+        <nav class="space-y-2 ">
+            <a href="{{url_for('warehouse')}}" class="block text-2xl px-4 py-3 bg-yellow-100 text-yellow-700 font-bold rounded-lg"><i
                     class="fa-solid fa-warehouse mr-3"></i>Quản lý Kho</a>
-            <a href="#"
-                class="block px-4 py-3 text-gray-600 hover:bg-yellow-50 hover:text-yellow-600 rounded-lg transition"><i
-                    class="fa-solid fa-file-invoice mr-3"></i>Đơn hàng</a>
         </nav>
+        <!-- Logout -->
+    <div class="p-8 border-t border-gray-100 mt-auto">
+        <a href="/logout"
+           class="flex items-center gap-3 px-6 py-4 text-red-500
+                  hover:bg-red-50 rounded-2xl bg-red-100 transition text-lg font-semibold">
+            <i class="fa-solid fa-arrow-right-from-bracket text-2xl w-8"></i>
+            <span>Đăng xuất</span>
+        </a>
+    </div>
     </div>
 </aside>

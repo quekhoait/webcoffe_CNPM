@@ -1,4 +1,6 @@
 #nhận request từ giao diện post, get
+from itertools import product
+
 from flask import app, jsonify, render_template, request, session
 
 from eapp.dao import ProductDao
@@ -14,8 +16,10 @@ def list(filehtml):
     def view_function():
         params = request.args.to_dict()
         products = ProductDao.list(params)
+        status_map=InventoryValidator.get_product_makeable_map(products=products, warehouse_id=session.get('warehouse_id', 1))
         return render_template(filehtml,
-                               products=products)
+                               products=products,
+                               product_status_map=status_map)
 
     return view_function
 
@@ -23,10 +27,10 @@ def list(filehtml):
 def get_product():
     params = request.args.to_dict()
     dishes = ProductDao.list(params)
-    # product_makeable_map = InventoryValidator.get_product_makeable_map(dishes, index.get_current_warehouse())
+    product_makeable_map = InventoryValidator.get_product_makeable_map(dishes, index.get_current_warehouse())
     return render_template('page/menu_product_item.html',
                            products=dishes,
-                           # product_makeable_map=product_makeable_map
+                           product_makeable_map=product_makeable_map
                            )
 
 
@@ -46,5 +50,19 @@ def delete_invoice():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+def success_invoice():
+    invoice_id = request.get_json().get('invoice_id')
+    invoice=InvoiceDAO.get_by_id(int(invoice_id))
+    if not invoice_id:
+        return jsonify({"success": False, "message": "Missing invoice_id"}), 400
+    try:
+        # Giả sử warehouse_id có thể lấy từ session hoặc mặc định
+        warehouse_id = request.args.get("warehouse_id", 1)
+
+        InvoiceService.InvoiceService.update_invoice_status(invoice, InvoiceStatusEnum.COMPLETED,
+                                                            warehouse_id=warehouse_id)
+        return jsonify({"status": "success", "message": f"Đơn hàng xác nhận thành công."})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 

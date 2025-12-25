@@ -16,13 +16,9 @@ from flask_login import login_required
 
 # @login_required
 def load_data():
-
     if request.method == "POST":
         invoice_items = session["checkout_items"] = request.json
-        print(invoice_items)
         insufficient_products, remain_stock = InventoryValidator.get_insufficient_products(invoice_items, 1)
-        print("insufficient:", insufficient_products)
-        print("remain_stock:", remain_stock)
         if len(insufficient_products) >0 :
             return jsonify({
                 "status": "error",
@@ -51,7 +47,7 @@ def load_data():
         })
 
         total += total_item
-    extra_fee = RuleService.calulate_service_fee(total)
+        extra_fee = RuleService.calulate_service_fee(total)
     final_total = total + extra_fee
     return render_template(
         "page/checkout.html",
@@ -101,7 +97,6 @@ def created_payment():
     StockService.reserve_stock_for_invoice(
         invoice=invoice,
         warehouse_id=index.get_current_warehouse()
-
     )
     momo_order_id = f"{invoice.order_code}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
     payment=PaymentDao.create_Payment_dao(
