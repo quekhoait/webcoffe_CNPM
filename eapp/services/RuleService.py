@@ -16,3 +16,4 @@ class RuleService:
                 fee += rule.value
         return fee
     
+    

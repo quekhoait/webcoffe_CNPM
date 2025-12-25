@@ -1,4 +1,5 @@
 from pprint import pprint
+
 from eapp import app,db
 from eapp.dao import ProductDao
 from eapp.dao.InvoiceDAO import InvoiceDAO, InvoiceFilter
@@ -94,13 +95,12 @@ def demo():
     kq = InventoryValidator.get_insufficient_products(data,1)
     print(kq)
     print(WarehouseDAO.get_available_stock_map(1))
+    pprint(ProductDao.get_product_recipe_map())
 
 
 if __name__ == '__main__':
     with app.app_context():
-        # fil = InvoiceFilter(keyword="huy")
-        # print(fil)
-        # pprint(parse_dict(InvoiceDAO.list(fil)))
+        # test_start_processing_invoice()
         demo()
         # print(ProductDao.get_product_recipe_map())
         # print(WarehouseDAO.get_stock_map(1))

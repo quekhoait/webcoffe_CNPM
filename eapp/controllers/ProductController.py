@@ -1,6 +1,4 @@
 #nhận request từ giao diện post, get
-from itertools import product
-
 from flask import app, jsonify, render_template, request, session
 
 from eapp.dao import ProductDao
@@ -16,7 +14,9 @@ def list(filehtml):
     def view_function():
         params = request.args.to_dict()
         products = ProductDao.list(params)
-        status_map=InventoryValidator.get_product_makeable_map(products=products, warehouse_id=session.get('warehouse_id', 1))
+
+        status_map = InventoryValidator.get_product_makeable_map(products=products,warehouse_id=session.get('warehouse_id',1))
+
         return render_template(filehtml,
                                products=products,
                                product_status_map=status_map)
@@ -64,5 +64,6 @@ def success_invoice():
         return jsonify({"status": "success", "message": f"Đơn hàng xác nhận thành công."})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
 
 

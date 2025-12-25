@@ -5,6 +5,7 @@ from eapp.dao.IngredientDAO import IngredientDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.models.Ingredient import Ingredient
 from eapp.models.WarehouseSlip import SlipType
+from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp.services.inventory.StockService import IngredientStatus, StockService
 
 
@@ -19,7 +20,6 @@ def warehouse_page():
     item for item in ingredient_stocks
     if item["status"] in [IngredientStatus.LOW_STOCK,IngredientStatus.OUT_OF_STOCK]
 ]
-    pprint(low_stock_list)
     return render_template('warehouse/warehouse.html',
                            warehouse=warehouse,
                             slip_types=slip_types,
@@ -49,11 +49,16 @@ def create_warehouse_slip():
     slip_data = request.json
     slip_data['stock_user_id'] = 1  # TODO: Lấy user từ session
     try:
-        StockService.create_slip(slip_data)
+        rs = InventoryValidator.validate_slip_data(slip_data)
+        if rs:
+            StockService.create_slip(slip_data)
         db.session.commit()
         return jsonify({"success": True})
 
     except Exception as ex:
         db.session.rollback()
         app.logger.error(f"Lỗi khi tạo phiếu kho: {str(ex)}", exc_info=True)
-        return jsonify({"success": False, "message": "Đã xảy ra lỗi hệ thống khi tạo phiếu kho"})
+        return jsonify({
+            "success": False, 
+            "message": str(ex) if str(ex) else "Đã xảy ra lỗi hệ thống khi tạo phiếu kho"
+        })
