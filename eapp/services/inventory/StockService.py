@@ -74,7 +74,6 @@ class StockService:
         # parse string về enum
         warehouse_slip.slip_type = SlipType[slip_data['slip_type']]
         warehouse_slip.note = slip_data['note'] if slip_data['note'] else None
-
         WarehouseSlipDAO.create_warehouse_slip(warehouse_slip, slip_data['ingredients'])
         # import pdb
         # pdb.set_trace()

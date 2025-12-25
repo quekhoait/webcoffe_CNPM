@@ -195,6 +195,9 @@ function createWarehouseSlip(){
         };
     })
 
+    console.log(ingredients);
+    
+
     const slipData = {
         slip_type: slipType,
         note: note,
