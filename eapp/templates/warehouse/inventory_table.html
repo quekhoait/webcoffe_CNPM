@@ -1,58 +1,113 @@
 <div class="bg-white p-6 rounded-2xl shadow-sm">
-    <h2 class="text-xl font-bold text-gray-800 mb-6">Tồn kho Hiện tại </h2>
-    <table class="w-full text-left">
-        <thead class="text-gray-500 border-b border-gray-100">
-            <tr>
-                <th class="pb-3 pl-2">Tên nguyên liệu</th>
-                <th class="pb-3 text-center">Tồn kho</th>
-                <th class="pb-3 text-center">Đã giữ</th>
-                <th class="pb-3 text-center">Khả dụng</th>
-                <th class="pb-3 text-center">Đơn vị</th>
-                <th class="pb-3 text-right pr-2">Trạng thái</th>
-            </tr>
-        </thead>
-        <tbody class="text-gray-700">
-            {% if ingredient_stocks %}
-            {% for stock in ingredient_stocks %}
-            {% if stock.status.name == 'OUT_OF_STOCK' %}
-            <!-- Hết hàng -->
-            <tr class="border-b border-gray-50 bg-red-50 hover:bg-red-100">
-                <td class="py-4 pl-2 font-medium">{{ stock.ingredient.name }}</td>
-                <td class="py-4 text-center font-bold text-red-600">{{ stock.quantity }}</td>
-                <td class="py-4 text-center text-gray-500">{{ stock.reserved }}</td>
-                <td class="py-4 text-center font-bold text-red-600">{{ stock.quantity - stock.reserved }}</td>
-                <td class="py-4 text-center text-gray-500">{{ stock.ingredient.unit }}</td>
-                <td class="py-4 text-right pr-2">
-                    <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded">Hết hàng</span>
-                </td>
-            </tr>
-            {% elif stock.status.name == 'LOW_STOCK' %}
-            <!-- Sắp hết -->
-            <tr class="border-b border-gray-50 bg-yellow-50 hover:bg-yellow-100">
-                <td class="py-4 pl-2 font-medium">{{ stock.ingredient.name }}</td>
-                <td class="py-4 text-center font-bold text-yellow-600">{{ stock.quantity }}</td>
-                <td class="py-4 text-center font-bold text-gray-700">{{ stock.reserved }}</td>
-                <td class="py-4 text-center font-bold text-yellow-600">{{ stock.quantity - stock.reserved }}</td>
-                <td class="py-4 text-center text-gray-500">{{ stock.ingredient.unit }}</td>
-                <td class="py-4 text-right pr-2">
-                    <span class="bg-yellow-100 text-yellow-600 text-xs font-bold px-2 py-1 rounded">Sắp hết</span>
-                </td>
-            </tr>
-            {% else %}
-            <!-- Còn hàng -->
-            <tr class="border-b border-gray-50 bg-green-50 hover:bg-green-100">
-                <td class="py-4 pl-2 font-medium">{{ stock.ingredient.name }}  - {{ stock.ingredient.id }}</td>
-                <td class="py-4 text-center font-bold">{{ stock.quantity }}</td>
-                <td class="py-4 text-center font-bold">{{ stock.reserved }}</td>
-                <td class="py-4 text-center font-bold">{{ stock.quantity - stock.reserved }}</td>
-                <td class="py-4 text-center text-gray-500">{{ stock.ingredient.unit }}</td>
-                <td class="py-4 text-right pr-2">
-                    <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded">Còn hàng</span>
-                </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
+    <h2 class="text-xl font-bold text-gray-800 mb-4">
+        Tồn kho hiện tại
+    </h2>
+
+    <!-- WRAPPER SCROLL -->
+    <div class="max-h-[calc(100vh-140px)] overflow-y-auto">
+        <table class="w-full text-left border-collapse">
+            <!-- HEADER -->
+            <thead class="text-gray-500 border-b border-gray-100 sticky top-0 bg-white z-10">
+                <tr>
+                    <th class="pb-3 pl-2">Tên nguyên liệu</th>
+                    <th class="pb-3 text-center">Tồn kho</th>
+                    <th class="pb-3 text-center">Đã giữ</th>
+                    <th class="pb-3 text-center">Khả dụng</th>
+                    <th class="pb-3 text-center">Đơn vị</th>
+                    <th class="pb-3 text-right pr-2">Trạng thái</th>
+                </tr>
+            </thead>
+
+            <!-- BODY -->
+            <tbody class="text-gray-700">
+                {% if ingredient_stocks %}
+                {% for stock in ingredient_stocks %}
+
+                {% if stock.status.name == 'OUT_OF_STOCK' %}
+                <!-- Hết hàng -->
+                <tr class="border-b border-gray-50 bg-red-50 hover:bg-red-100">
+                    <td class="py-4 pl-2 font-medium">
+                        {{ stock.ingredient.name }}
+                    </td>
+                    <td class="py-4 text-center font-bold text-red-600">
+                        {{ stock.quantity }}
+                    </td>
+                    <td class="py-4 text-center text-gray-500">
+                        {{ stock.reserved }}
+                    </td>
+                    <td class="py-4 text-center font-bold text-red-600">
+                        {{ stock.quantity - stock.reserved }}
+                    </td>
+                    <td class="py-4 text-center text-gray-500">
+                        {{ stock.ingredient.unit }}
+                    </td>
+                    <td class="py-4 text-right pr-2">
+                        <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded">
+                            Hết hàng
+                        </span>
+                    </td>
+                </tr>
+
+                {% elif stock.status.name == 'LOW_STOCK' %}
+                <!-- Sắp hết -->
+                <tr class="border-b border-gray-50 bg-yellow-50 hover:bg-yellow-100">
+                    <td class="py-4 pl-2 font-medium">
+                        {{ stock.ingredient.name }}
+                    </td>
+                    <td class="py-4 text-center font-bold text-yellow-600">
+                        {{ stock.quantity }}
+                    </td>
+                    <td class="py-4 text-center font-bold text-gray-700">
+                        {{ stock.reserved }}
+                    </td>
+                    <td class="py-4 text-center font-bold text-yellow-600">
+                        {{ stock.quantity - stock.reserved }}
+                    </td>
+                    <td class="py-4 text-center text-gray-500">
+                        {{ stock.ingredient.unit }}
+                    </td>
+                    <td class="py-4 text-right pr-2">
+                        <span class="bg-yellow-100 text-yellow-600 text-xs font-bold px-2 py-1 rounded">
+                            Sắp hết
+                        </span>
+                    </td>
+                </tr>
+
+                {% else %}
+                <!-- Còn hàng -->
+                <tr class="border-b border-gray-50 bg-green-50 hover:bg-green-100">
+                    <td class="py-4 pl-2 font-medium">
+                        {{ stock.ingredient.name }}
+                    </td>
+                    <td class="py-4 text-center font-bold">
+                        {{ stock.quantity }}
+                    </td>
+                    <td class="py-4 text-center font-bold">
+                        {{ stock.reserved }}
+                    </td>
+                    <td class="py-4 text-center font-bold">
+                        {{ stock.quantity - stock.reserved }}
+                    </td>
+                    <td class="py-4 text-center text-gray-500">
+                        {{ stock.ingredient.unit }}
+                    </td>
+                    <td class="py-4 text-right pr-2">
+                        <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded">
+                            Còn hàng
+                        </span>
+                    </td>
+                </tr>
+                {% endif %}
+
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="6" class="py-10 text-center text-gray-400">
+                        Không có dữ liệu tồn kho
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
 </div>

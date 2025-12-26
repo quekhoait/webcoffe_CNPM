@@ -1,8 +1,12 @@
 {% extends 'layout/base.html' %} {% block title %}Trang Chủ Webcoffe{% endblock
 %} {% block content %}
+<style>
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
 <div
   class="w-full h-[600px] bg-cover bg-center flex items-center"
-  style="background-image: url('{{ url_for('static', filename='image/bgr_banner.png') }}')"
+  style="background-image: url('https://res.cloudinary.com/ds11ggie4/image/upload/v1766638475/bgr_banner_c3hajz.png')"
 >
   <div class="ml-10 w-[50%]">
     <h2
@@ -40,7 +44,7 @@
           class="w-32 h-32 md:w-40 md:h-40 bg-gray-300 rounded-lg overflow-hidden"
         >
           <img
-            src="/static/image/anhcaffe_1.jpeg"
+            src="https://res.cloudinary.com/ds11ggie4/image/upload/v1766638482/cafe_menu_1_gwuisq.png"
             alt="Hình ảnh ly cà phê"
             class="w-full h-full"
           />
@@ -74,7 +78,7 @@
           class="w-32 h-32 md:w-40 md:h-40 bg-gray-300 rounded-lg overflow-hidden"
         >
           <img
-            src="/static/image/anhcaffe_1.jpeg"
+            src="https://res.cloudinary.com/ds11ggie4/image/upload/v1766638480/bgr7_ypamxk.png"
             alt="Hình ảnh ly cà phê"
             class="w-full h-full"
           />
@@ -85,7 +89,7 @@
           Ưu đãi buổi sáng
         </p>
         <h2 class="text-3xl font-bold text-gray-900 mb-3 leading-tight">
-          Nhận ngay 10% giảm giá cho đơn hàng cà phê đầu tiên của bạn
+          Nhận ngay 100% giảm giá cho đơn hàng cà phê đầu tiên của bạn
         </h2>
         <p class="text-gray-600 text-xl mb-4">
           Thức dậy với mùi thơm quyến rũ của cà phê mới pha. Bắt đầu ngày mới
@@ -110,7 +114,7 @@
     >
       SẢN PHẨM NỔI BẬT
     </h2>
-    <div class="relative w-full">
+    <div class="relative w-full ">
       <button
         id="prevButton"
         class="absolute top-1/2 left-0 transform -translate-x-1/2 -translate-y-1/2 p-3 bg-gray-700 text-white rounded-full z-10 opacity-75 hover:opacity-100 transition-opacity focus:outline-none"
@@ -134,10 +138,12 @@
 
       <div
         id="productSlider"
+        style="-webkit-scrollbar {
+    display: none !important}"
         class="flex overflow-x-auto overflow-y-hidden gap-4 hide-scrollbar p-2 snap-x snap-mandatory scroll-smooth items-stretch w-full"
       >
         {% for product in featured_products %}
-        <div class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg">
+        <div onclick="handleProductClick({{ product.id }})" class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg cursor-pointer">
           <div class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col">
             <div class="relative group">
               <img
@@ -158,46 +164,15 @@
                 </p>
               </div>
               <div class="mt-4">
-                <a href="#"
-                   class="block w-full py-3 px-6 text-lg font-semibold text-center text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811]">
-                  Mua ngay
+                <a href="#" onclick="(handleProductClick({{product.id}})"
+                   class="block w-full py-3 px-6 text-xl font-semibold text-center text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811]">
+                  Xem chi tiết
                 </a>
               </div>
             </div>
           </div>
         </div>
         {% endfor %}
-      </div>
-
-        <div
-          class="flex-shrink-0 w-[calc(25%-12px)] snap-start shadow-md rounded-lg"
-        >
-          <div
-            class="h-full border-0 overflow-hidden bg-[#fcece0] rounded-lg flex flex-col"
-          >
-            <div class="relative">
-              <img
-                src="/static/image/cafe_menu_1.png"
-                alt="Cà Phê Espresso"
-                class="w-full"
-                style="height: 250px; object-fit: cover"
-              />
-            </div>
-            <div class="p-4 flex flex-col justify-between h-full flex-grow">
-              <div>
-                <h5 class="font-semibold text-2xl mb-1">Cà Phê Espresso</h5>
-                <p class="text-xl font-extrabold text-[#9d5a15]">109.000₫</p>
-              </div>
-              <div class="mt-4">
-                <button
-                  class="w-full py-3 px-6 text-lg font-semibold text-white shadow-sm rounded-lg transition-colors bg-[#9d5a15] hover:bg-[#7c4811] focus:ring-4 focus:ring-[#9d5a15]/50"
-                >
-                  Mua ngay
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <button
@@ -225,24 +200,6 @@
 </div>
 
 <div class="container mx-auto px-4 w-[86%] pt-8">
-  <div
-    class="py-8 rounded-lg shadow-md mb-12 mx-32"
-    style="background-color: #d1b49a"
-  >
-    <div class="grid grid-cols-4 gap-4 text-center text-sm px-4">
-      {% for cat in categories %}
-      <div class="flex flex-col items-center">
-        <div class="w-[150px] h-[150px] rounded-full p-2 mb-3 shadow-lg flex justify-center items-center overflow-hidden bg-white">
-            <img src="/static/image/cafe_menu_2.png" alt="{{ cat.name }}" class="w-full h-full object-contain" />
-        </div>
-        <h3 class="text-4xl font-semibold mb-2 text-gray-800">{{ cat.name }}</h3>
-        <p class="text-2xl text-gray-800 leading-relaxed max-w-xs mx-auto line-clamp-2">
-          {{ cat.description }}
-        </p>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
 
   <div class="bg-white pt-16">
     <h2
@@ -251,15 +208,42 @@
       lựa chọn dành cho bạn
     </h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
-
+       {% for product in featured_products %}
+        <div class="flex items-start mb-8 pl-16 pr-4 items-center">
+        <div
+          class="flex-shrink-0 w-40 h-40 rounded-full border border-gray-300 overflow-hidden"
+        >
+          <img
+            src={{product.image}}
+            alt="Cà phê Latte"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex-grow pl-4">
+          <div
+            class="flex justify-between items-start mb-1 border-b border-dashed border-gray-300 pb-1"
+          >
+            <span class="text-3xl font-bold text-red-600 flex items-center">
+              <span class="text-orange-500 mr-2 text-2xl">◆</span> {{product.name}}
+            </span>
+            <span class="text-3xl font-bold text-gray-900">{{product.price}}đ</span>
+          </div>
+          <p class="text-2xl text-gray-600 pt-1">
+           {{product.description}}
+          </p>
+        </div>
+      </div>
+{% endfor %}
+  </div>
     <div class="text-center mt-8 pb-12">
       <button
         class="text-xl bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded shadow-lg transition duration-300"
       >
-        Xem thêm
+        <a href="/menu">
+          Xem thêm
+        </a>
       </button>
     </div>
-  </div>
 </div>
 
 <div class="py-16 px-4">
@@ -276,7 +260,7 @@
         style="background-color: #d6c7b7; border: 1px solid #c5b6a8"
       >
         <img
-          src="placeholder-group-photo.jpg"
+          src="https://res.cloudinary.com/ds11ggie4/image/upload/v1766638478/bgr3_hqjcye.png"
           alt="Nhóm người đang trò chuyện vui vẻ"
           class="w-full h-full object-cover opacity-90"
         />
@@ -287,7 +271,7 @@
       class="absolute z-10 w-40 h-40 -top-8 -left-2 md:-left-16 bg-white p-2 rounded-lg shadow-xl transform rotate-3"
     >
       <img
-        src="placeholder-coffee-art.jpg"
+        src="https://res.cloudinary.com/ds11ggie4/image/upload/v1766638639/Mocha_menu_5_lhjga6.png"
         alt="Các cốc cà phê nghệ thuật"
         class="w-full h-full object-cover rounded-md"
       />
@@ -297,7 +281,7 @@
       class="absolute z-10 w-40 h-40 bottom-16 -left-2 md:-left-12 bg-white p-2 rounded-lg shadow-xl transform -rotate-2"
     >
       <img
-        src="placeholder-matcha-powder.jpg"
+        src="https://res.cloudinary.com/ds11ggie4/image/upload/v1766638477/bgr1_trry4v.png"
         alt="Bột trà xanh hoặc nguyên liệu"
         class="w-full h-full object-cover rounded-md"
       />
@@ -307,8 +291,8 @@
       class="absolute z-10 w-40 h-40 bottom-16 -right-2 md:-right-12 bg-white p-2 rounded-lg shadow-xl transform rotate-3"
     >
       <img
-        src="placeholder-coffee-cherries.jpg"
-        alt="Tay đang cầm những quả cà phê chín"
+        src="https://res.cloudinary.com/ds11ggie4/image/upload/v1766638479/bgr6_t54giy.png"
+        alt=""
         class="w-full h-full object-cover rounded-md"
       />
     </div>

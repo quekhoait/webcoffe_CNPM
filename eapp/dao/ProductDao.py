@@ -21,9 +21,6 @@ def list(params: dict = None):
                 if params['filter'] == 'new':
                     # sx theo ngày tạo giảm dần
                     query = query.order_by(desc(Product.created_date))
-                elif params['filer'] == 'best':
-                    # sx theo số lượt đánh giá giảm dần
-                    query = query.order_by(desc(Product.rating_count))
 
         return query.all()
 
@@ -96,7 +93,6 @@ def add_product(data, recipes=[]):
                     product_id=new_product.id,
                     ingredient_id=item['ingredient_id'],
                     quantity=item['quantity'],
-                    unit=item['unit']
                 )
                 db.session.add(recipe)
 

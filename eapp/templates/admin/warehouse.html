@@ -1,143 +1,156 @@
-{% extends 'layout/base.html' %}
+{% extends 'admin/admin.html' %}
+{% block admin_content %}
+    <div class="flex-1 p-8 h-screen overflow-y-auto">
+        <div class="flex justify-between items-start mb-8">
+            <div>
+                <h1 class="text-3xl font-extrabold text-gray-900">Quản lý Nguyên liệu</h1>
+                <p class="text-gray-500 mt-1">Quản lý, thống kê danh sách các nguyên liệu.</p>
+            </div>
+            <button type="button" onclick="openModal('ADD')" class="bg-[#5D4037] hover:bg-[#4E342E] text-white font-bold py-2.5 px-6 rounded-lg shadow-md flex items-center gap-2 transition transform hover:-translate-y-1 cursor-pointer">
+                <i class="fa-solid fa-plus"></i> Thêm nguyên liệu
+            </button>
+        </div>
 
-{% block title %}Quản Lý Kho - The Coffee House{% endblock %}
+        <div class="bg-white p-6 rounded-2xl shadow-sm mb-8 flex gap-6 items-center">
+            <div class="flex-1 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-5 top-[75%] -translate-y-1/2 text-gray-400 text-2xl"></i>
+                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-14 p-4 !pl-16 text-2xl bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-gray-200 transition">
+            </div>
 
-{% block content %}
-<div class="flex min-h-screen bg-gray-100 pt-[90px]">
-    
-    <aside class="w-64 bg-white shadow-md hidden md:block">
-        <div class="p-6">
-            <div class="flex items-center gap-3 mb-8">
-                <img src="https://via.placeholder.com/40" class="rounded-full">
-                <div>
-                    <h4 class="font-bold text-gray-800">Nhân viên kho</h4>
-                    <p class="text-xs text-gray-500">Nhân viên</p>
+            <div class="relative min-w-[250px]" id="filter-container">
+                <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-gray-100 transition" onclick="toggleFilterDropdown()">
+                    <input type="text" id="inpFilterName" class="bg-transparent text-lg text-gray-700 font-medium cursor-pointer outline-none w-full" value="Tất cả loại" readonly>
+                    <i class="fa-solid fa-chevron-down text-gray-500 ml-2"></i>
+                </div>
+
+                <div id="filter-dropdown" class="absolute top-full right-0 w-full bg-white border border-gray-100 rounded-xl shadow-xl mt-2 hidden max-h-60 overflow-y-auto z-40">
+                    <div class="p-4 hover:bg-yellow-50 cursor-pointer text-2xl text-gray-700 border-b border-gray-50 transition"
+                         onclick="selectFilter('all', 'Tất cả loại')">
+                        Tất cả loại
+                    </div>
+
+                    {% for c in categories %}
+                    <div class="p-4 hover:bg-yellow-50 cursor-pointer text-lg text-gray-700 border-b border-gray-50 transition"
+                         onclick="selectFilter('{{ c.id }}', '{{ c.name }}')">
+                        {{ c.name }}
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
-            <nav class="space-y-2">
-                <a href="/" class="block px-4 py-3 text-gray-600 hover:bg-yellow-50 hover:text-yellow-600 rounded-lg transition"><i class="fa-solid fa-house mr-3"></i>Trang chủ</a>
-                <a href="/admin/warehouse" class="block px-4 py-3 bg-yellow-100 text-yellow-700 font-bold rounded-lg"><i class="fa-solid fa-warehouse mr-3"></i>Quản lý Kho</a>
-                <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-yellow-50 hover:text-yellow-600 rounded-lg transition"><i class="fa-solid fa-file-invoice mr-3"></i>Đơn hàng</a>
-            </nav>
-        </div>
-    </aside>
-
-    <main class="flex-1 p-8 overflow-y-auto">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Quản lý Kho Nguyên liệu</h1>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <div class="lg:col-span-4">
-                <div class="bg-white p-6 rounded-2xl shadow-sm">
-                    <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-2">Lập Phiếu Kho</h2>
-                    
-                    <form action="/admin/warehouse/create-ticket" method="POST" class="space-y-5">
-                        
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-600 mb-2">Loại phiếu (*)</label>
-                            <select name="ticket_type" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none" onchange="toggleWarehouseInput(this.value)">
-                                <option value="NHAP">Nhập Kho (Import)</option>
-                                <option value="XUAT">Xuất Kho (Export)</option>
-                                <option value="DIEU_CHINH">Điều Chỉnh (Adjust)</option>
-                                <option value="CHUYEN">Chuyển Kho (Transfer)</option>
-                            </select>
-                        </div>
+        <div class="bg-white rounded-xl shadow- overflow-hidden border border-gray-100">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-50 border-b border-gray-100 text-black-500 text-2xl font-bold">
+                    <tr>
+                        <th class="p-5 font-bold pl-8">Sản phẩm</th>
+                        <th class="p-5 font-bold">Giá</th>
+                        <th class="p-5 font-bold">Loại</th>
+                        <th class="p-5 font-bold text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50 text-gray-700">
+                    {% if not products %}
+                        <tr><td colspan="4" class="p-10 text-center text-gray-400 italic">Chưa có món ăn nào.</td></tr>
+                    {% endif %}
 
-                        <div class="grid grid-cols-2 gap-4" id="warehouse-section">
+                    {% for p in products %}
+                    <tr class="hover:bg-gray-50 transition group">
+                        <td class="p-5 pl-8">
+                            <div class="flex items-center gap-4">
+                                <img src="{{ p.image }}"  class="w-12 h-12 rounded-lg object-cover shadow-lg">
+                                <div>
+                                    <div class="font-bold text-gray-900 text-2xl">{{ p.name }}</div>
+                                    <div class="text-xl text-gray-400 line-clamp-1 max-w-[250px]">{{ p.description or 'Chưa có mô tả' }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-5 font-bold text-xl text-gray-900">{{ "{:,.0f}".format(p.price) }}đ</td>
+                        <td class="p-5 text-gray-600 text-xl font-bold">{{ p.category.name if p.category else 'Chưa phân loại' }}</td>
+                        <td class="p-5 text-center">
+                            <div class="flex justify-center gap-3">
+                                <button onclick='openModal("EDIT", {{ p | tojson }})' class="text-gray-400 hover:text-blue-600 text-xl transition"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteProduct({{ p.id }})" class="text-gray-400 hover:text-red-500 text-xltransition"><i class="fa-regular fa-trash-can"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<div id="productModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center backdrop-blur-lg">
+    <div class="bg-white w-[1000px] h-[90vh] rounded-xl p-0 shadow-2xl flex flex-col overflow-hidden">
+        <div class="flex justify-between items-center p-6 border-b bg-gray-50">
+            <h2 id="modalTitle" class="text-2xl font-bold text-gray-900">Thêm Món Mới</h2>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 text-3xl">&times;</button>
+        </div>
+            <div class="flex-1 overflow-y-auto p-8">
+                <input type="hidden" id="inpId">
+                <div class="grid grid-cols-2 gap-8">
+
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-gray-700 border-b pb-2 uppercase text-lg">1. Thông tin món</h3>
+                        <div><label class="block text-gray-700 font-bold mb-2">Tên món</label><input type="text" id="inpName" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></div>
+                        <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-600 mb-2">Kho Nguồn</label>
-                                <select name="source_warehouse" class="w-full p-3 border border-gray-300 rounded-lg outline-none">
-                                    {% for wh in warehouses %}
-                                    <option value="{{ wh.id }}">{{ wh.name }}</option>
-                                    {% endfor %}
-                                </select>
+                                <label class="block text-gray-700 font-bold mb-2 text-lg">Danh mục</label>
+                                <div class="relative" id="cat-container">
+                                    <div class="flex items-center border border-gray-300 rounded-xl bg-white overflow-hidden focus-within:ring-2 focus-within:ring-yellow-500 cursor-pointer" onclick="toggleCatDropdown()">
+                                        <input type="text" id="inpCategoryName" class="w-full p-4 text-lg outline-none bg-white cursor-pointer" placeholder="Chọn danh mục..." readonly>
+                                        <input type="hidden" id="inpCategory">
+                                        <button type="button" class="px-4 text-gray-500 hover:text-gray-800 border-l bg-gray-50 h-full text-lg">▼</button>
+                                    </div>
+                                    <div id="cat-dropdown" class="absolute w-full bg-white border border-gray-200 rounded-xl shadow-2xl hidden max-h-60 overflow-y-auto mt-2 text-lg z-50">
+                                        {% for c in categories %}
+                                        <div class="p-3 hover:bg-yellow-50 cursor-pointer border-b border-gray-50 text-gray-700 transition" onclick="selectCategory({{ c.id }}, '{{ c.name }}')">
+                                            {{ c.name }}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
                             </div>
-                            <div id="dest-warehouse-div" class="hidden">
-                                <label class="block text-sm font-semibold text-gray-600 mb-2">Kho Đích</label>
-                                <select name="dest_warehouse" class="w-full p-3 border border-gray-300 rounded-lg outline-none">
-                                    {% for wh in warehouses %}
-                                    <option value="{{ wh.id }}">{{ wh.name }}</option>
-                                    {% endfor %}
-                                </select>
+                            <div><label class="block text-gray-700 font-bold mb-2">Đơn vị tính</label><input type="text" id="inpUnit" placeholder="Ly, Cái..." class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></div>
+                        </div>
+                        <div><label class="block text-gray-700 font-bold mb-2">Giá bán</label><input type="number" id="inpPrice" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400 font-bold text-green-600"></div>
+                        <div><label class="block text-gray-700 font-bold mb-2">Hình ảnh</label><input type="file" id="inpImage" class="w-full p-2 border rounded-lg"><img id="previewImage" class="w-32 h-32 mt-2 rounded-lg border object-cover hidden"></div>
+                        <div><label class="block text-gray-700 font-bold mb-2">Mô tả</label><textarea id="inpDesc" rows="3" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></textarea></div>
+                    </div>
+
+                    <div class="space-y-6"> <div class="space-y-4">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <h3 class="font-bold text-gray-700 uppercase text-lg">2. Công thức</h3>
+                                <button type="button" onclick="addRecipeRow()" class="text-lg bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 font-bold">+ Thêm NL</button>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 min-h-[200px]">
+                                <div id="recipeContainer" class="space-y-3 overflow-visible"></div>
+                                <div class="text-xs text-gray-500 italic mt-4 text-center">* Nhập tên để tìm kiếm nguyên liệu nhanh.</div>
                             </div>
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-600 mb-2">Nguyên liệu (*)</label>
-                            <div class="flex gap-2">
-                                <select name="ingredient_id" class="flex-1 p-3 border border-gray-300 rounded-lg outline-none">
-                                    {% for item in ingredients %}
-                                    <option value="{{ item.id }}">{{ item.name }} ({{ item.unit }})</option>
-                                    {% endfor %}
-                                </select>
-                                <input type="number" name="quantity" placeholder="SL" class="w-20 p-3 border border-gray-300 rounded-lg outline-none text-center" required>
+                        <div class="space-y-4 pt-4 border-t border-gray-200">
+                            <h3 class="font-bold text-gray-700 uppercase text-lg">3. Thêm danh mục</h3>
+                            <div class="bg-yellow-50/50 p-4 rounded-xl border border-yellow-200">
+                                <div class="flex gap-2">
+                                    <input type="text" id="inpNewCatName" placeholder="Nhập tên danh mục mới..." class="flex-1 p-3 border border-gray-300 rounded-lg outline-none focus:border-yellow-400 bg-white">
+                                    <button type="button" onclick="addQuickCategory()" class="bg-[#5D4037] hover:bg-[#4E342E] text-white font-bold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">
+                                        <i class="fa-solid fa-plus"></i> Thêm
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-600 mb-2">Ghi chú</label>
-                            <textarea name="note" rows="3" class="w-full p-3 border border-gray-300 rounded-lg outline-none"></textarea>
-                        </div>
-
-                        <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg shadow-md transition">
-                            Xác Nhận
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="lg:col-span-8 space-y-8">
-                
-                <div class="bg-red-50 border border-red-200 p-4 rounded-xl flex items-start gap-3">
-                    <div class="text-red-500 mt-1"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                    <div>
-                        <h4 class="font-bold text-red-700">Cảnh báo tồn kho thấp</h4>
-                        <p class="text-sm text-red-600">Sắp hết hàng: <span class="font-semibold">Cafe hạt (4kg), Sữa tươi (2 lit)</span>.</p>
                     </div>
                 </div>
-
-                <div class="bg-white p-6 rounded-2xl shadow-sm">
-                    <h2 class="text-xl font-bold text-gray-800 mb-6">Tồn kho Hiện tại</h2>
-                    <table class="w-full text-left">
-                        <thead class="text-gray-500 border-b border-gray-100">
-                            <tr>
-                                <th class="pb-3 pl-2">Tên nguyên liệu</th>
-                                <th class="pb-3 text-center">Tồn kho</th>
-                                <th class="pb-3 text-center">Đơn vị</th>
-                                <th class="pb-3 text-right pr-2">Trạng thái</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-700">
-                            <tr class="border-b border-gray-50 hover:bg-gray-50">
-                                <td class="py-4 pl-2 font-medium">Cafe hạt</td>
-                                <td class="py-4 text-center font-bold text-red-600">4</td>
-                                <td class="py-4 text-center text-gray-500">kg</td>
-                                <td class="py-4 text-right pr-2"><span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded">Sắp hết</span></td>
-                            </tr>
-                            <tr class="border-b border-gray-50 hover:bg-gray-50">
-                                <td class="py-4 pl-2 font-medium">Đường</td>
-                                <td class="py-4 text-center font-bold">15</td>
-                                <td class="py-4 text-center text-gray-500">kg</td>
-                                <td class="py-4 text-right pr-2"><span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded">Còn hàng</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
+        <div class="p-6 border-t bg-gray-50 flex justify-end gap-3">
+            <button onclick="closeModal()" class="px-6 py-2 rounded-lg border hover:bg-gray-50">Hủy</button>
+            <button onclick="saveProduct()" class="px-6 py-2 rounded-lg bg-[#FCD34D] font-bold hover:bg-[#fbbf24]">Lưu</button>
         </div>
-    </main>
+    </div>
 </div>
 
-<script>
-    function toggleWarehouseInput(type) {
-        const destDiv = document.getElementById('dest-warehouse-div');
-        if (type === 'CHUYEN') {
-            destDiv.classList.remove('hidden');
-        } else {
-            destDiv.classList.add('hidden');
-        }
-    }
-</script>
+
+
 {% endblock %}

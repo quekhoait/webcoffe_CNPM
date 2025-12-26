@@ -19,14 +19,8 @@
 
     <!-- Nút tăng -->
     <button
-        class="plus-btn w-10 h-10 text-4xl flex items-center justify-center transition duration-150
-               {% if not in_stock %}
-                   text-gray-400 cursor-not-allowed
-               {% else %}
-                   text-gray-600 hover:bg-gray-100
-               {% endif %}"
+        class="plus-btn w-10 h-10 text-4xl flex items-center justify-center transition duration-150 text-gray-600 hover:bg-gray-100"
         aria-label="Tăng số lượng"
-        {% if not in_stock %} disabled {% endif %}
     >
         +
     </button>

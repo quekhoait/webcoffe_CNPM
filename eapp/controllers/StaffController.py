@@ -18,8 +18,11 @@ def load_staff():
     products = ProductDao.list()
     invoice = session.get('invoice', {})
     rules = RuleDAO.list(RuleDAO.RuleFilter(rule_type=RuleType.SERVICE))
-    total_price_tmp = InvoiceService.calculate_total(list(invoice.values()))
-    total_price = InvoiceService.calculate_final_total(total_price_tmp)
+    total_price_tmp = 0 
+    total_price = 0
+    if invoice:
+        total_price_tmp = InvoiceService.calculate_total(list(invoice.values()))
+        total_price = InvoiceService.calculate_final_total(total_price_tmp)
     status_map = InventoryValidator.get_product_makeable_map(products=products,warehouse_id=session.get('warehouse_id',1))
     return render_template('/staff/staff.html',
                            category=category, 
@@ -89,9 +92,7 @@ def addItemToInvoice():
         for key, value in WarehouseDAO.get_available_stock_map(get_current_warehouse()).items()     
     }
     
-    # print(required_ingredient_map)
-    # print(available_stock)
-    # print(WarehouseDAO.get_available_stock_map(get_current_warehouse()))
+
 
     #Kiểm tra kho đáp ứng được món này ko
     makeable_product = InventoryValidator.get_quantity_product_makeable(
@@ -100,11 +101,7 @@ def addItemToInvoice():
         available_stock_map = available_stock
     )
 
-    # print(makeable_product)
-    # print(invoice)
-    
-    
-
+ 
     if makeable_product['ingredient_insufficient']:
         return jsonify({
             "success": False,

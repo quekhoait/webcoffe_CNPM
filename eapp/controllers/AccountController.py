@@ -50,18 +50,15 @@ def login():
 
         # login_user là của flask_login
         login_user(u)
-        print(u.role)
-
-        if u.role== Role.USER:
-            redirect_url = url_for("index")
-        elif u.role == Role.STAFF:
+        redirect_url = url_for("home")
+        if u.role == Role.STAFF:
             redirect_url = url_for("staff")
         elif u.role == Role.CASHIER:
             redirect_url = url_for('cashier')
         elif u.role == Role.WAREHOUSE_KEEPER:
             redirect_url = url_for("warehouse")
-        # elif u.role == Role.ADMIN:
-        #     return redirect(url_for("user"))
+        elif u.role == Role.ADMIN:
+            redirect_url = url_for("overview")
         return jsonify({"status": "success", "message": "Đăng nhập thành công!", "redirect_url": redirect_url})
     except Exception as ex:
         app.logger.error(f'Lỗi khi đăng nhập: {ex}')

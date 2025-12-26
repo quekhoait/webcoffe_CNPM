@@ -1,5 +1,5 @@
 from enum import Enum
-from sqlalchemy import Boolean, Column, Float, Integer, String, Enum as SqlEnum
+from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Enum as SqlEnum
 from eapp.models import BaseModel
 
 class RuleType(Enum):
@@ -11,7 +11,6 @@ class Rule(BaseModel):
     rule_type = Column(SqlEnum(RuleType), nullable=False)
     value = Column(Float)
     unit = Column(String(50))
-    instance_rule_id = Column(Integer)
     description = Column(String(200))
     active = Column(Boolean, default=True)
-
+    account_id = Column(Integer, ForeignKey('account.id'), nullable=False)

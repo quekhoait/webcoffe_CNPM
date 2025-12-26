@@ -61,17 +61,17 @@ rules_seed = [
         "rule_type": RuleType.SERVICE,
         "value": 10,
         "unit": "%",
-        "instance_rule_id": None,
         "description": "Phí phục vụ áp dụng cho tất cả đơn hàng",
-        "active": True
+        "active": True,
+        "account_id": 1
     },{
         "name": "Nguyên liệu tồn kho tối thiểu",
         "rule_type": RuleType.INGREDIENT,
         "value": 5,
         "unit": None,
-        "instance_rule_id": None,
         "description": "Mức tồn kho tối thiểu cho mỗi nguyên liệu",
-        "active": True
+        "active": True,
+        "account_id": 1
     }
 ]
 
@@ -91,7 +91,7 @@ accounts = [
         "username": "admin",
         "password": str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
         "phone": "0123456789",
-        "name": "Huy dep trai",
+        "name": "Huy",
         "role": Role.ADMIN
     },
     {
@@ -113,8 +113,16 @@ accounts = [
         "password": str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
         "phone": "0916445657",
         "address":"quem",
-        "name": "HUy ngu",
+        "name": "Huy",
         "role":Role.USER
+    },
+    {
+        "username": "khao",
+        "password": str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
+        "phone": "0916445957",
+        "address":"quem",
+        "name": "eeee",
+        "role":Role.WAREHOUSE_KEEPER
     }
 ]
 
@@ -318,7 +326,7 @@ if __name__ == "__main__":
 
 
 
-
+        
 
         # Seed dishes
         for cat_name, items in cafe_dishes.items():
@@ -332,8 +340,6 @@ if __name__ == "__main__":
                     status=ProductStatus.ACTIVE,
                     description=f"{name} được pha chế theo công thức đặc biệt của quán.",
                     image=image_url,
-                    rating_score=round(random.uniform(3.5, 5), 1),
-                    rating_count=random.randint(10, 200),
                     dish_category_id=category.id,
                 )
                 db.session.add(dish)
@@ -384,7 +390,6 @@ if __name__ == "__main__":
                     product_id=product.id,
                     ingredient_id=ingredient.id,
                     quantity=ing_data["quantity"],
-                    unit=ing_data["unit"]
                 )
                 db.session.add(recipe)
 

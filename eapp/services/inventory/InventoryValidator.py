@@ -1,8 +1,10 @@
 import pdb
 from pprint import pprint
 from eapp.dao import ProductDao
+from eapp.dao.IngredientDAO import IngredientDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.services.inventory.RecipeService import RecipeService
+from eapp.services.inventory.StockService import StockService
 
 
 class InventoryValidator:
@@ -162,6 +164,11 @@ class InventoryValidator:
 
 
     """
+        [
+            Product,
+            Product
+        ]
+
         {
             product_id:bool,
             product_id:bool,
@@ -203,6 +210,7 @@ class InventoryValidator:
         required_ingredient_map = RecipeService.calculate_required_ingredients(invoice_items)
         recipe_map = ProductDao.get_product_recipe_map()
         result = []
+        
         # lặp qua từng product
         for product in invoice_items:
             max_quantities = []
@@ -232,3 +240,54 @@ class InventoryValidator:
 
 
         return result , available_stock_map
+    
+
+    """
+    slip_data:
+        slip_type
+        note
+        stock_user_id
+        invoice_id (option)
+        destination_warehouse_id
+        source_warehouse_id
+        ingredients (list)
+            ingredient_id
+            quantity
+    """
+    def validate_slip_data(slip_data):
+        slip_type = slip_data.get('slip_type')
+        ingredients = slip_data.get('ingredients', [])
+        src_id = slip_data.get('source_warehouse_id')
+        dest_id = slip_data.get('destination_warehouse_id')
+
+        if not ingredients:
+            raise Exception("Danh sách nguyên liệu không được để trống")
+
+        if slip_type == 'IMPORT':
+            if not dest_id: raise Exception("Phải chỉ định kho để nhập hàng")
+        
+        elif slip_type in ['EXPORT', 'UPDATE']:
+            if not src_id: raise Exception("Phải chọn kho nguồn")
+            
+        elif slip_type == 'TRANSFER':
+            if not src_id or not dest_id:
+                raise Exception("Chuyển kho cần có cả kho nguồn và kho đích")
+            if src_id == dest_id:
+                raise Exception("Kho nguồn và kho đích không được trùng nhau")
+        current_stock = {}
+        if src_id:
+            current_stock = WarehouseDAO.get_available_stock_map(src_id)
+        print(current_stock)
+        for item in ingredients:
+            ing_id = int(item.get('ingredient_id')) 
+            quantity = float(item.get('quantity'))
+
+            if not ing_id: raise Exception("Dữ liệu nguyên liệu không hợp lệ")
+            if quantity <= 0: raise Exception("Số lượng phải lớn hơn 0")
+
+            if slip_type in ['EXPORT', 'TRANSFER', 'UPDATE']:
+                if quantity > current_stock.get(ing_id,0):
+                    ing_name = IngredientDAO.get_by_id(ing_id).name
+                    raise Exception(f"Nguyên liệu {ing_name} không đủ tồn kho (Hiện có: {current_stock.get(ing_id,0)})")
+        
+        return True

@@ -45,7 +45,7 @@ def revenue_by_time_dao(time_type='day', time_value='None' ):
     }
 
 
-def top_products_by_time_dao(time_type='day', time_value=None, limit=6):
+def top_products_by_time_dao(time_type='day', time_value=None):
     # Mặc định thời gian hiện tại nếu không truyền
     if not time_value:
         time_value = datetime.now()
@@ -75,6 +75,6 @@ def top_products_by_time_dao(time_type='day', time_value=None, limit=6):
     # Nhóm theo sản phẩm và sắp xếp theo số lượng bán
     query = query.group_by(InvoiceDetail.product_id, Product.name
                            ).order_by(func.sum(InvoiceDetail.quantity).desc()
-                                      ).limit(limit)
+                                      )
 
     return query.all()

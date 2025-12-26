@@ -139,7 +139,7 @@
             <td class="p-3">{{ res.product_name }}</td>
             <td class="p-3 text-right">{{ res.total_quantity }}</td>
             <td class="p-3 text-right">
-                {{ "{:,.1f}".format(res.total_revenue / 1_000_000) }}M ₫
+                {{ res.total_revenue }} ₫
             </td>
         </tr>
         {% else %}
@@ -170,6 +170,7 @@
 
 
 {% endblock %}
+{% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 <!--Mở form-->
@@ -199,8 +200,7 @@ function applyDateRange(){
     // Ẩn panel
     closeDateRange();
 
-    // Redirect với start_time và end_time
-    window.location.href = `/admin/overview?start_time=${from}&end_time=${to}`;
+    window.location.href = `/dashboard/admin/overview?start_time=${from}&end_time=${to}`;
 }
 
 <!--Tính tỉ lệ-->
@@ -246,4 +246,4 @@ new Chart(ctx, {
 
 
 </script>
-
+{% endblock %}

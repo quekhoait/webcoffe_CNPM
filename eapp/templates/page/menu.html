@@ -31,11 +31,6 @@
                        class="px-6 py-3 rounded-full font-bold text-xl shadow-sm border transition whitespace-nowrap {{ 'bg-[#7c5c56] text-white' if current_filter == 'new' else 'bg-white text-gray-500 hover:bg-[#efe7d6]' }}">
                         Món mới
                     </a>
-
-                    <a href="/menu?filter=best{{ '&category=' ~ current_cate_id if current_cate_id else '' }}{{ '&q=' ~ search_query if search_query else '' }}"
-                       class="px-6 py-3 rounded-full font-bold text-xl shadow-sm border transition whitespace-nowrap {{ 'bg-[#7c5c56] text-white' if current_filter == 'best' else 'bg-white text-gray-500 hover:bg-[#efe7d6]' }}">
-                        Bán chạy nhất
-                    </a>
                 </div>
             </div>
 

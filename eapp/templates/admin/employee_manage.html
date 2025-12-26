@@ -13,10 +13,11 @@
         </div>
 
         <div class="bg-white p-6 rounded-2xl shadow-sm mb-8 flex gap-6 items-center">
-            <div class="flex-1 relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
-                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Tìm theo tên, ID hoặc SĐT..." class="w-full pl-14 p-4 text-lg bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-gray-200 transition">
+               <div class="flex-1 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-5 top-[75%] -translate-y-1/2 text-gray-400 text-2xl"></i>
+                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Tìm theo tên, ID hoặc SĐT..." class="w-full pl-14 p-4 !pl-16 text-2xl bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-gray-200 transition">
             </div>
+
 
             <div class="relative min-w-[250px]" id="filter-container">
                 <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-gray-100 transition" onclick="toggleFilterDropdown()">

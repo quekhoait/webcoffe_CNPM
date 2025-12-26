@@ -23,7 +23,6 @@ def load_home():
     categories = Category.query.limit(4).all()
 
     featured_products = Product.query.filter_by(status=ProductStatus.ACTIVE) \
-        .order_by(Product.rating_score.desc()) \
         .limit(8).all()
 
     menu_products = Product.query.filter_by(status=ProductStatus.ACTIVE).limit(10).all()
@@ -95,18 +94,18 @@ def load_overview():
 
 
 
-# def product_detail(id):
-#
-#     product = Dish.query.get(id)
-#
-#     if not product:
-#         return "Không tìm thấy sản phẩm", 404
-#
-#     related_products = Dish.query.filter(
-#         Dish.dish_category_id == product.dish_category_id,
-#         Dish.id != product.id
-#     ).limit(4).all()
-#
-#     return render_template('page/product_detail.html',
-#                            product=product,
-#                            related_products=related_products)
+def load_product_detail(id):
+
+    product = Product.query.get(id)
+
+    if not product:
+        return "Không tìm thấy sản phẩm", 404
+
+    related_products = Product.query.filter(
+        Product.dish_category_id == product.dish_category_id,
+        Product.id != product.id
+    ).limit(4).all()
+
+    return render_template('page/product_detail.html',
+                           product=product,
+                           related_products=related_products)

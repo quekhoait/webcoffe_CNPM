@@ -8,7 +8,6 @@ def load_overview():
         time_type = request.args.get('type', 'day')
         start_time = request.args.get('start_time')
         end_time = request.args.get('end_time')
-        limit = 6
 
         # Xử lý time_value
         time_value = None
@@ -24,7 +23,7 @@ def load_overview():
         total_revenue = OverviewDAO.revenue_by_time_dao(time_type, time_value)
 
         # Top sản phẩm
-        data = OverviewDAO.top_products_by_time_dao(time_type=time_type, time_value=time_value, limit=limit)
+        data = OverviewDAO.top_products_by_time_dao(time_type=time_type, time_value=time_value)
         result = [{
             'product_id': item.product_id,
             'product_name': item.product_name,

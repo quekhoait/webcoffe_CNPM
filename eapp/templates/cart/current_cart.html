@@ -2,31 +2,53 @@
   <h2 class="text-2xl font-bold mb-6 text-gray-800">Giỏ hàng hiện tại (2)</h2>
   <div class="h-[270px] overflow-y-auto">
 
-    {% if list_pro %}
-        {% for product in list_pro %}
-             <div class="cart-component-item flex items-start justify-between py-4 border-b border-gray-100">
-      <div class="flex items-center">
-        <img class="w-20 h-20 flex items-center bg-purple-700 bg-opacity-80 rounded-lg mr-3 flex-shrink-0" src="{{product.product.image}}">
-        <div class="pl-4">
-          <p class="font-semibold text-2xl text-gray-800">{{product.product.name}}</p>
-          <p class="text-xl font-semibold text-gray-700 price">{{product.product.price}}đ</p>
+{% if list_pro %}
+    {% for prod in list_pro %}
+        {% set status = list_prod_status.get(prod.product.id) %}
+        {% set in_stock = status.in_stock if status else False %}
+        {% set makeable_quantity = status.makeable_quantity if status else 0 %}
+        {% set quantity = prod.quantity %}
+        <div class="cart-component-item flex items-start justify-between py-4 border-b border-gray-100">
+            <div class="flex items-center">
+                <img class="w-20 h-20 flex items-center bg-purple-700 bg-opacity-80 rounded-lg mr-3 flex-shrink-0" src="{{ prod.product.image }}">
+                <div class="pl-4">
+                    <p class="font-semibold text-2xl text-gray-800">{{ prod.product.name }}</p>
+                    <p class="text-xl font-semibold text-gray-700 price">{{ prod.product.price }}đ</p>
+                    {% if not in_stock %}
+                        <span class="text-sm text-red-600 font-semibold">
+                            Không đủ số lượng (còn {{ makeable_quantity }})
+                        </span>
+                    {% else %}
+                        <span class="text-sm text-green-600 font-semibold">
+                            Số lượng (còn {{ makeable_quantity }})
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="flex items-center gap-4 shrink-0">
+                {% set quantity = prod.quantity %}
+                {% include 'page/quantity_control.html' %}
+                <input
+                    type="checkbox"
+                    class="mx-4 self-center scale-125 select-cart-component"
+                      data-product-id="{{ prod.product.id }}"
+                />
+                <button
+                    type="button"
+                    class="btn-remove-product-cart text-gray-400 hover:text-red-500 p-1"
+                    data-product-id="{{ prod.product.id }}"
+                >
+                    <i class="fa-solid fa-trash-can text-2xl"></i>
+                </button>
+            </div>
         </div>
-      </div>
-      <div class="flex items-center space-x-2">
-        {% set quantity=product.quantity %}
-        {% include 'page/quantity_control.html' %}
-         <input type="checkbox" class="ml-auto select-cart-component mx-4">
-        <button type="button" class="btn-remove-product-cart text-gray-400 hover:text-red-500 p-1" data-product-id="{{ product.product.id }}">
-          <i class="fa-solid fa-trash-can text-2xl "    ></i>
-        </button>
-      </div>
+    {% endfor %}
+{% else %}
+    <div class="col-span-full text-center py-20">
+        <p class="text-3xl text-gray-400">Không tìm thấy món nào.</p>
     </div>
-        {% endfor %}
-    {% else %}
-        <div class="col-span-full text-center py-20">
-            <p class="text-3xl text-gray-400">Không tìm thấy món nào.</p>
-        </div>
 {% endif %}
+
   </div>
 
   <div class="mt-6 pt-4 border-t border-gray-200 space-y-2 text-2xl">
@@ -43,7 +65,7 @@
       <span  id="total">0đ</span>
     </div>
   </div>
-  <button
+  <button id="btn_payment"
     class="w-full mt-6 py-3 bg-orange-600 text-white font-bold text-2xl rounded-xl hover:bg-orange-700 transition duration-200 shadow-md"
   >
     Tiến hành Thanh toán

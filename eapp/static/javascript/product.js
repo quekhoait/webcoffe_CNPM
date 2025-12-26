@@ -21,54 +21,63 @@ const searchProduct = document.getElementById('search-product')
     }
 
 
-
-document.getElementById("btn_payment").addEventListener("click", () => {
-    const cartItems = document.querySelectorAll('.cart-component-item-popup');
+function cartToPayment(btn, cartSelector){
+if (!btn) {
+      return; }
+  btn.addEventListener("click", () => {
+    // Lấy các item popup lúc click
+    const cartItems = document.querySelectorAll(cartSelector);
+    console.log(cartItems)
     const selectedItems = getSelectedItems(cartItems);
     if (selectedItems.length === 0) {
         showAlert("warning", "Thông báo", "Vui lòng chọn ít nhất 1 sản phẩm");
         return;
     }
+
     fetch("/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(selectedItems)
     })
-  .then(res => res.json())
+    .then(res => res.json())
     .then(data => {
         if (data.status === "error") {
             showAlert("error", "Không thể thanh toán", data.message);
             return;
         }
-        // ✅ OK
         window.location.href = "/payment";
     })
     .catch(err => {
         console.error(err);
-        showAlert("error", "Lỗi", data.message);
+        showAlert("error", "Lỗi", err.message || "Lỗi xảy ra");
     });
+  });
+}
 
-});
+// Chỉ truyền selector, NodeList sẽ được lấy khi click
+
 
 
 function getSelectedItems(cartItems) {
     let selectedItems = [];
     cartItems.forEach(item => {
         const checkbox = item.querySelector('.select-cart-component');
+        console.log("cb: ", checkbox)
         if (!checkbox || !checkbox.checked) return;
         selectedItems.push({
-            product_id: item.dataset.productId,
+            product_id: item.dataset.productId || checkbox.dataset.productId,
             quantity: parseInt(item.querySelector('.qty-display').innerText),
         });
     });
     return selectedItems;
 }
 
+cartToPayment(document.getElementById("btn_payment_popup"), ".cart-component-item-popup");
+cartToPayment(document.getElementById("btn_payment"), ".cart-component-item");
 
 //Tiến hành thanh toán
 document.getElementById("btn-accept-payment").addEventListener("click",()=> {
  const note = document.getElementById("order-note").value;
-
     const paymentMethod = document.querySelector(
         'input[name="payment_method"]:checked'
     )?.value;
@@ -84,13 +93,16 @@ document.getElementById("btn-accept-payment").addEventListener("click",()=> {
           if (data.status === "success") {
            window.open(data.pay_url, "_blank");
         } else {
-            alert(data.message);
+            showAlert("error", "Thông báo", data.message)
         }
     });
 })
 
 
-
+//Truy cập product detail
+function handleProductClick(id){
+   window.location.href = `/product/${id}`;
+}
 
 
 
