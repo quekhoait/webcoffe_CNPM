@@ -8,8 +8,7 @@ from eapp.models.WarehouseSlip import SlipType
 from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp.services.inventory.StockService import IngredientStatus, StockService
 
-
-def warehouse_page():
+def get_warehouse():
     warehouse_id = int(request.args.get('warehouse_id', 1))
     warehouse = WarehouseDAO.get_by_id(warehouse_id)
     warehouses = WarehouseDAO.list()
@@ -17,16 +16,26 @@ def warehouse_page():
     ingredient_stocks = StockService.load_stock(warehouse_id=warehouse_id)
     ingredients = IngredientDAO.list()
     low_stock_list = [
-    item for item in ingredient_stocks
-    if item["status"] in [IngredientStatus.LOW_STOCK,IngredientStatus.OUT_OF_STOCK]
-]
+        item for item in ingredient_stocks
+        if item["status"] in [IngredientStatus.LOW_STOCK, IngredientStatus.OUT_OF_STOCK]
+    ]
+    return {
+        "warehouse": warehouse,
+        "warehouses": warehouses,
+        "slip_types": slip_types,
+        "ingredient_stocks": ingredient_stocks,
+        "ingredients": ingredients,
+        "low_stock_list": low_stock_list
+    }
+def warehouse_page():
+    data=get_warehouse()
     return render_template('warehouse/warehouse.html',
-                           warehouse=warehouse,
-                            slip_types=slip_types,
-                           ingredient_stocks=ingredient_stocks,
-                           ingredients=ingredients,
-                           warehouses=warehouses,
-                           low_stock_list=low_stock_list)
+                           **data)
+
+def warehouse_admin():
+    data=get_warehouse()
+    return render_template('admin/warehouse.html',
+                           **data)
 
 #API
 def get_ingredients():

@@ -23,8 +23,3 @@ class BaseModel(db.Model, SerializerMixin):
         
     def save_all(self, objects: list):
         db.session.add_all(objects)
-     
-#
-#     def __repr__(self):
-#         # Hàm hiển thị thông tin đối tượng khi debug
-#         return f"<{self.__class__.__name__} {self.id}>"
