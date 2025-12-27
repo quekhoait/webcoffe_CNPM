@@ -92,13 +92,10 @@ def TransactionStatus():
 
 
 def momo_ipn():
-    print(1)
     data = request.json
-    print("data:", data)
     order_id = data.get("orderId")
     result_code = data.get("resultCode")
     trans_id = data.get("transId")
-    print("rscode", result_code)
     payment = PaymentDao.get_by_momo_id(order_id)
     if not payment:
         return jsonify({"message": "payment not found"}), 404

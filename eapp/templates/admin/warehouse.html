@@ -135,19 +135,19 @@
         </div>
          <div class="grid p-8">
             <div class="space-y-4">
-                <div><label class="block text-gray-700 font-bold mb-2">Tên nguyên liệu</label><input type="text" id="inpName" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></div>
+                <div><label class="block text-gray-700 font-bold mb-2">Tên nguyên liệu</label><input type="text" id="inpName_ingre" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></div>
                 <div class="grid grid-cols-2 gap-4">
-                <div><label class="block text-gray-700 font-bold mb-2">Giá bán</label><input type="number" id="inpPrice" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400 font-bold text-green-600"></div>
+                <div><label class="block text-gray-700 font-bold mb-2">Giá bán</label><input type="number" id="inpPrice_ingre" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400 font-bold text-green-600"></div>
                     <div>
-                        <label class="block text-gray-700 font-bold mb-2">Đơn vị tính</label><input type="text" id="inpUnit" placeholder="Ly, Cái..." class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400">
+                        <label class="block text-gray-700 font-bold mb-2">Đơn vị tính</label><input type="text" id="inpUnit_ingre" placeholder="Ly, Cái..." class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400">
                     </div>
                 </div>
-                <div><label class="block text-gray-700 font-bold mb-2">Mô tả</label><textarea id="inpDesc" rows="3" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></textarea></div>
+                <div><label class="block text-gray-700 font-bold mb-2">Mô tả</label><textarea id="inpDesc_ingre" rows="3" class="w-full p-3 border rounded-lg outline-none focus:border-yellow-400"></textarea></div>
             </div>
          </div>
         <div class="p-6 border-t bg-gray-50 flex justify-end gap-3">
             <button onclick="closeModal()" class="px-6 py-2 rounded-lg border hover:bg-gray-50">Hủy</button>
-            <button onclick="saveProduct()" class="px-6 py-2 rounded-lg bg-[#FCD34D] font-bold hover:bg-[#fbbf24]">Lưu</button>
+            <button onclick="saveIngredient()" class="px-6 py-2 rounded-lg bg-[#FCD34D] font-bold hover:bg-[#fbbf24]">Lưu</button>
         </div>
     </div>
 </div>

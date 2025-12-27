@@ -1,4 +1,5 @@
 # Cấu trúc route của các trang web bình thường
+from _ast import In
 
 from flask import Flask, render_template
 from jinja2.nodes import Or
@@ -7,14 +8,14 @@ from jinja2.nodes import Or
 # from eapp.dao.Product import get_product
 from eapp import app
 from eapp.controllers import AccountController, CashierController, ProductController, RuleController, StaffController, \
-    WarehouseController, index, \
-    CartController, PaymentController, OverviewController
+    WarehouseController, index, IngredientController, CartController, PaymentController, OverviewController
 
 from eapp.Momo import momo
+from eapp.Google import google
 from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index, AdminController, EmployeeController
 
 from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index, AdminController, EmployeeController
-
+from eapp.models import Ingredient
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
@@ -87,7 +88,7 @@ app.add_url_rule('/dashboard/warehouse', 'warehouse', WarehouseController.wareho
 app.add_url_rule('/admin/warehouse/create-ticket', 'create_ticket', StaffController.create_ticket, methods=['POST'])
 
 
-#API Ingredient
+#API IngredientController.py
 app.add_url_rule('/api/ingredients', 'get_ingredients', WarehouseController.get_ingredients, methods=['GET'])
 
 #API WarehouseSlip
@@ -135,3 +136,8 @@ app.add_url_rule("/rule/<int:rule_id>/update",'update-rule',RuleController.updat
 
 #warehouse
 app.add_url_rule('/dashboard/admin/ware-house', 'admin_warehouse', WarehouseController.warehouse_admin, methods=['get'])
+app.add_url_rule('/api/admin/ingredient/add', 'api_add_ingredient', IngredientController.api_add, methods=['POST'])
+# app.add_url_rule('/api/admin/ingredient/update', 'api_update', IngredientController.api_update, methods=['POST'])
+#Google
+app.add_url_rule("/api/login_google",'login_google', google.login, methods=['GET'])
+app.add_url_rule("/api/callback",'callback_google', google.auth, methods=['GET'])

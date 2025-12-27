@@ -13,9 +13,12 @@ class Role(Enum):
 
 class Account(BaseModel, UserMixin):
     username = Column(String(100), nullable=False, unique=True)
-    phone = Column(String(25), nullable=False, unique=True)
     name = Column(String(100))
-    password = Column(String(255), nullable=False)
+
+    password = Column(String(255), nullable=True)
+    phone = Column(String(25), nullable=True, unique=True)
+    google_id = Column(String(100), unique=True, default=None)
+
     email = Column(String(100), unique=False)
     address=Column(String(255))
     provider = Column(String(50), default='local')
