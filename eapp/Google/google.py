@@ -12,8 +12,8 @@ app.secret_key = os.getenv("SECRET_KEY_GOOGLE")
 oauth = OAuth(app)
 google = oauth.register(
     name='google',
-    client_id='883694741732-v38og27huae6kmdq78hmabfcsmvg10o0.apps.googleusercontent.com',
-    client_secret='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',
+    client_id=os.getenv("YOUR_CLIENT_ID"),
+    client_secret=os.getenv("YOUR_CLIENT_SECRET"),
     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
     client_kwargs={'scope': 'openid email profile'}
 )
