@@ -11,10 +11,9 @@ from eapp.services.RuleService import RuleService
 from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp.services.inventory.RecipeService import RecipeService
 from eapp.services.admin import admin_required
-from eapp.permissions import staff_required
+# from eapp.permissions import staff_required
 # @admin_required
 
-@staff_required
 def load_staff():
     user = current_user
     category = CategoryDao.list()
@@ -23,10 +22,10 @@ def load_staff():
     rules = RuleDAO.list(RuleDAO.RuleFilter(rule_type=RuleType.SERVICE))
     total_price_tmp = 0 
     total_price = 0
+    status_map = InventoryValidator.get_product_makeable_map(products=products,warehouse_id=get_current_warehouse())
     if invoice:
         total_price_tmp = InvoiceService.calculate_total(list(invoice.values()))
         total_price = InvoiceService.calculate_final_total(total_price_tmp)
-    status_map = InventoryValidator.get_product_makeable_map(products=products,warehouse_id=get_current_warehouse())
     return render_template('/staff/staff.html',
                            category=category, 
                            products=products, 
@@ -68,6 +67,12 @@ def addItemToInvoice():
     quantity = data.get('quantity', 1)
     bonus_quantity = int(data.get('bonus_quantity', 1))
     
+    rule_quantity_invoice = RuleDAO.list(RuleDAO.RuleFilter(rule_type=RuleType.INVOICE))[0].value
+    if len(invoice) >= rule_quantity_invoice:
+        return jsonify({
+            "success" : False,
+            "message" : f"Hóa đơn chỉ được tối đa {rule_quantity_invoice} món"
+        })
     message = InvoiceService.is_invalid_value(invoice.get(product_id, {}).get('quantity', 0),bonus_quantity,data.get('is_set_quantity'))
 
     #kiểm tra dữ liệu vào có hợp lệ ko

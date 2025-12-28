@@ -32,7 +32,8 @@ function createIngredientComboBoxRow() {
     const container = document.getElementById("ingredients-container");
 
     const rowIndex = container.children.length - 1;
-
+    console.log(rowIndex);
+    
     const rowHTML = `
             <div class="ingredient-row flex gap-2 relative w-full">
                 <div class="relative w-[70%]">
@@ -52,7 +53,7 @@ function createIngredientComboBoxRow() {
 
                 <input id="ingredient-quantity-${rowIndex}" type="number" name="quantity" placeholder="SL"
                     class="w-[30%] p-3 border border-gray-300 rounded-lg outline-none text-center" required>
-                <button type="button" class="delete-row p-3 text-red-500 hover:text-red-700">
+                <button type="button" class="delete-row hidden p-3 text-red-500 hover:text-red-700">
                 ✕
                 </button>
             </div>

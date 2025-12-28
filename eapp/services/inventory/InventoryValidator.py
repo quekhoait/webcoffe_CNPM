@@ -117,7 +117,6 @@ class InventoryValidator:
     # kiểm tra xem product này đủ không, ko thì trả về lý do ko đủ
     @staticmethod
     def get_quantity_product_makeable(product_id,quantity,available_stock_map):
-        print("av: ", available_stock_map)
         recipe_map = ProductDao.get_product_recipe_map()
         recipe = recipe_map.get(product_id, [])
 

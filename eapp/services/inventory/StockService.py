@@ -80,6 +80,10 @@ class StockService:
         src_wh_id = slip_data['source_warehouse_id']
         dst_wh_id = slip_data['destination_warehouse_id']
 
+        
+        if slip_data.get('invoice_id'):
+            warehouse_slip.invoice_id = slip_data['invoice_id']
+
         # nhập kho
         if dst_wh_id is not None:
             warehouse_slip.destination_warehouse_id = dst_wh_id

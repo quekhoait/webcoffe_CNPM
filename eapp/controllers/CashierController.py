@@ -49,7 +49,8 @@ def update_invoice_status():
     params = request.json
     invoice = InvoiceDAO.get_by_id(params['invoice_id'])
     invoice_status = InvoiceStatusEnum[params['invoice_status']]
-    warehouse_id =get_current_warehouse_id()
+    invoice.cashier_id = current_user.id
+    warehouse_id = get_current_warehouse_id()
     result = InvoiceService.update_invoice_status(invoice=invoice,new_status=invoice_status,warehouse_id=warehouse_id)
     # result['invoice'] = result['invoice'].to_dict() if result['invoice'] else None
     return jsonify({
