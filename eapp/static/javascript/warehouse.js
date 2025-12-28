@@ -22,7 +22,7 @@ let ingredients = []
 
 document.addEventListener("DOMContentLoaded", async () => {
     ingredients = load_ingredients()
-    createIngredientComboBoxRow();
+    createIngredientComboBoxRow()
 });
 
 
@@ -52,7 +52,7 @@ function createIngredientComboBoxRow() {
 
                 <input id="ingredient-quantity-${rowIndex}" type="number" name="quantity" placeholder="SL"
                     class="w-[30%] p-3 border border-gray-300 rounded-lg outline-none text-center" required>
-                <button type="button" class="delete-row hidden p-3 text-red-500 hover:text-red-700">
+                <button type="button" class="delete-row p-3 text-red-500 hover:text-red-700">
                 ✕
                 </button>
             </div>
@@ -143,6 +143,17 @@ function renderListComboBox(keyword, dropdown) {
 }
 
 
+document.getElementById('toggle-edit-button').addEventListener('click', e => {
+    buttons = document.querySelectorAll('#ingredients-container .ingredient-row .delete-row')
+    
+    const isShow = e.target.classList.toggle('show');
+
+    buttons.forEach(btn => {
+        if (isShow) btn.classList.remove('hidden');
+        else btn.classList.add('hidden');
+    });
+})
+
 
 document.addEventListener("click", e => {
     document.querySelectorAll(".ingredient-row div.absolute").forEach(dd => {
@@ -220,3 +231,11 @@ console.log(
 document.getElementById('list-slip'));
 
 
+document.getElementById('list-slip').querySelectorAll('.slip').forEach(slip => {
+    slip.addEventListener('click', (e) =>{
+        alert(q.data.id)
+        // fetch('/render_view_slip_detail').then(res => res.text()).then(data => {
+        //     console.log(data);
+        // })
+    })
+})
