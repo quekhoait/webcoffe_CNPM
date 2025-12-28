@@ -1,8 +1,8 @@
 <div class="bg-white p-6 rounded-xl shadow-lg" id="my-cart-page">
-  <h2 class="text-2xl font-bold mb-6 text-gray-800">Giỏ hàng hiện tại (2)</h2>
+  {% if list_pro %}
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Giỏ hàng hiện tại {{ list_pro | length }}</h2>
   <div class="h-[270px] overflow-y-auto">
 
-{% if list_pro %}
     {% for prod in list_pro %}
         {% set status = list_prod_status.get(prod.product.id) %}
         {% set in_stock = status.in_stock if status else False %}

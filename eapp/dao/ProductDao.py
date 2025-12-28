@@ -1,3 +1,5 @@
+from _ast import In
+
 from eapp.models import Product, ProductRecipe, ProductRecipe, ProductStatus
 # from MySQLdb._mysql import result
 from sqlalchemy.sql.functions import current_user
@@ -49,28 +51,21 @@ def get_product_recipe_map():
     return product_recipe
 
 
-def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None, search_key=None):
+def get_product_by_status_dao(user_id, invoice_status=None, payment_status=None):
     query = (
-        Invoice.query
+        db.session.query(Invoice, Payment, InvoiceDetail)
         .join(Payment, Payment.invoice_id == Invoice.id)
         .join(InvoiceDetail, InvoiceDetail.invoice_id == Invoice.id)
-        .join(Product, Product.id == InvoiceDetail.product_id)
         .filter(Invoice.customer_id == user_id)
     )
 
     if invoice_status is not None:
         query = query.filter(Invoice.invoice_status == invoice_status)
+
     if payment_status is not None:
         query = query.filter(Payment.status == payment_status)
-    if search_key:  # thêm điều kiện tìm kiếm
-        query = query.filter(Product.name.ilike(f"%{search_key}%"))
 
-    result = query.with_entities(
-        Product,
-        Invoice,
-        Payment
-    ).all()
-    return result
+    return query.all()
 
 
 

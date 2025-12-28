@@ -28,7 +28,6 @@
                     <th class="py-8 text-center">Giá tiền(trên 1 đơn vị)</th>
                     <th class="py-8 text-center">Đơn vị</th>
                     <th class="py-8 text-right pr-2">Trạng thái</th>
-                    <th class="py-8 text-center">Khác</th>
                 </tr>
             </thead>
 
@@ -57,9 +56,7 @@
                             Hết hàng
                         </span>
                     </td>
-                    <td class="py-4 text-center text-gray-500">
-                        xóa
-                    </td>
+
                 </tr>
 
                 {% elif stock.status.name == 'LOW_STOCK' %}
@@ -82,9 +79,6 @@
                             Sắp hết
                         </span>
                     </td>
-                    <td class="py-4 text-center text-gray-500">
-                        xóa
-                    </td>
                 </tr>
 
                 {% else %}
@@ -106,10 +100,6 @@
                         <span class="bg-green-100 text-center text-green-600 text-xl font-bold px-2 py-1 rounded">
                             còn hàng
                         </span>
-                    </td>
-                    <td class="py-4 pl-8 flex gap-2 justify-center text-gray-500">
-                       <i class="fa-solid fa-trash-can cursor-pointer hover:text-red-600"></i>
-                        <i class="fa-solid fa-pen-to-square cursor-pointer hover:text-green-800"></i>
                     </td>
                 </tr>
                 {% endif %}

@@ -362,47 +362,52 @@ document.addEventListener("click", e => {
 
 async function addQuickCategory() {
     const nameInput = document.getElementById('inpNewCatName');
-    const name = nameInput.value.trim();
+    const desInput = document.getElementById('inpNewCatDes');
 
-    if (!name) {
-        alert("Vui lòng nhập tên danh mục mới!");
-        nameInput.focus();
+    const name = nameInput.value.trim();
+    const des = desInput.value.trim();
+    if (!name || !des) {
+        showAlert("error", "Thông báo", "Vui lòng nhập đầy đủ thông tin");
         return;
     }
+    const url = id_cate_click
+        ? "/api/admin/category/update"
+        : "/api/admin/category/add";
+
+    const payload = id_cate_click
+        ? { id: id_cate_click, name: name, description: des }
+        : { name: name, description: des };
 
     try {
-        const res = await fetch('/api/admin/category/add', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ name: name })
+        const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
         });
-
         const data = await res.json();
-
         if (data.success) {
-            alert("Thêm danh mục thành công!");
+            showAlert(
+                "success",
+                "Thông báo",
+                id_cate_click ? "Cập nhật thành công!" : "Thêm danh mục thành công!"
+            );
 
-            const newCat = { id: data.category.id, name: data.category.name };
-            if (typeof ALL_CATEGORIES !== 'undefined') {
-                ALL_CATEGORIES.push(newCat);
-            }
-
-            const dropdown = document.getElementById('cat-dropdown');
-            const newOption = document.createElement('div');
-            newOption.className = "p-3 hover:bg-yellow-50 cursor-pointer border-b border-gray-50 text-gray-700 transition";
-            newOption.innerText = newCat.name;
-            newOption.onclick = function() { selectCategory(newCat.id, newCat.name); };
-            dropdown.appendChild(newOption);
-
-            selectCategory(newCat.id, newCat.name);
-
-            // 4. Xóa ô nhập
-            nameInput.value = "";
+            setTimeout(() => location.reload(), 1000);
         } else {
-            alert("Lỗi: " + data.message);
+            showAlert("error", "Thông báo", data.message);
         }
     } catch (err) {
         console.error(err);
-        alert("Lỗi kết nối Server!");
+        showAlert("error", "Thông báo", "Lỗi kết nối server");
     }
 }
+
+let id_cate_click=null;
+document.querySelectorAll(".btn_edit_cate").forEach(btn => {
+    btn.addEventListener("click", function () {
+        id_cate_click = this.dataset.id
+        document.getElementById("inpNewCatName").value = this.dataset.name;
+        document.getElementById("inpNewCatDes").value = this.dataset.desc;
+});
+
+});

@@ -93,11 +93,11 @@ def api_delete_product():
 def api_add_category():
     data = request.json
     name = data.get('name')
+    description = data.get('description')
+    if not name or not description:
+        return jsonify({'success': False, 'message': 'Nhập đầy đủ thông tin!'})
 
-    if not name:
-        return jsonify({'success': False, 'message': 'Tên danh mục không được để trống!'})
-
-    new_cat = CategoryDao.create_category(name)
+    new_cat = CategoryDao.create_category(name, description)
 
     if new_cat:
         return jsonify({
@@ -105,8 +105,33 @@ def api_add_category():
             'message': 'Thêm danh mục thành công!',
             'category': {
                 'id': new_cat.id,
-                'name': new_cat.name
+                'name': new_cat.name,
+                'description': new_cat.description
             }
         })
     else:
         return jsonify({'success': False, 'message': 'Lỗi: Danh mục đã tồn tại hoặc lỗi server!'})
+
+def api_update_category():
+        data = request.get_json()
+        id = data.get('id')
+        print("id", id)
+        name = data.get('name')
+        description = data.get('description')
+        if not name or not description:
+            return jsonify({'success': False, 'message': 'Nhập đầy đủ thông tin!'})
+        print("id", id)
+        new_cat = CategoryDao.update_categories_dao(id, name, description)
+
+        if new_cat:
+            return jsonify({
+                'success': True,
+                'message': 'cập nhật danh mục thành công!',
+                'category': {
+                    'id': new_cat.id,
+                    'name': new_cat.name,
+                    'description': new_cat.description
+                }
+            })
+        else:
+            return jsonify({'success': False, 'message': 'Lỗi: Danh mục đã tồn tại hoặc lỗi server!'})

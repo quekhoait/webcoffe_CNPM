@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, jsonify, render_template
+from flask import Flask, redirect, request, jsonify, render_template, url_for
 import requests, uuid, hmac, hashlib
 import os
 from eapp.dao import PaymentDao
@@ -13,8 +13,8 @@ ACCESS_KEY = os.getenv("ACCESS_KEY")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ENDPOINT = "https://test-payment.momo.vn/v2/gateway/api/create"
 
-RETURN_URL = "https://e49b46b65ec5.ngrok-free.app/momo/return"
-IPN_URL = "https://e49b46b65ec5.ngrok-free.app/momo/ipn"
+RETURN_URL = "https://4fd8692d2a03.ngrok-free.app/momo/return"
+IPN_URL = "https://4fd8692d2a03.ngrok-free.app/momo/ipn"
 
 
 def create_signature(data, secret):
@@ -110,4 +110,4 @@ def momo_ipn():
     return jsonify({"message": "OK"})
 
 def momo_return():
-    return render_template('page/cart.html')
+    return redirect(url_for("my-cart"))

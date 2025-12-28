@@ -88,6 +88,22 @@ def tinhTien():
 
 from flask import request, render_template
 
+def group_orders(rows):
+    orders = {}
+
+    for invoice, payment, detail in rows:
+        if invoice.id not in orders:
+            orders[invoice.id] = {
+                "invoice": invoice,
+                "payment": payment,
+                "details": []
+            }
+
+        orders[invoice.id]["details"].append(detail)
+
+    return list(orders.values())
+
+
 def load_my_cart():
     user_id = current_user.id
 
@@ -139,15 +155,14 @@ def load_my_cart():
         invoice_status = InvoiceStatusEnum.CANCELLED
         payment_status = PaymentStatus.failed
 
-    search_key = request.args.get('search', '').strip()
 
-    list_order = ProductDao.get_product_by_status_dao(
+    rows = ProductDao.get_product_by_status_dao(
         user_id=user_id,
         invoice_status=invoice_status,
         payment_status=payment_status,
-        search_key=search_key
     )
-
+    list_order = group_orders(rows)
+    print("lis", list_order)
     return render_template(
         "cart/my_order.html",
         tab=tab,

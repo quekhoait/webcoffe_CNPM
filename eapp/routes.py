@@ -110,7 +110,8 @@ app.add_url_rule('/api/get-rule-calulate','get-rule-calulate',CartController.tin
 app.add_url_rule('/api/admin/product/add', 'api_add_product', AdminController.api_add_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminController.api_update_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminController.api_delete_product, methods=['POST'])
-
+app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.api_add_category, methods=['POST'])
+app.add_url_rule('/api/admin/category/update', 'api_update_category', AdminController.api_update_category, methods=['POST'])
 #employee_manage
 
 # app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
@@ -126,7 +127,6 @@ app.add_url_rule('/api/admin/employees/add', 'api_add', EmployeeController.api_a
 app.add_url_rule('/api/admin/employees/update', 'api_update', EmployeeController.api_update, methods=['POST'])
 app.add_url_rule('/api/admin/employees/delete', 'api_delete', EmployeeController.api_delete, methods=['POST'])
 app.add_url_rule('/api/admin/employees/open', 'api_open', EmployeeController.api_open, methods=['POST'])
-app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.api_add_category, methods=['POST'])
 app.add_url_rule('/api/admin/employees/open', 'api_open', EmployeeController.api_open, methods=['POST'])
 
 #rule
