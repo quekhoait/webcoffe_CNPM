@@ -143,17 +143,6 @@ function renderListComboBox(keyword, dropdown) {
 }
 
 
-document.getElementById('toggle-edit-button').addEventListener('click', e => {
-    buttons = document.querySelectorAll('#ingredients-container .ingredient-row .delete-row')
-    
-    const isShow = e.target.classList.toggle('show');
-
-    buttons.forEach(btn => {
-        if (isShow) btn.classList.remove('hidden');
-        else btn.classList.add('hidden');
-    });
-})
-
 
 document.addEventListener("click", e => {
     document.querySelectorAll(".ingredient-row div.absolute").forEach(dd => {
@@ -226,3 +215,8 @@ function getSelectedIngredientIds() {
         .map(input => input.dataset.id)
         .filter(Boolean); // loại null / undefined
 }
+
+console.log(
+document.getElementById('list-slip'));
+
+

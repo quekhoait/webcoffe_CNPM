@@ -8,5 +8,6 @@ class Warehouse(BaseModel):
     location = Column(String(200), nullable=True)
 
     stocks = relationship("Stock", backref="warehouse", lazy=True)
+    
     def __str__(self):
         return self.name

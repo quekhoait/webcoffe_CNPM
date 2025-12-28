@@ -3,6 +3,7 @@ from flask import jsonify, render_template, request
 from eapp import app, db
 from eapp.dao.IngredientDAO import IngredientDAO, IngredientFilter
 from eapp.dao.WarehouseDAO import WarehouseDAO
+from eapp.dao.WarehouseSlipDAO import WarehouseSlipDAO
 from eapp.models.Ingredient import Ingredient
 from eapp.models.WarehouseSlip import SlipType
 from eapp.services.RuleService import RuleService
@@ -89,4 +90,18 @@ def load_warehouse():
 
 def get_current_warehouse_id():
     return RuleService.get_rule_warehouse_id()
-    
+
+def render_view_slip():
+    warehouse_slips = WarehouseSlipDAO.list()
+    return render_template('warehouse/warehouse.html',
+                           warehouse_slips=warehouse_slips)
+
+def render_view_slip_detail():
+    slip_id = int(request.args.get('slip_id'))
+    warehouse_slip = WarehouseSlipDAO.get_by_id(slip_id)
+    return render_template('warehouse/view_slip_detail.html',warehouse_slip=warehouse_slip)
+
+def warehouse_slip_page():
+    warehouse_slips = WarehouseSlipDAO.list()
+    return render_template('warehouse/warehouse_slip_details.html',
+                           warehouse_slips = warehouse_slips)

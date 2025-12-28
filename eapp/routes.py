@@ -55,6 +55,7 @@ app.add_url_rule('/api/success-invoice', 'success-invoice', ProductController.su
 app.add_url_rule('/api/products','products',ProductController.list('/staff/product_item.html'), methods=['get'])
 
 # staff
+from eapp.permissions import staff_required
 app.add_url_rule('/dashboard/staff','staff',staff_required(StaffController.load_staff))
 app.add_url_rule('/api/order','add_order',StaffController.addItemToInvoice, methods=['post'])
 app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice, methods=['post'])
@@ -63,6 +64,9 @@ app.add_url_rule('/render/invoice-item','invoice_item',StaffController.render_in
 
 
 # warehouse
+app.add_url_rule('/viewslip', 'warehouse_view_slip', WarehouseController.render_view_slip)
+app.add_url_rule('/render_view_slip_detail', 'warehouse_view_slip_detail', WarehouseController.render_view_slip_detail)
+app.add_url_rule('/dashboard/warehouse-slip', 'warehouse_slip', WarehouseController.warehouse_slip_page)
 app.add_url_rule('/dashboard/warehouse', 'warehouse', warehouse_required(WarehouseController).warehouse_page)
 
 #API Ingredient
@@ -116,6 +120,8 @@ app.add_url_rule('/api/get-rule-calulate','get-rule-calulate',CartController.tin
 
 
 #product_manage
+
+
 app.add_url_rule('/api/admin/product/add', 'api_add_product', AdminController.api_add_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminController.api_update_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminController.api_delete_product, methods=['POST'])

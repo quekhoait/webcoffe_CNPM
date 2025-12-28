@@ -33,5 +33,16 @@ class WarehouseDAO:
             for stock in warehouse.stocks
         }
     
+    @staticmethod
+    def get_stock_map(warehouse_id):
+        warehouse = WarehouseDAO.get_by_id(warehouse_id)
+        return {
+            stock.ingredient_id : {
+                'quantity' : stock.quantity,
+                'reserved' : stock.reserved,
+                'available' : stock.quantity - stock.reserved
+            }
+            for stock in warehouse.stocks
+        }
     
     
