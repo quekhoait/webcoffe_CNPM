@@ -2,29 +2,29 @@
 <div class="p-6 overflow-y-auto">
     <!-- HEADER -->
     <div class="mb-6">
-        <h2 class="text-xl font-bold text-gray-800">Chi tiết phiếu #{{ warehouse_slip.id }}</h2>
-        <p class="text-xs text-gray-500">Thông tin chi tiết phiếu kho</p>
+        <h2 class="text-2xl font-bold text-gray-800">Chi tiết phiếu #{{ warehouse_slip.id }}</h2>
+        <p class="text-xl text-gray-500">Thông tin chi tiết phiếu kho</p>
     </div>
 
     <!-- SUMMARY -->
     <div class="grid grid-cols-3 gap-4 mb-6">
         <div class="bg-white rounded-xl p-4 shadow-sm">
-            <p class="text-xs text-gray-500">Loại phiếu</p>
+            <p class="text-xl text-gray-500">Loại phiếu</p>
             <p class="font-bold text-green-600 mt-1">{{ warehouse_slip.slip_type.name }}</p>
         </div>
         <div class="bg-white rounded-xl p-4 shadow-sm">
-            <p class="text-xs text-gray-500">Ngày lập</p>
-            <p class="font-semibold mt-1">{{ warehouse_slip.created_date.strftime('%d/%m/%Y %H:%M') }}</p>
+            <p class="text-xl text-gray-500">Ngày lập</p>
+            <p class="font-semibold text-xl mt-1">{{ warehouse_slip.created_date.strftime('%d/%m/%Y %H:%M') }}</p>
         </div>
         <div class="bg-white rounded-xl p-4 shadow-sm">
-            <p class="text-xs text-gray-500">Người lập</p>
-            <p class="font-semibold mt-1">{{ warehouse_slip.keeper.name }}</p>
+            <p class="text-xl text-gray-500">Người lập</p>
+            <p class="font-semibold text-xl mt-1">{{ warehouse_slip.keeper.name }}</p>
         </div>
     </div>
 
     <!-- INFO -->
     <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-xl">
             <p>
                 <span class="text-gray-500">Hóa đơn:</span>
                 {% if warehouse_slip.invoice %}
@@ -75,17 +75,17 @@
             Danh sách nguyên liệu
         </h3>
 
-        <table class="w-full text-xs">
+        <table class="w-full text-xl">
             <thead>
                 <tr class="text-gray-500 border-b">
                     <th class="text-left py-2 w-10">STT</th>
-                    <th class="text-left py-2">Nguyên liệu</th>
+                    <th class="w-[30%] text-left py-2">Nguyên liệu</th>
                     <th class="text-left py-2 w-24">Đơn vị</th>
                     <th class="text-right py-2 w-28">Số lượng</th>
                     <th class="text-right py-2 w-40">Ngày nhập</th>
                 </tr>
             </thead>
-            <tbody class="text-gray-700">
+            <tbody class="text-gray-700 text-xl">
                 {% for detail in warehouse_slip.slip_details %}
                 <tr class="border-b hover:bg-gray-50">
                     <td class="py-2">{{ detail.id }}</td>

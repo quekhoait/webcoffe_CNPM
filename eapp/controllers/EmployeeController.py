@@ -7,8 +7,6 @@ from eapp.dao import AccountDAO
 from eapp.models.Account import Role
 
 
-
-
 def load_employee():
     try:
         users = AccountDAO.get_all_employees()
