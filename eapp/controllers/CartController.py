@@ -20,7 +20,7 @@ def add_to_cart():
     if not current_user.is_authenticated:
         return jsonify({
             "status": "error",
-            "message": "mi chưa đăng nhập",
+            "message": "Bạn cần đăng nhập",
         })
     data = request.get_json()
     product_id = data.get("product_id")

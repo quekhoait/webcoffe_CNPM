@@ -45,7 +45,6 @@ def render_warehouse_admin_ingredient_item():
                                 warehouse_id=get_current_warehouse_id(),
                                 params=IngredientFilter(keyword=request.args.get('keyword'))
                             )
-    pprint(ingredient_stocks)
     return render_template('admin/warehouse_ingredient_item.html',
                             ingredient_stocks = ingredient_stocks)
 

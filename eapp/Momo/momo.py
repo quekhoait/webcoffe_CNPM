@@ -1,9 +1,11 @@
-from flask import Flask, redirect, request, jsonify, render_template, url_for
+from flask import Flask, redirect, request, jsonify, render_template, url_for, session
 import requests, uuid, hmac, hashlib
 import os
 from eapp.dao import PaymentDao
 from eapp.models.Payment import PaymentStatus
 from eapp import db
+from flask_login import current_user
+
 
 app = Flask(__name__)
 
@@ -27,6 +29,7 @@ def create_signature(data, secret):
 
 
 def created_pay(momo_order_id, total):
+    session["momo_user_id"] = current_user.id
     request_id = str(uuid.uuid4())
     raw_signature = (
         f"accessKey={ACCESS_KEY}"
@@ -110,4 +113,9 @@ def momo_ipn():
     return jsonify({"message": "OK"})
 
 def momo_return():
+    user_id = session.get("momo_user_id")
+    if not user_id:
+        return redirect(url_for("login"))
+
+    session["user_id"] = user_id  # khôi phục lại
     return redirect(url_for("my-cart"))

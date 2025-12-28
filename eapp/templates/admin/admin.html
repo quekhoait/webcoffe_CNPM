@@ -1,28 +1,21 @@
-{% extends "layout/base.html" %}
+{% extends "layout/base.html" %} {% block header %} {% endblock%} {% block
+content %}
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-[20%] bg-[#2a1e15]">
+    {% include "admin/manager_sidebar.html" %}
+  </aside>
 
-{% block header %}
-{% endblock%}
-{% block content %}
- <div class="flex min-h-screen">
-
-    <!-- Sidebar -->
-    <aside class="w-[20%] bg-[#2a1e15]">
-        {% include "admin/manager_sidebar.html" %}
-    </aside>
-
-    <!-- Main content -->
-    <main id="main-content" class="w-[80%] flex-1 p-6">
-{% block admin_content %}
-        <!-- nội dung con -->
-{% endblock %}
-    </main>
-
+  <!-- Main content -->
+  <main id="main-content" class="w-[80%] flex-1 p-6">
+    {% block admin_content %}
+    <!-- nội dung con -->
+    {% endblock %}
+  </main>
 </div>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='javascript/base.js') }}"></script>
 <script src="{{ url_for('static', filename='javascript/admin_product.js') }}"></script>
 <script src="{{ url_for('static', filename='javascript/admin_ingredient.js') }}"></script>
 
- {% endblock %}
+{% endblock %}

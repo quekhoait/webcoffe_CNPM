@@ -1,88 +1,62 @@
-{% if ingredient_stocks %}
-{% for stock in ingredient_stocks %}
-
-{% if stock.status.name == 'OUT_OF_STOCK' %}
+{% if ingredient_stocks %} {% for stock in ingredient_stocks %} {% if
+stock.status.name == 'OUT_OF_STOCK' %}
 <!-- Hết hàng -->
 <tr class="border-b border-gray-50 bg-red-50 hover:bg-red-100">
-    <td class="py-4 pl-2 font-medium">
-        {{ stock.ingredient.name }}
-    </td>
-    <td class="py-4 text-center font-bold text-red-600">
-        {{ stock.quantity }}
-    </td>
-    <td class="py-4 text-center font-bold text-red-600">
-        {{ stock.price }}
-    </td>
-    <td class="py-4 text-center text-gray-500">
-        {{ stock.ingredient.unit }}
-    </td>
-    <td class="py-4 text-right pr-2">
-        <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded">
-            Hết hàng
-        </span>
-    </td>
-    <td class="py-4 text-center text-gray-500">
-        xóa
-    </td>
+  <td class="py-4 pl-2 font-medium">{{ stock.ingredient.name }}</td>
+  <td class="py-4 text-center font-bold text-red-600">{{ stock.quantity }}</td>
+  <td class="py-4 text-center font-bold text-red-600">{{ stock.price }}</td>
+  <td class="py-4 text-center text-gray-500">{{ stock.ingredient.unit }}</td>
+  <td class="py-4 text-right pr-2">
+    <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded">
+      Hết hàng
+    </span>
+  </td>
+  <td class="py-4 text-center text-gray-500">xóa</td>
 </tr>
 
 {% elif stock.status.name == 'LOW_STOCK' %}
 <!-- Sắp hết -->
 <tr class="border-b border-gray-50 bg-yellow-50 hover:bg-yellow-100">
-    <td class="py-4 pl-2 font-medium">
-        {{ stock.ingredient.name }}
-    </td>
-    <td class="py-4 text-center font-bold text-yellow-600">
-        {{ stock.quantity }}
-    </td>
-    <td class="py-4 text-center font-bold text-yellow-600">
-        Giá
-    </td>
-    <td class="py-4 text-center text-gray-500">
-        {{ stock.ingredient.unit }}
-    </td>
-    <td class="py-4 text-right pr-2">
-        <span class="bg-yellow-100 text-yellow-600 text-xs font-bold px-2 py-1 rounded">
-            Sắp hết
-        </span>
-    </td>
-    <td class="py-4 text-center text-gray-500">
-        xóa
-    </td>
+  <td class="py-4 pl-2 font-medium">{{ stock.ingredient.name }}</td>
+  <td class="py-4 text-center font-bold text-yellow-600">
+    {{ stock.quantity }}
+  </td>
+  <td class="py-4 text-center font-bold text-yellow-600">Giá</td>
+  <td class="py-4 text-center text-gray-500">{{ stock.ingredient.unit }}</td>
+  <td class="py-4 text-right pr-2">
+    <span
+      class="bg-yellow-100 text-yellow-600 text-xs font-bold px-2 py-1 rounded"
+    >
+      Sắp hết
+    </span>
+  </td>
+  <td class="py-4 text-center text-gray-500">xóa</td>
 </tr>
 
 {% else %}
 <!-- Còn hàng -->
 <tr class="border-b text-xl border-gray-50 bg-green-50 hover:bg-green-100">
-    <td class="py-4 pl-2 font-medium">
-        {{ stock.ingredient.name }}
-    </td>
-    <td class="py-4 text-center font-bold text-green-600">
-        {{ stock.quantity }}
-    </td>
-    <td class="py-4 text-center font-bold text-green-600">
-        {{ stock.ingredient.price }}
-    </td>
-    <td class="py-4 text-center text-gray-500">
-        {{ stock.ingredient.unit }}
-    </td>
-    <td class="py-4 text-right pr-2">
-        <span class="bg-green-100 text-center text-green-600 text-xl font-bold px-2 py-1 rounded">
-            còn hàng
-        </span>
-    </td>
-    <td class="py-4 pl-8 flex gap-2 justify-center text-gray-500">
-        <i class="fa-solid fa-trash-can cursor-pointer hover:text-red-600"></i>
-        <i class="fa-solid fa-pen-to-square cursor-pointer hover:text-green-800"></i>
-    </td>
-</tr>
-{% endif %}
+  <td class="py-4 pl-2 font-medium">{{ stock.ingredient.name }}</td>
+  <td class="py-4 text-center font-bold text-green-600">
+    {{ stock.quantity }}
+  </td>
+  <td class="py-4 text-center font-bold text-green-600">
+    {{ stock.ingredient.price }}
+  </td>
+  <td class="py-4 text-center text-gray-500">{{ stock.ingredient.unit }}</td>
+  <td class="py-4 text-right pr-2">
+    <span
+      class="bg-green-100 text-center text-green-600 text-xl font-bold px-2 py-1 rounded"
+    >
+      còn hàng
+    </span>
+  </td>
 
-{% endfor %}
-{% else %}
+</tr>
+{% endif %} {% endfor %} {% else %}
 <tr>
-    <td colspan="6" class="py-10 text-center text-gray-400">
-        Không có dữ liệu tồn kho
-    </td>
+  <td colspan="6" class="py-10 text-center text-gray-400">
+    Không có dữ liệu tồn kho
+  </td>
 </tr>
 {% endif %}
