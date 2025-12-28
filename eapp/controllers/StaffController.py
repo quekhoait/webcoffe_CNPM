@@ -7,11 +7,14 @@ from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.models.Invoice import Invoice, PaymentMethod
 from eapp.models.Rule import RuleType
 from eapp.services.InvoiceService import InvoiceService
+from eapp.services.RuleService import RuleService
 from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp.services.inventory.RecipeService import RecipeService
 from eapp.services.admin import admin_required
-
+from eapp.permissions import staff_required
 # @admin_required
+
+@staff_required
 def load_staff():
     user = current_user
     category = CategoryDao.list()
@@ -23,7 +26,7 @@ def load_staff():
     if invoice:
         total_price_tmp = InvoiceService.calculate_total(list(invoice.values()))
         total_price = InvoiceService.calculate_final_total(total_price_tmp)
-    status_map = InventoryValidator.get_product_makeable_map(products=products,warehouse_id=session.get('warehouse_id',1))
+    status_map = InventoryValidator.get_product_makeable_map(products=products,warehouse_id=get_current_warehouse())
     return render_template('/staff/staff.html',
                            category=category, 
                            products=products, 
@@ -85,7 +88,7 @@ def addItemToInvoice():
         item_tmp = invoice.pop(product_id,None)
     required_ingredient_map = RecipeService.get_required_ingredient_map_from_session_invoice(invoice.values())
     
-    # 10 
+  
     
     available_stock = {
         key : max(0, value - required_ingredient_map.get(key, 0))
@@ -208,7 +211,7 @@ def clear_invoice():
 
 
 def get_current_warehouse():
-    return 1
+    return RuleService.get_rule_warehouse_id()
 
 from flask import render_template, request, redirect
 

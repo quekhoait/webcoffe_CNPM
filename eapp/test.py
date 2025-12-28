@@ -1,14 +1,16 @@
-from pprint import pprint
+from pprint import pp, pprint
 
 from eapp import app,db
 from eapp.dao import ProductDao
+from eapp.dao.IngredientDAO import IngredientFilter
 from eapp.dao.InvoiceDAO import InvoiceDAO, InvoiceFilter
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.models.Account import Account
 from eapp.models.Invoice import Invoice, InvoiceStatusEnum, PaymentMethod
 from eapp.models.Payment import PaymentStatus
 from eapp.models.Product import Product
-from eapp.services.inventory import StockService
+from eapp.services.RuleService import RuleService
+from eapp.services.inventory.StockService import StockService
 from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp.services.inventory.RecipeService import RecipeService
 from sqlalchemy.dialects import mysql
@@ -101,10 +103,13 @@ def demo():
 if __name__ == '__main__':
     with app.app_context():
         # test_start_processing_invoice()
-        demo()
+        rs = StockService.load_stock_for_admin(1,IngredientFilter(keyword = "s"))
+        pprint(rs)
+        # print(RuleService.get_rule_warehouse_id())
         # print(ProductDao.get_product_recipe_map())
         # print(WarehouseDAO.get_stock_map(1))
         # print(InventoryService.get_product_makeable_map(ProductDao.list(),1))
         # print(InventoryService.get_quantity_product_makeable(1,200,1))
         # print(InventoryService.load_stock(1))
         # print(WarehouseDAO.get_available_stock_map(1))
+        

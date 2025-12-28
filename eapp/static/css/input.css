@@ -78,7 +78,7 @@
     @apply text-blue-700 text-sm font-semibold bg-blue-100 px-2 py-1 rounded-md;
 }
 
-.invoice-card .payment-method[data-method="bank_transfer"] {
+.invoice-card .payment-method[data-method="momo"] {
     @apply text-purple-700 text-sm font-semibold bg-purple-100 px-2 py-1 rounded-md;
 }
 

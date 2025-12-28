@@ -1,5 +1,6 @@
 from enum import Enum
 from eapp.dao import RuleDAO
+from eapp.dao.IngredientDAO import IngredientDAO
 from eapp.dao.WarehouseDAO import WarehouseDAO
 from eapp.dao.WarehouseSlipDAO import WarehouseSlipDAO
 from eapp.models.Invoice import Invoice, InvoiceStatusEnum
@@ -20,13 +21,29 @@ class StockService:
     @staticmethod
     def load_rules():
         return RuleDAO.list(RuleDAO.RuleFilter(rule_type = RuleType.INGREDIENT))
+    
+    @staticmethod
+    def load_stock_for_admin(warehouse_id: int, params = None):
+        ingredients_stocks = IngredientDAO.list_stock_by_warehouse_id(params=params,warehouse_id=warehouse_id)
+        stock_data = []
+        for ingredient, stock in ingredients_stocks:
+            quantity = stock.quantity if stock else 0
+            reserved = stock.reserved if stock else 0
+            status = StockService.get_ingredient_stock_status(quantity,reserved)
+            stock_data.append({
+                'ingredient': ingredient,
+                'quantity': quantity,
+                'reserved' : reserved,
+                'status': status
+            })
+        return stock_data
 
     @staticmethod
     def load_stock(warehouse_id: int):
         warehouse = WarehouseDAO.get_by_id(warehouse_id)
         stock_data = []
         for ingredient_stock in warehouse.stocks:
-            status = StockService.get_ingredient_stock_status(ingredient_stock)
+            status = StockService.get_ingredient_stock_status(ingredient_stock.quantity,ingredient_stock.reserved)
             stock_data.append({
                 'ingredient': ingredient_stock.ingredient,
                 'quantity': ingredient_stock.quantity,
@@ -36,8 +53,8 @@ class StockService:
         return stock_data
     
     @staticmethod
-    def get_ingredient_stock_status(ingredient_stock: Stock):
-        availabble_stock = ingredient_stock.quantity - ingredient_stock.reserved
+    def get_ingredient_stock_status(quantity, reserved):
+        availabble_stock = quantity - reserved
         if availabble_stock == 0:
             return IngredientStatus.OUT_OF_STOCK
         if availabble_stock < StockService.load_rules()[0].value:

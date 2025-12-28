@@ -9,11 +9,13 @@ from eapp.models.Rule import Rule, RuleType
 from eapp.services.InvoiceService import InvoiceService
 from flask_login import login_user, logout_user, current_user, login_required
 
+from eapp.services.RuleService import RuleService
+
 
 def load_cashier():
     user = current_user
-    invoice = InvoiceDAO.get_by_id(10)
     invoices = InvoiceDAO.list(InvoiceFilter(payment_method="CASH"))
+    invoice = invoices[0]
     rules = RuleDAO.list(RuleDAO.RuleFilter(rule_type=RuleType.SERVICE))
     payment_method = 'CASH'
     return render_template('cashier/cashier.html',
@@ -47,7 +49,7 @@ def update_invoice_status():
     params = request.json
     invoice = InvoiceDAO.get_by_id(params['invoice_id'])
     invoice_status = InvoiceStatusEnum[params['invoice_status']]
-    warehouse_id = 1 #chưa biểt lấy ở đâu
+    warehouse_id =get_current_warehouse_id()
     result = InvoiceService.update_invoice_status(invoice=invoice,new_status=invoice_status,warehouse_id=warehouse_id)
     # result['invoice'] = result['invoice'].to_dict() if result['invoice'] else None
     return jsonify({
@@ -65,3 +67,6 @@ def load_invoice_detail():
                            invoice=invoice,
                            rules=rules)
 
+
+def get_current_warehouse_id():
+    return RuleService.get_rule_warehouse_id

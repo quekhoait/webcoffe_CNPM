@@ -68,8 +68,25 @@ rules_seed = [
         "name": "Nguyên liệu tồn kho tối thiểu",
         "rule_type": RuleType.INGREDIENT,
         "value": 5,
-        "unit": None,
+        "unit": "Đơn vị",
         "description": "Mức tồn kho tối thiểu cho mỗi nguyên liệu",
+        "active": True,
+        "account_id": 1
+    },
+    {
+        "name": "Kho mặc định của toàn hệ thống",
+        "rule_type": RuleType.WAREHOUSE,
+        "value": 1,
+        "unit": "ID",
+        "description": "Tất cả các sản phẩm đều phải sử dụng kho này",
+        "active": True,
+        "account_id": 1
+    },{
+        "name": "Số sản phẩm tối đa của hóa đơn",
+        "rule_type": RuleType.INVOICE,
+        "value": 10,
+        "unit": "Món",
+        "description": "Mỗi hóa đơn chỉ được tối đa 10 món",
         "active": True,
         "account_id": 1
     }
@@ -117,11 +134,11 @@ accounts = [
         "role":Role.USER
     },
     {
-        "username": "khao",
+        "username": "whouse",
         "password": str(hashlib.md5("123456".strip().encode('utf-8')).hexdigest()),
         "phone": "0916445957",
         "address":"quem",
-        "name": "eeee",
+        "name": "Trưởng kho",
         "role":Role.WAREHOUSE_KEEPER
     }
 ]
