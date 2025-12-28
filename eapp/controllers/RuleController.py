@@ -55,3 +55,9 @@ def update_rule(rule_id):
 
     return redirect(url_for("rule"))
 
+
+def get_rule():
+    rule_quantity_invoice = RuleDAO.list(RuleDAO.RuleFilter(rule_type=RuleType.INVOICE))[0].value
+    return jsonify({
+        "rule_quantity": rule_quantity_invoice
+    })

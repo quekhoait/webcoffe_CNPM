@@ -49,7 +49,7 @@ class InventoryFacade:
         slip_data = {
             'slip_type' : 'EXPORT',
             'note' : f'Xuất kho tự động cho hóa đơn #{invoice.id}',
-            'stock_user_id' : None,
+            'stock_user_id' : invoice.cashier_id,
             'invoice_id' : invoice.id,
             'destination_warehouse_id' : None,
             'source_warehouse_id' : source_warehouse_id,

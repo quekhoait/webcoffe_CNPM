@@ -4,8 +4,8 @@
     <div class="w-1/3 bg-white border-r border-gray-200 flex flex-col">
 
         <div class="p-5 border-b">
-            <h2 class="text-lg font-bold text-gray-800">Phiếu kho</h2>
-            <p class="text-xs text-gray-500">Danh sách gần đây</p>
+            <h2 class="text-2xl font-bold text-gray-800">Phiếu kho</h2>
+            <p class="text-xl pt-4 text-gray-500">Danh sách gần đây</p>
         </div>
 
         <div id="list-slip" class="flex-1 overflow-y-auto bg-white divide-y">
@@ -17,18 +17,18 @@
             <div data-id='{{ slip.id }}' class="slip cursor-pointer px-5 py-4 hover:bg-gray-50 transition">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
-                        <span class="text-base font-semibold text-gray-800">
+                        <span class="text-xl font-semibold text-gray-800">
                             #{{ slip.id }}
                         </span>
-                        <span class="text-xs font-semibold text-green-600 uppercase">
+                        <span class="text-xl font-semibold text-green-600 uppercase">
                             IMPORT
                         </span>
                     </div>
-                    <span class="text-xs text-gray-400">
+                    <span class="text-xl text-gray-400">
                         {{ slip.created_date.strftime('%d/%m/%Y %H:%M') }}
                     </span>
                 </div>
-                <div class="mt-2 flex justify-between text-sm text-gray-500">
+                <div class="mt-2 flex justify-between text-xl text-gray-500">
                     <span>Người lập: {{ slip.keeper.name }}</span>
                     {% if slip.invoice %}
                     <span>HĐ: {{ slip.invoice.order_code }}</span>
@@ -43,18 +43,18 @@
             <div data-id='{{ slip.id }}' class="slip cursor-pointer px-5 py-4 hover:bg-gray-50 transition">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
-                        <span class="text-base font-semibold text-gray-800">
+                        <span class="text-xl font-semibold text-gray-800">
                             #{{ slip.id }}
                         </span>
-                        <span class="text-xs font-semibold text-red-600 uppercase">
+                        <span class="text-xl font-semibold text-red-600 uppercase">
                             EXPORT
                         </span>
                     </div>
-                    <span class="text-xs text-gray-400">
+                    <span class="text-xl text-gray-400">
                         {{ slip.created_date.strftime('%d/%m/%Y %H:%M') }}
                     </span>
                 </div>
-                <div class="mt-2 flex justify-between text-sm text-gray-500">
+                <div class="mt-2 flex justify-between text-xl text-gray-500">
                     <span>Người lập: {{ slip.keeper.name }}</span>
                     {% if slip.invoice %}
                     <span>HĐ: {{ slip.invoice.order_code }}</span>
@@ -91,10 +91,10 @@
             <div data-id='{{ slip.id }}' class="slip cursor-pointer px-5 py-4 hover:bg-gray-50 transition">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
-                        <span class="text-base font-semibold text-gray-800">
+                        <span class="text-xl font-semibold text-gray-800">
                             #{{ slip.id }}
                         </span>
-                        <span class="text-xs font-semibold text-blue-600 uppercase">
+                        <span class="text-xl font-semibold text-blue-600 uppercase">
                             TRANSFER
                         </span>
                     </div>
@@ -102,7 +102,7 @@
                         {{ slip.created_date.strftime('%d/%m/%Y %H:%M') }}
                     </span>
                 </div>
-                <div class="mt-2 flex justify-between text-sm text-gray-500">
+                <div class="mt-2 flex justify-between text-xl text-gray-500">
                     <span>Người lập: {{ slip.keeper.name }}</span>
                     {% if slip.invoice %}
                     <span>HĐ: {{ slip.invoice.order_code }}</span>
@@ -115,7 +115,7 @@
             {% endif %}
             {% endfor %}
             {% else %}
-            <div class="p-4 text-sm text-gray-500 italic">
+            <div class="p-4 text-xl text-gray-500 italic">
                 Không có phiếu nào
             </div>
             {% endif %}

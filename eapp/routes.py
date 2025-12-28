@@ -151,3 +151,4 @@ app.add_url_rule("/api/login_google",'login_google', google.login, methods=['GET
 app.add_url_rule("/api/callback",'callback_google', google.auth, methods=['GET'])
 
 app.add_url_rule('/api/admin/ingredients', 'api_get_ingredient', admin_required(WarehouseController.render_warehouse_admin_ingredient_item), methods=['get'])
+app.add_url_rule('/api/get_rule_quantity', 'api_get_rule_quantity', RuleController.get_rule, methods=['get'])

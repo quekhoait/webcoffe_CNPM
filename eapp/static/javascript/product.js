@@ -5,7 +5,6 @@ function loadProducts(params = {}) {
     fetch('/api/get_product?' + query)
         .then(res => res.text())
         .then(html => {
-        console.log(html)
             productList.innerHTML = html
 
         })
@@ -27,7 +26,6 @@ if (!btn) {
   btn.addEventListener("click", () => {
     // Lấy các item popup lúc click
     const cartItems = document.querySelectorAll(cartSelector);
-    console.log(cartItems)
     const selectedItems = getSelectedItems(cartItems);
     if (selectedItems.length === 0) {
         showAlert("warning", "Thông báo", "Vui lòng chọn ít nhất 1 sản phẩm");

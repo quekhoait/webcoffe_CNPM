@@ -1,5 +1,7 @@
 from pprint import pprint
 from flask import jsonify, render_template, request
+from flask_login import current_user
+
 from eapp import app, db
 from eapp.dao.IngredientDAO import IngredientDAO, IngredientFilter
 from eapp.dao.WarehouseDAO import WarehouseDAO
@@ -67,8 +69,8 @@ slip_data:
 """
 def create_warehouse_slip():
     slip_data = request.json
-    slip_data['stock_user_id'] = 1  # TODO: Lấy user từ session
     try:
+        slip_data['stock_user_id'] = current_user.id
         rs = InventoryValidator.validate_slip_data(slip_data)
         if rs:
             StockService.create_slip(slip_data)
@@ -84,8 +86,7 @@ def create_warehouse_slip():
         })
 
 def load_warehouse():
-    return render_template('admin/warehouse.html',
-                          )
+    return render_template('admin/warehouse.html')
 
 def get_current_warehouse_id():
     return RuleService.get_rule_warehouse_id()

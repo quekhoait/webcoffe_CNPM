@@ -52,7 +52,7 @@ function createIngredientComboBoxRow() {
 
                 <input id="ingredient-quantity-${rowIndex}" type="number" name="quantity" placeholder="SL"
                     class="w-[30%] p-3 border border-gray-300 rounded-lg outline-none text-center" required>
-                <button type="button" class="delete-row p-3 text-red-500 hover:text-red-700">
+                <button type="button" class=" hidden delete-row p-3 text-red-500 hover:text-red-700">
                 ✕
                 </button>
             </div>

@@ -191,27 +191,36 @@ function calculateSubtotal(items, cart) {
 
 
 
-function setupCheckboxEvents(items, subtotalElementId, cart) {
-    items.forEach(item => {
+async function setupCheckboxEvents(items, subtotalElementId, cart) {
+    for (const item of items) {
         const checkbox = item.querySelector('.select-cart-component');
-        if (!checkbox) return;
-
-        checkbox.addEventListener("change", () => {
+        if (!checkbox) continue;
+        checkbox.addEventListener("change", async () => {
             const checkedCount = document.querySelectorAll(
                 '.select-cart-component:checked'
             ).length;
 
-            if (checkedCount > 10) {
-                checkbox.checked = false; // ❗ hủy tick
-                showAlert("warning", "Thông báo", "Số lượng không quá 10 món");
-                return;
+            try {
+                const res = await fetch('/api/get_rule_quantity');
+                const data = await res.json();
+                const quantity = data.rule_quantity;
+                if (checkedCount > quantity) {
+                    checkbox.checked = false;
+                    showAlert(
+                        "warning",
+                        "Thông báo",
+                        `Số lượng không quá ${quantity} món`
+                    );
+                    return;
+                }
+                calculateSubtotal(items, cart);
+
+            } catch (err) {
+                console.error(err);
             }
-
-            calculateSubtotal(items, cart);
         });
-    });
+    }
 }
-
 
 
 

@@ -67,7 +67,13 @@ def addItemToInvoice():
     product_id = str(data.get('id'))
     quantity = data.get('quantity', 1)
     bonus_quantity = int(data.get('bonus_quantity', 1))
-    
+    rule_quantity_invoice = RuleDAO.list(RuleDAO.RuleFilter(rule_type=RuleType.INVOICE))[0].value
+    if len(invoice) >= rule_quantity_invoice:
+        return jsonify({
+            "success": False,
+            "message": f"Hóa đơn chỉ được tối đa {rule_quantity_invoice} món"
+        })
+
     message = InvoiceService.is_invalid_value(invoice.get(product_id, {}).get('quantity', 0),bonus_quantity,data.get('is_set_quantity'))
 
     #kiểm tra dữ liệu vào có hợp lệ ko

@@ -64,3 +64,4 @@ def update(rule_id: int, data: dict):
         db.session.rollback()
         app.logger.error(f"Lỗi khi update rule: {ex}", exc_info=True)
         raise
+
