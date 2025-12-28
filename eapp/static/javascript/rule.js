@@ -43,6 +43,6 @@ document.getElementById("create-rule-btn").addEventListener("click", () => {
     document.querySelector("#crud-modal h3").innerText = "Thêm quy định mới"
 
     const form = document.getElementById("rule-form")
-    form.action = "/rule"
+    form.action = "/dashboard/admin/rule"
     form.reset()
 })

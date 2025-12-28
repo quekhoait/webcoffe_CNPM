@@ -1,7 +1,3 @@
-# Cấu trúc route của các trang web bình thường
-
-from flask import Flask, render_template
-from jinja2.nodes import Or
 
 # Thay đổi import tương đối thành import tuyệt đối:
 # from eapp.dao.Product import get_product
@@ -16,6 +12,11 @@ from eapp.controllers import ProductController, StaffController, index, AccountC
 from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index, AdminController, EmployeeController
 from eapp.models import Ingredient
 from eapp.controllers import AccountController, AdminController, CartController, CashierController, EmployeeController, OverviewController, PaymentController, ProductController, RuleController, StaffController, WarehouseController, index
+from eapp.permissions import staff_required
+from eapp.permissions import warehouse_required
+from eapp.permissions import cashier_required
+from eapp.permissions import user_required
+from eapp.permissions import admin_required
 
 
 app.add_url_rule('/login','login', index.load_login)
@@ -54,7 +55,6 @@ app.add_url_rule('/api/success-invoice', 'success-invoice', ProductController.su
 app.add_url_rule('/api/products','products',ProductController.list('/staff/product_item.html'), methods=['get'])
 
 # staff
-from eapp.permissions import staff_required
 app.add_url_rule('/dashboard/staff','staff',staff_required(StaffController.load_staff))
 app.add_url_rule('/api/order','add_order',StaffController.addItemToInvoice, methods=['post'])
 app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice, methods=['post'])
@@ -63,7 +63,7 @@ app.add_url_rule('/render/invoice-item','invoice_item',StaffController.render_in
 
 
 # warehouse
-app.add_url_rule('/dashboard/warehouse', 'warehouse', WarehouseController.warehouse_page)
+app.add_url_rule('/dashboard/warehouse', 'warehouse', warehouse_required(WarehouseController).warehouse_page)
 
 #API Ingredient
 app.add_url_rule('/api/ingredients', 'get_ingredients', WarehouseController.get_ingredients, methods=['GET'])
@@ -89,7 +89,7 @@ app.add_url_rule("/momo/ipn",'momo_ipn', momo.momo_ipn, methods=['POST'])
 app.add_url_rule("/momo/return",'momo_return', momo.momo_return)
 
 #cashier
-app.add_url_rule('/dashboard/cashier','cashier',CashierController.load_cashier)
+app.add_url_rule('/dashboard/cashier','cashier',cashier_required(CashierController).load_cashier)
 app.add_url_rule('/cashier/status-bar', 'get_status_bar', CashierController.load_status_bar, methods=['get'])
 
 app.add_url_rule('/product/<int:id>', 'product_detail', index.load_product_detail, methods=['GET'])
@@ -116,8 +116,6 @@ app.add_url_rule('/api/get-rule-calulate','get-rule-calulate',CartController.tin
 
 
 #product_manage
-
-
 app.add_url_rule('/api/admin/product/add', 'api_add_product', AdminController.api_add_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminController.api_update_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminController.api_delete_product, methods=['POST'])
@@ -141,7 +139,7 @@ app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.
 app.add_url_rule('/api/admin/employees/open', 'api_open', EmployeeController.api_open, methods=['POST'])
 
 #rule
-app.add_url_rule('/dashboard/admin/rule', 'rule', RuleController.load_rule, methods=['get'])
+app.add_url_rule('/dashboard/admin/rule', 'rule', RuleController.load_rule, methods=['get', 'post'])
 app.add_url_rule("/rules/<int:rule_id>", 'delete-rule', RuleController.delete_rule, methods=['delete'])
 app.add_url_rule("/rule/<int:rule_id>/update",'update-rule',RuleController.update_rule, methods=["POST"])
 

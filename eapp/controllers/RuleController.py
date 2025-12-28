@@ -1,5 +1,6 @@
 
 from flask import jsonify, redirect, render_template, request, url_for
+from flask_login import current_user
 
 from eapp.dao import RuleDAO
 from eapp.models.Rule import Rule, RuleType
@@ -16,6 +17,7 @@ def load_rule():
         description = request.form.get("description")
         active = request.form.get('active')
         rule = Rule(
+            account_id=current_user.id,
             name=name,
             value=value,
             rule_type=RuleType[rule_type],
@@ -52,3 +54,4 @@ def update_rule(rule_id):
         return jsonify({"message": "Rule không tồn tại"})
 
     return redirect(url_for("rule"))
+

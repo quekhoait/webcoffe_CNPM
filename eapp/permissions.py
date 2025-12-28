@@ -24,9 +24,12 @@ admin_required = role_required(
 )
 
 staff_required = role_required(
-    Role.STAFF,
+    Role.STAFF
+)
+warehouse_required = role_required(
     Role.WAREHOUSE_KEEPER
 )
+
 
 cashier_required = role_required(
     Role.CASHIER
