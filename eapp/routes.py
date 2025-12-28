@@ -1,5 +1,4 @@
 # Cấu trúc route của các trang web bình thường
-from _ast import In
 
 from flask import Flask, render_template
 from jinja2.nodes import Or
@@ -16,6 +15,8 @@ from eapp.controllers import ProductController, StaffController, index, AccountC
 
 from eapp.controllers import ProductController, StaffController, index, AccountController,CashierController, ProductController, StaffController, index, AdminController, EmployeeController
 from eapp.models import Ingredient
+from eapp.controllers import AccountController, AdminController, CartController, CashierController, EmployeeController, OverviewController, PaymentController, ProductController, RuleController, StaffController, WarehouseController, index
+
 
 app.add_url_rule('/login','login', index.load_login)
 app.add_url_rule('/api/login','login_account',AccountController.login, methods=['POST'])
@@ -53,12 +54,22 @@ app.add_url_rule('/api/success-invoice', 'success-invoice', ProductController.su
 app.add_url_rule('/api/products','products',ProductController.list('/staff/product_item.html'), methods=['get'])
 
 # staff
-
-app.add_url_rule('/dashboard/staff','staff',StaffController.load_staff, )
+from eapp.permissions import staff_required
+app.add_url_rule('/dashboard/staff','staff',staff_required(StaffController.load_staff))
 app.add_url_rule('/api/order','add_order',StaffController.addItemToInvoice, methods=['post'])
 app.add_url_rule('/api/invoice','create_invoice',StaffController.create_invoice, methods=['post'])
 app.add_url_rule('/api/remove-item','remove_item',StaffController.removeItemFromInvoice, methods=['post'])
 app.add_url_rule('/render/invoice-item','invoice_item',StaffController.render_invoice_item, methods=['get'])
+
+
+# warehouse
+app.add_url_rule('/dashboard/warehouse', 'warehouse', WarehouseController.warehouse_page)
+
+#API Ingredient
+app.add_url_rule('/api/ingredients', 'get_ingredients', WarehouseController.get_ingredients, methods=['GET'])
+
+#API WarehouseSlip
+app.add_url_rule('/api/warehouse-slips', 'create_warehouse_slip', WarehouseController.create_warehouse_slip, methods=['POST'])
 
 
 
@@ -88,7 +99,7 @@ app.add_url_rule('/dashboard/warehouse', 'warehouse', WarehouseController.wareho
 app.add_url_rule('/admin/warehouse/create-ticket', 'create_ticket', StaffController.create_ticket, methods=['POST'])
 
 
-#API IngredientController.py
+#API Ingredient
 app.add_url_rule('/api/ingredients', 'get_ingredients', WarehouseController.get_ingredients, methods=['GET'])
 
 #API WarehouseSlip
@@ -110,8 +121,7 @@ app.add_url_rule('/api/get-rule-calulate','get-rule-calulate',CartController.tin
 app.add_url_rule('/api/admin/product/add', 'api_add_product', AdminController.api_add_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/update', 'api_update_product', AdminController.api_update_product, methods=['POST'])
 app.add_url_rule('/api/admin/product/delete', 'api_delete_product', AdminController.api_delete_product, methods=['POST'])
-app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.api_add_category, methods=['POST'])
-app.add_url_rule('/api/admin/category/update', 'api_update_category', AdminController.api_update_category, methods=['POST'])
+
 #employee_manage
 
 # app.add_url_rule('/admin/employees', 'admin_employee_index', EmployeeController.index, methods=['GET'])
@@ -127,6 +137,7 @@ app.add_url_rule('/api/admin/employees/add', 'api_add', EmployeeController.api_a
 app.add_url_rule('/api/admin/employees/update', 'api_update', EmployeeController.api_update, methods=['POST'])
 app.add_url_rule('/api/admin/employees/delete', 'api_delete', EmployeeController.api_delete, methods=['POST'])
 app.add_url_rule('/api/admin/employees/open', 'api_open', EmployeeController.api_open, methods=['POST'])
+app.add_url_rule('/api/admin/category/add', 'api_add_category', AdminController.api_add_category, methods=['POST'])
 app.add_url_rule('/api/admin/employees/open', 'api_open', EmployeeController.api_open, methods=['POST'])
 
 #rule
@@ -141,3 +152,5 @@ app.add_url_rule('/api/admin/ingredient/add', 'api_add_ingredient', IngredientCo
 #Google
 app.add_url_rule("/api/login_google",'login_google', google.login, methods=['GET'])
 app.add_url_rule("/api/callback",'callback_google', google.auth, methods=['GET'])
+
+app.add_url_rule('/api/admin/ingredients', 'api_get_ingredient', WarehouseController.render_warehouse_admin_ingredient_item, methods=['get'])

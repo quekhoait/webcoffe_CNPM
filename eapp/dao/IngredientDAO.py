@@ -1,6 +1,14 @@
-from eapp import app, db
-from eapp.models import Ingredient
+from dataclasses import dataclass
+from typing import Optional
 
+from sqlalchemy import and_
+from eapp import app,db
+from eapp.models import Ingredient, Stock
+
+
+@dataclass
+class IngredientFilter:
+    keyword : Optional[str] = None
 
 class IngredientDAO:
     @staticmethod
@@ -16,6 +24,27 @@ class IngredientDAO:
             return []
         return query.all()
     
+    @staticmethod
+    def list_stock_by_warehouse_id(params : IngredientFilter = None, warehouse_id=None):
+
+        try:
+            query = db.session.query(Ingredient,Stock).outerjoin(
+                Stock,
+                and_(
+                    Stock.ingredient_id == Ingredient.id,
+                    Stock.warehouse_id == warehouse_id
+                )
+            )
+
+            if params:
+                if params.keyword:
+                    query = query.filter(Ingredient.name.ilike(f"%{params.keyword}%"))
+
+            return query.all()
+        except Exception as ex:
+            app.logger.error(f"Lỗi khi lấy nguyên liệu với stock: {ex}", exc_info=True)
+            return []
+
     @staticmethod
     def get_by_id(ingredient_id):
         try:
@@ -40,49 +69,4 @@ def add_ingredient(data):
         db.session.rollback()
         return False
 
-# def update_product(product_id, data, recipes=None):
-#     try:
-#         product = Product.query.get(product_id)
-#         if not product: return False
-#
-#         product.name = data.get('name')
-#         product.price = data.get('price')
-#         product.unit = data.get('unit')
-#         product.dish_category_id = data.get('dish_category_id')
-#         product.description = data.get('description')
-#         if data.get('image'):
-#             product.image = data.get('image')
-#
-#         #cập nhật công thức nếu có
-#         if recipes is not None:
-#             #xóa công thức cũ -> thêm công thức mới
-#             ProductRecipe.query.filter_by(product_id=product_id).delete()
-#             for item in recipes:
-#                 if item.get('ingredient_id'):
-#                     new_recipe = ProductRecipe(
-#                         product_id=product.id,
-#                         ingredient_id=item['ingredient_id'],
-#                         quantity=item['quantity'],
-#                         unit=item['unit']
-#                     )
-#                     db.session.add(new_recipe)
-#
-#         db.session.commit()
-#         return True
-#     except Exception as ex:
-#         print(f"Lỗi sửa: {ex}")
-#         db.session.rollback()
-#         return False
-#
-# def delete_product(product_id):
-#     try:
-#         product = Product.query.get(product_id)
-#         if product:
-#             ProductRecipe.query.filter_by(product_id=product_id).delete()
-#             db.session.delete(product)
-#             db.session.commit()
-#             return True
-#         return False
-#     except Exception as ex:
-#         db.session.rollback()
-#         return False
+
