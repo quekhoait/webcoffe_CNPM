@@ -276,8 +276,7 @@ class InventoryValidator:
                 raise Exception("Kho nguồn và kho đích không được trùng nhau")
         current_stock = {}
         if src_id:
-            current_stock = WarehouseDAO.get_available_stock_map(src_id)
-        print(current_stock)
+            current_stock = WarehouseDAO.get_stock_map(src_id)
         for item in ingredients:
             ing_id = int(item.get('ingredient_id')) 
             quantity = float(item.get('quantity'))
@@ -285,9 +284,12 @@ class InventoryValidator:
             if not ing_id: raise Exception("Dữ liệu nguyên liệu không hợp lệ")
             if quantity <= 0: raise Exception("Số lượng phải lớn hơn 0")
 
-            if slip_type in ['EXPORT', 'TRANSFER', 'UPDATE']:
-                if quantity > current_stock.get(ing_id,0):
+            if slip_type in ['EXPORT', 'TRANSFER']:
+                if quantity > current_stock.get(ing_id,None).get('available',0):
                     ing_name = IngredientDAO.get_by_id(ing_id).name
                     raise Exception(f"Nguyên liệu {ing_name} không đủ tồn kho (Hiện có: {current_stock.get(ing_id,0)})")
-        
+            elif slip_type in ['UPDATE']:
+                if quantity < current_stock.get(ing_id,None).get('reserved',0):
+                    ing_name = IngredientDAO.get_by_id(ing_id).name
+                    raise Exception(f"Nguyên liệu {ing_name} không đủ tồn kho (Hiện có: {current_stock.get(ing_id,0)})")
         return True

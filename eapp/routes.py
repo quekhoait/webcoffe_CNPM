@@ -49,6 +49,10 @@ app.add_url_rule('/render/invoice-item','invoice_item',StaffController.render_in
 
 # warehouse
 app.add_url_rule('/dashboard/warehouse', 'warehouse', WarehouseController.warehouse_page)
+app.add_url_rule('/viewslip', 'warehouse_view_slip', WarehouseController.render_view_slip)
+app.add_url_rule('/render_view_slip_detail', 'warehouse_view_slip_detail', WarehouseController.render_view_slip_detail)
+app.add_url_rule('/dashboard/warehouse-slip', 'warehouse_slip', WarehouseController.warehouse_slip_page)
+
 
 #API Ingredient
 app.add_url_rule('/api/ingredients', 'get_ingredients', WarehouseController.get_ingredients, methods=['GET'])
@@ -122,3 +126,4 @@ app.add_url_rule("/rule/<int:rule_id>/update",'update-rule',RuleController.updat
 #warehouse
 app.add_url_rule('/dashboard/admin/ware-house', 'admin_warehouse', WarehouseController.warehouse_admin, methods=['get'])
 app.add_url_rule('/api/admin/ingredients', 'api_get_ingredient', WarehouseController.render_warehouse_admin_ingredient_item, methods=['get'])
+

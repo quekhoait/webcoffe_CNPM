@@ -5,10 +5,12 @@ from eapp.dao import ProductDao
 from eapp.dao.IngredientDAO import IngredientFilter
 from eapp.dao.InvoiceDAO import InvoiceDAO, InvoiceFilter
 from eapp.dao.WarehouseDAO import WarehouseDAO
+from eapp.dao.WarehouseSlipDAO import WarehouseSlipDAO
 from eapp.models.Account import Account
 from eapp.models.Invoice import Invoice, InvoiceStatusEnum, PaymentMethod
 from eapp.models.Payment import PaymentStatus
 from eapp.models.Product import Product
+from eapp.services.InvoiceService import InvoiceService
 from eapp.services.RuleService import RuleService
 from eapp.services.inventory.StockService import StockService
 from eapp.services.inventory.InventoryValidator import InventoryValidator
@@ -103,8 +105,11 @@ def demo():
 if __name__ == '__main__':
     with app.app_context():
         # test_start_processing_invoice()
-        rs = StockService.load_stock_for_admin(1,IngredientFilter(keyword = "s"))
-        pprint(rs)
+        rs = InvoiceDAO.get_by_id(invoice_id=6)
+        kq = WarehouseSlipDAO.get_by_id(1)
+        pprint(WarehouseSlipDAO.get_by_id(1))
+        import pdb
+        pdb.set_trace()
         # print(RuleService.get_rule_warehouse_id())
         # print(ProductDao.get_product_recipe_map())
         # print(WarehouseDAO.get_stock_map(1))

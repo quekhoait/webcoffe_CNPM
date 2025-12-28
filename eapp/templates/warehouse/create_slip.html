@@ -1,0 +1,83 @@
+<main class="flex-1 p-8 overflow-y-auto ">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Quản lý Nguyên Liệu {{ warehouse.name }}</h1>
+
+
+
+        <div class="flex items-center gap-3">
+            <label for="warehouseSelect" class="text-lg font-medium text-gray-700">Kho hiện tại:</label>
+            <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="inline-flex items-center gap-2 bg-gray-100 text-yellow-700
+           hover:bg-gray-200 focus:ring-2 focus:ring-yellow-300 
+           shadow-sm font-medium rounded-lg text-sm px-4 py-2 transition">
+                {{ warehouse.name }}
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m19 9-7 7-7-7" />
+                </svg>
+            </button>
+
+
+            <!-- Dropdown menu -->
+            <div id="dropdown" class="z-20 hidden bg-white border border-default-medium rounded-base shadow-lg w-48">
+
+                <ul class="p-2 text-sm text-body font-medium" aria-labelledby="dropdownDefaultButton">
+                    {% for wh in warehouses %}
+                    <li>
+                        <a href="?warehouse_id={{ wh.id }}" class="
+                                inline-flex items-center w-full p-2 rounded-lg transition
+                                {% if wh.id == warehouse.id %}
+                                    bg-blue-600 text-white font-semibold shadow-sm
+                                {% else %}
+                                    hover:bg-blue-50 hover:text-blue-700 text-gray-700
+                                {% endif %}
+                            ">
+                            {{ wh.name }}
+                        </a>
+                    </li>
+
+                    {% endfor %}
+                </ul>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 ">
+
+        <div class="lg:col-span-4">
+            {% include 'warehouse/warehouse_slip.html' %}
+        </div>
+
+        <div class="lg:col-span-8 space-y-8">
+            <div class="space-y-4">
+                {% if low_stock_list %}
+                <div class="bg-red-50 border border-red-200 p-4 rounded-xl flex items-start gap-3">
+                    <div class="text-red-500 mt-1">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-red-700">Cảnh báo tồn kho thấp</h4>
+
+                        <p class="text-sm text-red-600 mt-1">
+                            Sắp hết hàng:
+                            {% for item in low_stock_list %}
+                            <span class="font-semibold">
+                                {{ item.ingredient.name }}
+                                ({{ item.quantity - item.reserved }} {{ item.ingredient.unit }})
+                            </span>{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+
+
+                {% include 'warehouse/inventory_table.html' %}
+            </div>
+        </div>
+    </div>
+</main>

@@ -146,6 +146,7 @@ class InvoiceService:
     
 
     def update_invoice_status(invoice: Invoice, new_status: InvoiceStatusEnum, warehouse_id: int = None):
+
         result = {
             'success': False,
             'message': '',

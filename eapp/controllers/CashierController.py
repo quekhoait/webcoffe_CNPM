@@ -69,4 +69,4 @@ def load_invoice_detail():
 
 
 def get_current_warehouse_id():
-    return RuleService.get_rule_warehouse_id
+    return RuleService.get_rule_warehouse_id()
