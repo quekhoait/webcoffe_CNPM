@@ -15,7 +15,7 @@ from eapp.services.RuleService import RuleService
 def load_cashier():
     user = current_user
     invoices = InvoiceDAO.list(InvoiceFilter(payment_method="CASH"))
-    invoice = invoices[0]
+    invoice = None
     rules = RuleDAO.list(RuleDAO.RuleFilter(rule_type=RuleType.SERVICE))
     payment_method = 'CASH'
     return render_template('cashier/cashier.html',
