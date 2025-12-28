@@ -1,249 +1,259 @@
-{% extends 'admin/admin.html' %}
-{% block admin_content %}
+{% extends 'admin/admin.html' %} {% block admin_content %}
 
-        <div class="container-fluid p-4">
-            <!-- HEADER -->
-            <div class="d-flex justify-content-between align-items-start mb-4">
-                <h2 class="fw-bold text-5xl">BÁO CÁO DOANH THU</h2>
+<div class="container-fluid p-4">
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <h2 class="fw-bold text-5xl">BÁO CÁO DOANH THU</h2>
 
-                <!-- FILTER -->
-                <div class="d-flex flex-column align-items-end gap-2 relative">
+    <!-- FILTER -->
+    <div class="d-flex flex-column align-items-end gap-2 relative">
+      <div class="d-flex gap-2">
+        <div class="btn-group">
+          <a
+            href="{{ url_for('overview', type='day') }}"
+            class="btn text-2xl {% if tab == 'day' %} bg-yellow-500 text-black {% else %} btn-dark {% endif %}"
+          >
+            Hôm nay
+          </a>
 
-                    <div class="d-flex gap-2">
-                      <div class="btn-group">
-    <a href="{{ url_for('overview', type='day') }}"
-       class="btn text-2xl {% if tab == 'day' %} bg-yellow-500 text-black {% else %} btn-dark {% endif %}">
-       Hôm nay
-    </a>
+          <a
+            href="{{ url_for('overview', type='month') }}"
+            class="btn text-2xl {% if tab == 'month' %} bg-yellow-500 text-black {% else %} btn-dark {% endif %}"
+          >
+            Tháng này
+          </a>
 
-    <a href="{{ url_for('overview', type='month') }}"
-   class="btn text-2xl {% if tab == 'month' %} bg-yellow-500 text-black {% else %} btn-dark {% endif %}">
-   Tháng này
-</a>
+          <a
+            href="{{ url_for('overview', type='years') }}"
+            class="btn text-2xl {% if tab == 'years' %} bg-yellow-500 text-black {% else %} btn-dark {% endif %}"
+          >
+            Năm nay
+          </a>
+        </div>
 
-    <a href="{{ url_for('overview', type='years') }}"
-       class="btn text-2xl {% if tab == 'years' %} bg-yellow-500 text-black {% else %} btn-dark {% endif %}">
-       Năm nay
-    </a>
-</div>
+        <!-- BUTTON MỞ RỘNG -->
+        <button
+          type="button"
+          class="btn btn-outline-warning text-2xl"
+          id="btn-open-calendar"
+        >
+          <i class="fa-regular fa-calendar"></i>
+          Chọn khoảng ngày
+        </button>
+      </div>
 
-
-                        <!-- BUTTON MỞ RỘNG -->
-                        <button type="button"
-                            class="btn btn-outline-warning text-2xl" id="btn-open-calendar"
-                        >
-                            <i class="fa-regular fa-calendar"></i>
-                            Chọn khoảng ngày
-                        </button>
-                    </div>
-
-                    <!-- PANEL CHỌN NGÀY -->
-              <div id="dateRangeCollapse" class="w-full absolute top-[36px] hidden">
-    <div class="bg-[#2a1e15] rounded-xl p-4 shadow-lg w-[360px]">
-
-        <div class="grid grid-cols-2 gap-3">
+      <!-- PANEL CHỌN NGÀY -->
+      <div id="dateRangeCollapse" class="w-full absolute top-[36px] hidden">
+        <div class="bg-[#2a1e15] rounded-xl p-4 shadow-lg w-[360px]">
+          <div class="grid grid-cols-2 gap-3">
             <div>
-                <label class="text-xl text-gray-400 mb-1 block">Từ ngày</label>
-                <input type="date" id="fromDate" class="form-control form-control-xl bg-dark text-white border-secondary">
+              <label class="text-xl text-gray-400 mb-1 block">Từ ngày</label>
+              <input
+                type="date"
+                id="fromDate"
+                class="form-control form-control-xl bg-dark text-white border-secondary"
+              />
             </div>
 
             <div>
-                <label class="text-xl text-gray-400 mb-1 block">Đến ngày</label>
-                <input type="date" id="toDate" class="form-control form-control-xl bg-dark text-white border-secondary">
+              <label class="text-xl text-gray-400 mb-1 block">Đến ngày</label>
+              <input
+                type="date"
+                id="toDate"
+                class="form-control form-control-xl bg-dark text-white border-secondary"
+              />
             </div>
-        </div>
+          </div>
 
-        <div class="flex justify-end gap-2 mt-4">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="closeDateRange()">
-                Hủy
+          <div class="flex justify-end gap-2 mt-4">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              onclick="closeDateRange()"
+            >
+              Hủy
             </button>
-            <button type="button" class="btn btn-warning btn-sm text-dark" id="accept_btn" onclick="applyDateRange()">
-                Áp dụng
+            <button
+              type="button"
+              class="btn btn-warning btn-sm text-dark"
+              id="accept_btn"
+              onclick="applyDateRange()"
+            >
+              Áp dụng
             </button>
+          </div>
         </div>
-
+      </div>
     </div>
-</div>
+  </div>
 
+  <!-- CARDS -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="bg-[#2a1e15] rounded-xl p-4 shadow-lg">
+        <p class="text-gray-400 text-2xl">
+          Doanh thu {% if tab == 'day' %} ngày {% elif tab == 'month' %} tháng
+          {% elif tab == 'years' %} năm {% else %} khoảng thời gian {% endif %}
+        </p>
+        <h3 class="text-4xl fw-bold text-yellow-600 py-4">
+          {{total_revenue.total_revenue}}
+        </h3>
+        <!--                        <span class="text-green-400 text-xl">▲ +15%</span>-->
+      </div>
+    </div>
 
-                </div>
-            </div>
+    <div class="col-md-3">
+      <div class="bg-[#2a1e15] rounded-xl p-4 shadow-lg">
+        <p class="text-gray-400 text-2xl">Đơn hàng</p>
+        <h3 class="text-4xl fw-bold text-yellow-600 py-4">
+          {{total_revenue.total_orders}}
+        </h3>
+        <!--                        <span class="text-green-400 text-xl">▲ +8%</span>-->
+      </div>
+    </div>
 
-            <!-- CARDS -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-3">
-                    <div class="bg-[#2a1e15] rounded-xl p-4 shadow-lg">
-                        <p class="text-gray-400 text-2xl">Doanh thu  {% if tab == 'day' %}
-        ngày
-    {% elif tab == 'month' %}
-        tháng
-    {% elif tab == 'years' %}
-        năm
-    {% else %}
-        khoảng thời gian
-    {% endif %}</p>
-                        <h3 class="text-4xl fw-bold text-yellow-600 py-4">{{total_revenue.total_revenue}}</h3>
-<!--                        <span class="text-green-400 text-xl">▲ +15%</span>-->
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="bg-[#2a1e15] rounded-xl p-4 shadow-lg">
-                        <p class="text-gray-400 text-2xl">Đơn hàng</p>
-                        <h3 class="text-4xl fw-bold text-yellow-600 py-4">{{total_revenue.total_orders}}</h3>
-<!--                        <span class="text-green-400 text-xl">▲ +8%</span>-->
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="bg-[#2a1e15] rounded-xl p-4 shadow-lg">
-                        <p class="text-gray-400 text-2xl">Giá trị TB / đơn</p>
-                        {% if total_revenue and total_revenue.total_orders > 0 %}
-            <h3 class="text-4xl fw-bold text-yellow-600 py-4">
-                {{ "{:,.1f}".format(total_revenue.total_revenue / total_revenue.total_orders) }}₫
-            </h3>
+    <div class="col-md-3">
+      <div class="bg-[#2a1e15] rounded-xl p-4 shadow-lg">
+        <p class="text-gray-400 text-2xl">Giá trị TB / đơn</p>
+        {% if total_revenue and total_revenue.total_orders > 0 %}
+        <h3 class="text-4xl fw-bold text-yellow-600 py-4">
+          {{ "{:,.1f}".format(total_revenue.total_revenue /
+          total_revenue.total_orders) }}₫
+        </h3>
         {% else %}
-            <h3 class="text-4xl fw-bold text-yellow-600 py-4">0₫</h3>
+        <h3 class="text-4xl fw-bold text-yellow-600 py-4">0₫</h3>
         {% endif %}
-                    </div>
-                </div>
+      </div>
+    </div>
 
-<!--                 <div class="col-md-3">-->
-<!--                    <div class="bg-[#2a1e15] rounded-xl p-4 shadow-lg">-->
-<!--                        <p class="text-gray-400 text-2xl">Doanh thu quý</p>-->
-<!--                        <h3 class="text-4xl fw-bold text-yellow-600 py-4">82,000 ₫</h3>-->
-<!--                        <span class="text-red-400 text-xl">▼ -2%</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-            </div>
+    <!--                 <div class="col-md-3">-->
+    <!--                    <div class="bg-[#2a1e15] rounded-xl p-4 shadow-lg">-->
+    <!--                        <p class="text-gray-400 text-2xl">Doanh thu quý</p>-->
+    <!--                        <h3 class="text-4xl fw-bold text-yellow-600 py-4">82,000 ₫</h3>-->
+    <!--                        <span class="text-red-400 text-xl">▼ -2%</span>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+  </div>
 
-              <div class="row g-4">
+  <div class="row g-4">
     <!-- BẢNG THỐNG KÊ DOANH THU -->
     <div class="col-md-7">
-        <div class="bg-white rounded-xl p-4 shadow h-100">
-            <h5 class="fw-bold mb-4 text-3xl text-gray-800">
-                📊 Thống kê doanh thu theo món (Top 6)
-            </h5>
+      <div class="bg-white rounded-xl p-4 shadow h-100">
+        <h5 class="fw-bold mb-4 text-3xl text-gray-800">
+          📊 Thống kê doanh thu theo món
+        </h5>
 
-            <table class="w-full text-2xl border-collapse">
-                <thead>
-                    <tr class="bg-gray-100 text-gray-700">
-                        <th class="p-3 text-left">Món</th>
-                        <th class="p-3 text-right">Số lượng bán</th>
-                        <th class="p-3 text-right">Doanh thu (VNĐ)</th>
-                    </tr>
-                </thead>
-                <tbody>
-               {% for res in result %}
-        <tr class="border-t">
-            <td class="p-3">{{ res.product_name }}</td>
-            <td class="p-3 text-right">{{ res.total_quantity }}</td>
-            <td class="p-3 text-right">
-                {{ res.total_revenue }} ₫
-            </td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="3" class="p-3 text-center text-gray-400">Không có dữ liệu</td>
-        </tr>
-        {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <table class="w-full text-2xl border-collapse">
+          <thead>
+            <tr class="bg-gray-100 text-gray-700">
+              <th class="p-3 text-left">Món</th>
+              <th class="p-3 text-right">Số lượng bán</th>
+              <th class="p-3 text-right">Doanh thu (VNĐ)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for res in result %}
+            <tr class="border-t">
+              <td class="p-3">{{ res.product_name }}</td>
+              <td class="p-3 text-right">{{ res.total_quantity }}</td>
+              <td class="p-3 text-right">{{ res.total_revenue }} ₫</td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="3" class="p-3 text-center text-gray-400">
+                Không có dữ liệu
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- BIỂU ĐỒ TRÒN -->
     <div class="col-md-5">
-        <div class="bg-[#2a1e15] rounded-xl p-4 h-100">
-            <h5 class="fw-bold mb-3 text-white text-3xl">
-                🥧 Tỷ lệ món bán chạy
-            </h5>
-            <div class="h-[280px]">
-                <canvas id="bestSellerChart"></canvas>
-            </div>
+      <div class="bg-[#2a1e15] rounded-xl p-4 h-100">
+        <h5 class="fw-bold mb-3 text-white text-3xl">🥧 Tỷ lệ món bán chạy</h5>
+        <div class="h-[280px]">
+          <canvas id="bestSellerChart"></canvas>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
-            </div>
-
-
-
-{% endblock %}
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-<!--Mở form-->
+  <!--Mở form-->
 
-document.getElementById('btn-open-calendar').addEventListener('click', () => {
-    document.getElementById('dateRangeCollapse').classList.toggle('hidden');
-});
+  document.getElementById('btn-open-calendar').addEventListener('click', () => {
+      document.getElementById('dateRangeCollapse').classList.toggle('hidden');
+  });
 
-function closeDateRange() {
-    document.getElementById('dateRangeCollapse').classList.add('hidden');
-}
+  function closeDateRange() {
+      document.getElementById('dateRangeCollapse').classList.add('hidden');
+  }
 
-function applyDateRange(){
-     const from = document.getElementById('fromDate').value;
-    const to = document.getElementById('toDate').value;
+  function applyDateRange(){
+       const from = document.getElementById('fromDate').value;
+      const to = document.getElementById('toDate').value;
 
-    if (!from || !to) {
-        alert("Vui lòng chọn đầy đủ ngày");
-        return;
-    }
+      if (!from || !to) {
+          alert("Vui lòng chọn đầy đủ ngày");
+          return;
+      }
 
-    if (from > to) {
-        alert("Ngày bắt đầu không được lớn hơn ngày kết thúc");
-        return;
-    }
+      if (from > to) {
+          alert("Ngày bắt đầu không được lớn hơn ngày kết thúc");
+          return;
+      }
 
-    // Ẩn panel
-    closeDateRange();
+      // Ẩn panel
+      closeDateRange();
 
-    window.location.href = `/dashboard/admin/overview?start_time=${from}&end_time=${to}`;
-}
+      window.location.href = `/dashboard/admin/overview?start_time=${from}&end_time=${to}`;
+  }
 
-<!--Tính tỉ lệ-->
+  <!--Tính tỉ lệ-->
 
-    const ctx = document.getElementById('bestSellerChart');
-const result = {{ result | tojson | safe }};
-const totalQuantity = result.reduce((sum, p) => sum + p.total_quantity, 0);
-const labels = result.map(p => p.product_name);
-const data = result.map(p => (p.total_quantity/totalQuantity) *100 );
+      const ctx = document.getElementById('bestSellerChart');
+  const result = {{ result | tojson | safe }};
+  const totalQuantity = result.reduce((sum, p) => sum + p.total_quantity, 0);
+  const labels = result.map(p => p.product_name);
+  const data = result.map(p => (p.total_quantity/totalQuantity) *100 );
 
-console.log(data)
-new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: labels,  // dùng labels từ result
-        datasets: [{
-            data: data,   // dùng data từ result
-            backgroundColor: [
-                '#F59E0B',
-                '#10B981',
-                '#3B82F6',
-                '#9CA3AF',
-                '#A78BFA',
-                '#F87171'
-            ],
-            borderWidth: 0
-        }]
-    },
-    options: {
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    color: 'white',
-                    font: {
-                        size: 14
-                    }
-                }
-            }
-        }
-    }
-});
-
-
+  console.log(data)
+  new Chart(ctx, {
+      type: 'pie',
+      data: {
+          labels: labels,  // dùng labels từ result
+          datasets: [{
+              data: data,   // dùng data từ result
+              backgroundColor: [
+                  '#F59E0B',
+                  '#10B981',
+                  '#3B82F6',
+                  '#9CA3AF',
+                  '#A78BFA',
+                  '#F87171'
+              ],
+              borderWidth: 0
+          }]
+      },
+      options: {
+          plugins: {
+              legend: {
+                  position: 'bottom',
+                  labels: {
+                      color: 'white',
+                      font: {
+                          size: 14
+                      }
+                  }
+              }
+          }
+      }
+  });
 </script>
 {% endblock %}

@@ -18,7 +18,19 @@ class WarehouseSlip(BaseModel):
     stock_user_id = Column(ForeignKey('account.id'))
     invoice_id = Column(ForeignKey('invoice.id'))
 
+    source_warehouse = relationship(
+        "Warehouse",
+        foreign_keys=[source_warehouse_id],
+        backref="source_slips"
+    )
+
+    destination_warehouse = relationship(
+        "Warehouse",
+        foreign_keys=[destination_warehouse_id],
+        backref="destination_slips"
+    )
     slip_details = relationship('WarehouseSlipDetail',backref='warehouse_slip',lazy=True)
     __table_args__ = (UniqueConstraint('invoice_id'),)
+    serialize_rules = ('-destination_warehouse','-source_warehouse',)
     # invoice
     

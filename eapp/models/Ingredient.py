@@ -11,7 +11,7 @@ class Ingredient(BaseModel):
     stocks = relationship('Stock', backref='ingredient', lazy=True)
     products = relationship('ProductRecipe', backref='ingredient', lazy=True)
 
-    serialize_rules = ('-stocks', '-products')
+    serialize_rules = ('-stocks', '-products','-warehouse_slip_details')
     
     def __str__(self):
         return self.name

@@ -44,4 +44,7 @@ class Invoice(BaseModel):
     payment_method = Column( SqlEnum(PaymentMethod), nullable=False)
     invoice_status = Column(SqlEnum(InvoiceStatusEnum), nullable=False, default=InvoiceStatusEnum.PENDING)
     invoice_details = relationship("InvoiceDetail", backref="invoice", lazy=True)
-    serialize_rules = ('-invoice_details', '-invoice.customer','-invoice.staff','-invoice.cashier')
+    invoice_payments = relationship("Payment", backref="invoice",lazy=True) 
+    warehouse_slip = relationship('WarehouseSlip',foreign_keys='WarehouseSlip.invoice_id', backref='invoice',lazy=True)
+    serialize_rules = ('-warehouse_slip','-invoice_details', '-invoice.customer','-invoice.staff','-invoice.cashier','-invoice_payments',)
+

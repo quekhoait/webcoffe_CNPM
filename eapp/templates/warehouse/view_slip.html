@@ -1,0 +1,146 @@
+<div class="flex h-screen bg-gray-100 text-sm w-full p-3">
+
+    <!-- LEFT: DANH SÁCH PHIẾU -->
+    <div class="w-1/3 bg-white border-r border-gray-200 flex flex-col">
+
+        <div class="p-5 border-b">
+            <h2 class="text-lg font-bold text-gray-800">Phiếu kho</h2>
+            <p class="text-xs text-gray-500">Danh sách gần đây</p>
+        </div>
+
+        <div id="list-slip" class="flex-1 overflow-y-auto bg-white divide-y">
+            {% if warehouse_slips %}
+            {% for slip in warehouse_slips %}
+
+            <!-- ITEM IMPORT -->
+            {% if slip.slip_type.name == 'IMPORT' %}
+            <div data-id='{{ slip.id }}' class="slip cursor-pointer px-5 py-4 hover:bg-gray-50 transition">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <span class="text-base font-semibold text-gray-800">
+                            #{{ slip.id }}
+                        </span>
+                        <span class="text-xs font-semibold text-green-600 uppercase">
+                            IMPORT
+                        </span>
+                    </div>
+                    <span class="text-xs text-gray-400">
+                        {{ slip.created_date.strftime('%d/%m/%Y %H:%M') }}
+                    </span>
+                </div>
+                <div class="mt-2 flex justify-between text-sm text-gray-500">
+                    <span>Người lập: {{ slip.keeper.name }}</span>
+                    {% if slip.invoice %}
+                    <span>HĐ: {{ slip.invoice.order_code }}</span>
+                    {% else %}
+                    <span class="italic">Không có HĐ</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- ITEM EXPORT -->
+            {% elif slip.slip_type.name == 'EXPORT' %}
+            <div data-id='{{ slip.id }}' class="slip cursor-pointer px-5 py-4 hover:bg-gray-50 transition">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <span class="text-base font-semibold text-gray-800">
+                            #{{ slip.id }}
+                        </span>
+                        <span class="text-xs font-semibold text-red-600 uppercase">
+                            EXPORT
+                        </span>
+                    </div>
+                    <span class="text-xs text-gray-400">
+                        {{ slip.created_date.strftime('%d/%m/%Y %H:%M') }}
+                    </span>
+                </div>
+                <div class="mt-2 flex justify-between text-sm text-gray-500">
+                    <span>Người lập: {{ slip.keeper.name }}</span>
+                    {% if slip.invoice %}
+                    <span>HĐ: {{ slip.invoice.order_code }}</span>
+                    {% else %}
+                    <span class="italic">Không có HĐ</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- ITEM UPDATE -->
+            {% elif slip.slip_type.name == 'UPDATE' %}
+            <div data-id='{{ slip.id }}' class="slip cursor-pointer px-5 py-4 hover:bg-gray-50 transition">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <span class="text-base font-semibold text-gray-800">
+                            #{{ slip.id }}
+                        </span>
+                        <span class="text-xs font-semibold text-yellow-600 uppercase">
+                            UPDATE
+                        </span>
+                    </div>
+                    <span class="text-xs text-gray-400">
+                        {{ slip.created_date.strftime('%d/%m/%Y %H:%M') }}
+                    </span>
+                </div>
+                <div class="mt-2 flex justify-between text-sm text-gray-500">
+                    <span>Người lập: {{ slip.keeper.name }}</span>
+                    <span class="italic">Không có HĐ</span>
+                </div>
+            </div>
+
+            <!-- ITEM TRANSFER -->
+            {% elif slip.slip_type.name == 'TRANSFER' %}
+            <div data-id='{{ slip.id }}' class="slip cursor-pointer px-5 py-4 hover:bg-gray-50 transition">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <span class="text-base font-semibold text-gray-800">
+                            #{{ slip.id }}
+                        </span>
+                        <span class="text-xs font-semibold text-blue-600 uppercase">
+                            TRANSFER
+                        </span>
+                    </div>
+                    <span class="text-xs text-gray-400">
+                        {{ slip.created_date.strftime('%d/%m/%Y %H:%M') }}
+                    </span>
+                </div>
+                <div class="mt-2 flex justify-between text-sm text-gray-500">
+                    <span>Người lập: {{ slip.keeper.name }}</span>
+                    {% if slip.invoice %}
+                    <span>HĐ: {{ slip.invoice.order_code }}</span>
+                    {% else %}
+                    <span class="italic">Không có HĐ</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <div class="p-4 text-sm text-gray-500 italic">
+                Không có phiếu nào
+            </div>
+            {% endif %}
+        </div>
+
+
+    </div>
+
+    <!-- RIGHT: CHI TIẾT PHIẾU -->
+    <div id="section-right" class="w-2/3">
+        {% include 'warehouse/view_slip_detail.html' %}
+    </div>
+    
+</div>
+
+<script>
+console.log(document.getElementById('list-slip').querySelectorAll('.slip'))
+document.getElementById('list-slip').querySelectorAll('.slip').forEach(slip => {
+    slip.addEventListener('click', (e) =>{
+        fetch(`/render_view_slip_detail?slip_id=${slip.dataset.id}`).then(res => res.text()).then(data => {
+            document.getElementById('section-right').innerHTML = data
+        })
+    })
+})
+</script>
+
+
+

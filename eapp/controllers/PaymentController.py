@@ -1,3 +1,4 @@
+from unittest import result
 from flask import app, jsonify, render_template, request, session
 from flask_login import  current_user, login_required
 from datetime import datetime
@@ -12,6 +13,7 @@ from eapp import db
 from eapp.services.inventory.InventoryValidator import InventoryValidator
 from eapp.services.inventory.StockService import StockService
 from eapp.controllers import index
+from eapp.models import Invoice
 from flask_login import login_required
 
 # @login_required
@@ -47,7 +49,7 @@ def load_data():
         })
 
         total += total_item
-        extra_fee = RuleService.calulate_service_fee(total)
+    extra_fee = RuleService.calulate_service_fee(total)
     final_total = total + extra_fee
     return render_template(
         "page/checkout.html",
@@ -77,11 +79,10 @@ def created_payment():
             "message": "Vui lòng cập nhật thông tin trước khi đặt hàng!"
         })
     sub_total = 0
-    extra_total =0
     for item in cart_items:
         prod = ProductDao.get_by_id(item["product_id"])
         sub_total += prod.price * int(item["quantity"])
-        extra_total = RuleService.calulate_service_fee(sub_total)
+    extra_total = RuleService.calulate_service_fee(sub_total)
     invoice = PaymentDao.create_Invoice_dao(
         user_id=current_user.id,
         subtotal=sub_total,
@@ -124,11 +125,31 @@ def created_payment():
 
 def repay_payment():
     invoice_id = request.get_json().get("invoice_id")
-    print("invoice_id_cl: ", invoice_id)
     result = PaymentDao.repay_payment_dao(
         invoice_id=invoice_id,
     )
-    print("res: ", result)
+    if result.momo_id and result.payUrl:
+        return jsonify({
+            "status": "success",
+            "pay_url": result.payUrl
+        })
+    invoice = Invoice.query.get(invoice_id)
+
+    momo_order_id = f"{invoice.order_code}_{int(datetime.now().timestamp())}"
+
+    momo_res = momo.created_pay(momo_order_id, result.amount)
+
+    if momo_res.get("resultCode") != 0:
+        result.status = PaymentStatus.failed
+        db.session.commit()
+        return jsonify({
+            "status": "error",
+            "message": momo_res.get("message", "Lỗi hệ thống")
+        })
+
+    result.momo_id = momo_order_id
+    result.payUrl = momo_res["payUrl"]
+    db.session.commit()
     return jsonify({
         "status": "success",
         "pay_url": result.payUrl

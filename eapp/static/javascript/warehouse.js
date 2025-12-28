@@ -16,15 +16,17 @@ function toggleWarehouseInput(type) {
         srcDiv.classList.remove('hidden');
     }
 }
+
 let ingredients = []
+
+
 document.addEventListener("DOMContentLoaded", async () => {
     ingredients = load_ingredients()
-    createIngredientComboBoxRow();
+    createIngredientComboBoxRow()
 });
 
 
 
-console.log(document.getElementById("ingredients-container").children.length)
 
 function createIngredientComboBoxRow() {
     const container = document.getElementById("ingredients-container");
@@ -50,7 +52,7 @@ function createIngredientComboBoxRow() {
 
                 <input id="ingredient-quantity-${rowIndex}" type="number" name="quantity" placeholder="SL"
                     class="w-[30%] p-3 border border-gray-300 rounded-lg outline-none text-center" required>
-                <button type="button" class="delete-row hidden p-3 text-red-500 hover:text-red-700">
+                <button type="button" class="delete-row p-3 text-red-500 hover:text-red-700">
                 ✕
                 </button>
             </div>
@@ -98,7 +100,6 @@ function createIngredientComboBoxRow() {
             }
         }
     });
-
 }
 
 function load_ingredients(params = {}) {
@@ -155,12 +156,10 @@ document.getElementById('toggle-edit-button').addEventListener('click', e => {
 
 
 document.addEventListener("click", e => {
-    // Lấy tất cả dropdown
     document.querySelectorAll(".ingredient-row div.absolute").forEach(dd => {
         const input = dd.closest(".ingredient-row").querySelector("input");
         const toggleBtn = dd.closest(".ingredient-row").querySelector("button");
 
-        // Nếu click ngoài dropdown, input, toggleBtn thì ẩn dropdown
         if (!dd.contains(e.target) && e.target !== input && e.target !== toggleBtn) {
             hideDropdown(dd);
         }
@@ -227,3 +226,4 @@ function getSelectedIngredientIds() {
         .map(input => input.dataset.id)
         .filter(Boolean); // loại null / undefined
 }
+

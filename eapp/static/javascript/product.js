@@ -91,9 +91,10 @@ document.getElementById("btn-accept-payment").addEventListener("click",()=> {
     })
     .then(res => res.json()).then(data => {
           if (data.status === "success") {
-           window.open(data.pay_url, "_blank");
+                window.location.replace(data.pay_url);
         } else {
             showAlert("error", "Thông báo", data.message)
+            return;
         }
     });
 })

@@ -5,6 +5,9 @@ from eapp.models import BaseModel
 class RuleType(Enum):
     SERVICE = "Phí phục vụ"
     INGREDIENT = "Tồn nguyên liệu"
+    INVOICE = "Hóa đơn"
+    WAREHOUSE = "Kho mặc định"
+
 
 class Rule(BaseModel):
     name = Column(String(100), nullable=False, unique=True)

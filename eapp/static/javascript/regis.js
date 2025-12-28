@@ -5,7 +5,6 @@ function togglePassword(formSelector, inputId, iconId) {
   const icon = form.querySelector(`#${iconId}`);
 
   icon.addEventListener("click", () => {
-    console.log(1)
     const isPassword = pw.type === "password";
     pw.type = isPassword ? "text" : "password";
     icon.classList.toggle("fa-eye", !isPassword);
@@ -19,9 +18,8 @@ togglePassword("#regis-form", "confirm", "password-confirm-toggle-icon");
 
 
 document.getElementById("regis-form").addEventListener("submit", async (e) => {
-  e.preventDefault(); // Ngăn reload
+  e.preventDefault();
   const formData = new FormData(e.target);
-
   const res = await fetch("/api/regis", {
     method: "POST",
     body: formData

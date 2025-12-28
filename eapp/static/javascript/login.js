@@ -12,7 +12,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
         document.getElementById("error-login-box").classList.remove("hidden");
         document.getElementById("error-login-text").innerText = data.message;
     } else if (data.status === "success") {
-      alert(data.redirect_url)
+        alert("Đăng nhập thành công")
         window.location.href = data.redirect_url;
     }
   })

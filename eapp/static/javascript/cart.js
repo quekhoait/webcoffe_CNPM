@@ -36,7 +36,8 @@ document.querySelectorAll(".btn-repay-payment").forEach(btn => {
         .then(res => res.json())
         .then(data => {
             if(data.status === "success") {
-                window.open(data.pay_url, "_blank");
+                  window.location.replace(data.pay_url)
+                location.href = data.pay_url;
             } else {
                 alert(data.message);
             }

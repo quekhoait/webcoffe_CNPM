@@ -1,9 +1,11 @@
-from flask import Flask, redirect, request, jsonify, render_template
+from flask import Flask, redirect, request, jsonify, render_template, url_for, session
 import requests, uuid, hmac, hashlib
 import os
 from eapp.dao import PaymentDao
 from eapp.models.Payment import PaymentStatus
 from eapp import db
+from flask_login import current_user
+
 
 app = Flask(__name__)
 
@@ -13,8 +15,8 @@ ACCESS_KEY = os.getenv("ACCESS_KEY")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ENDPOINT = "https://test-payment.momo.vn/v2/gateway/api/create"
 
-RETURN_URL = "https://e49b46b65ec5.ngrok-free.app/momo/return"
-IPN_URL = "https://e49b46b65ec5.ngrok-free.app/momo/ipn"
+RETURN_URL = "https://4fd8692d2a03.ngrok-free.app/momo/return"
+IPN_URL = "https://4fd8692d2a03.ngrok-free.app/momo/ipn"
 
 
 def create_signature(data, secret):
@@ -27,6 +29,7 @@ def create_signature(data, secret):
 
 
 def created_pay(momo_order_id, total):
+    session["momo_user_id"] = current_user.id
     request_id = str(uuid.uuid4())
     raw_signature = (
         f"accessKey={ACCESS_KEY}"
@@ -92,13 +95,10 @@ def TransactionStatus():
 
 
 def momo_ipn():
-    print(1)
     data = request.json
-    print("data:", data)
     order_id = data.get("orderId")
     result_code = data.get("resultCode")
     trans_id = data.get("transId")
-    print("rscode", result_code)
     payment = PaymentDao.get_by_momo_id(order_id)
     if not payment:
         return jsonify({"message": "payment not found"}), 404
@@ -113,4 +113,9 @@ def momo_ipn():
     return jsonify({"message": "OK"})
 
 def momo_return():
-    return render_template('page/cart.html')
+    user_id = session.get("momo_user_id")
+    if not user_id:
+        return redirect(url_for("login"))
+
+    session["user_id"] = user_id  # khôi phục lại
+    return redirect(url_for("my-cart"))

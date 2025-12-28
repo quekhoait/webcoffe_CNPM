@@ -1,28 +1,17 @@
-<!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/base.css') }}"
-    />
-    <title>Đăng nhập Cà phê</title>
-  </head>
-  <body
-    class="bg-[--primary-color] relative min-h-screen p-4 font-sans"
+{% extends 'layout/base.html' %}
+
+{% block title %}Đằng ký sản phẩm{% endblock %}
+{% block header %}
+
+{%endblock%}
+
+{% block content %}
+  <div
+    class="bg-[--primary-color] min-h-screen flex items-center justify-center p-4 font-sans"
   >
     <div
       class="max-w-sm text-[#EAEAEA] shadow-3xl transition-all duration-500 hover:shadow-neumorphic
-      absolute top-1/2 left-1/2 transform -translate-x-[85%] -translate-y-1/2
+
       "
     >
       <div class="p-8 md:p-10 w-[450px] bg-[#2A2930] rounded-3xl">
@@ -62,9 +51,6 @@
                 placeholder="Username"
                 class="text-2xl w-full p-3 pl-10 bg-[#1F1E24] border-b-2 border-[#7A7A7A] text-[#EAEAEA] rounded-lg focus:outline-none focus:border[#C27C5A] transition duration-200"
               />
-              <i
-                class="fas fa-mobile-alt absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7A7A7A] text-base"
-              ></i>
             </div>
           </div>
 
@@ -82,9 +68,6 @@
                 placeholder="Nhập số điện thoại"
                 class="text-2xl w-full p-3 pl-10 bg-[#1F1E24] border-b-2 border-[#7A7A7A] text-[#EAEAEA] rounded-lg focus:outline-none focus:border-[#C27C5A] transition duration-200"
               />
-              <i
-                class="fas fa-mobile-alt absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7A7A7A] text-base"
-              ></i>
             </div>
           </div>
 
@@ -102,9 +85,6 @@
                 placeholder="Họ và tên"
                 class="text-2xl w-full p-3 pl-10 bg-[#1F1E24] border-b-2 border-[#7A7A7A] text-[#EAEAEA] rounded-lg focus:outline-none focus:border-[#C27C5A] transition duration-200"
               />
-              <i
-                class="fas fa-mobile-alt absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7A7A7A] text-base"
-              ></i>
             </div>
           </div>
 
@@ -122,9 +102,6 @@
                 placeholder="Nhập mật khẩu"
                 class="text-2xl w-full p-3 pl-10 bg-[#1F1E24] border-b-2 border-[#7A7A7A] text-[#EAEAEA] rounded-lg focus:outline-none focus:border-[#C27C5A] transition duration-200"
               />
-              <i
-                class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7A7A7A] text-base"
-              ></i>
               <button
                 type="button"
                 id="password-toggle"
@@ -149,9 +126,6 @@
                 placeholder="Nhập lại mật khẩu"
                 class="text-2xl w-full p-3 pl-10 bg-[#1F1E24] border-b-2 border-[#7A7A7A] text-[#EAEAEA] rounded-lg focus:outline-none focus:border-[#C27C5A] transition duration-200"
               />
-              <i
-                class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7A7A7A] text-base"
-              ></i>
               <button
                 type="button"
                 id="password-confirm-toggle"
@@ -183,6 +157,13 @@
         </p>
       </div>
     </div>
-    <script src="{{ url_for('static', filename='javascript/regis.js') }}"></script>
-  </body>
-</html>
+
+  </div>
+ <script src="{{ url_for('static', filename='javascript/regis.js') }}"></script>
+{% endblock %}
+{%block footer%}
+
+{% endblock %}
+{% block script %}
+
+{% endblock %}

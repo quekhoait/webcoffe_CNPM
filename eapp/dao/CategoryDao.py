@@ -11,16 +11,30 @@ def list(params: dict = None):
         return []
 
 
-def create_category(name):
+def create_category(name, description):
     try:
         existing = Category.query.filter(Category.name == name).first()
         if existing:
             return None
 
-        new_cat = Category(name=name)
+        new_cat = Category(name=name, description=description)
         db.session.add(new_cat)
         db.session.commit()
         return new_cat
+    except Exception as e:
+        print(f"Lỗi thêm danh mục: {e}")
+        db.session.rollback()
+        return None
+
+def update_categories_dao(id, name, description):
+    try:
+        cat = Category.query.get(id)
+        if not cat:
+            return None
+        cat.name = name
+        cat.description = description
+        db.session.commit()
+        return cat
     except Exception as e:
         print(f"Lỗi thêm danh mục: {e}")
         db.session.rollback()

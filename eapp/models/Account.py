@@ -13,9 +13,12 @@ class Role(Enum):
 
 class Account(BaseModel, UserMixin):
     username = Column(String(100), nullable=False, unique=True)
-    phone = Column(String(25), nullable=False, unique=True)
     name = Column(String(100))
-    password = Column(String(255), nullable=False)
+
+    password = Column(String(255), nullable=True)
+    phone = Column(String(25), nullable=True, unique=True)
+    google_id = Column(String(100), unique=True, default=None)
+
     email = Column(String(100), unique=False)
     address=Column(String(255))
     provider = Column(String(50), default='local')
@@ -27,10 +30,13 @@ class Account(BaseModel, UserMixin):
     invoice_of_staffs = relationship('Invoice',backref='staff',foreign_keys='Invoice.staff_id',lazy=True)
     invoice_of_cashiers = relationship('Invoice',backref='cashier',foreign_keys='Invoice.cashier_id',lazy=True)
 
+    warehouse_slips = relationship('WarehouseSlip',backref='keeper',foreign_keys='WarehouseSlip.stock_user_id',lazy=True)
+
     serialize_rules = (
         '-invoice_of_customers', 
         '-invoice_of_staffs', 
         '-invoice_of_cashiers',
+        '-warehouse_slips'
     )
     def __str__(self):
         return f"Account(ID: {self.id}, Username: {self.username})"
