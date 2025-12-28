@@ -104,12 +104,19 @@ def demo():
 
 if __name__ == '__main__':
     with app.app_context():
+        pd = [{'product_id': 1, 'quantity': 5}, {'product_id': 3, 'quantity': 1}, {'product_id': 6, 'quantity': 1}]
+        rs = InventoryValidator.get_stock_shortage_by_products(pd,1)
+        available_stock_map = WarehouseDAO.get_available_stock_map(1)
+        product_recipe_map = ProductDao.get_product_recipe_map()
+        pprint(available_stock_map)
+        pprint(product_recipe_map)
+        pprint(rs)
         # test_start_processing_invoice()
-        rs = InvoiceDAO.get_by_id(invoice_id=6)
-        kq = WarehouseSlipDAO.get_by_id(1)
-        pprint(WarehouseSlipDAO.get_by_id(1))
-        import pdb
-        pdb.set_trace()
+        # rs = InvoiceDAO.get_by_id(invoice_id=6)
+        # kq = WarehouseSlipDAO.get_by_id(1)
+        # pprint(WarehouseSlipDAO.get_by_id(1))
+        # import pdb
+        # pdb.set_trace()
         # print(RuleService.get_rule_warehouse_id())
         # print(ProductDao.get_product_recipe_map())
         # print(WarehouseDAO.get_stock_map(1))

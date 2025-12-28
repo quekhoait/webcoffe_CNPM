@@ -106,7 +106,7 @@ function updateInvoiceStatus(invoiceId, invoiceStatus) {
         if (data['success']) {
             loadInvoices()
         }
-        alert(data['message'])
+        showAlert('success','Thông báo',data['message'])
     })
 }
 

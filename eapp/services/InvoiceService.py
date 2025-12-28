@@ -168,8 +168,8 @@ class InvoiceService:
             #xử lý hóa đơn sang in progress
             if new_status == InvoiceStatusEnum.IN_PROGRESS:
                 rs = InventoryFacade.start_processing_invoice(invoice,warehouse_id)
-                invoice.invoice_status = InvoiceStatusEnum.IN_PROGRESS
                 if rs['success']:
+                    invoice.invoice_status = InvoiceStatusEnum.IN_PROGRESS
                     result.update({
                         'success': True,
                         'message': 'Xác thực thành công, hóa đơn đang được xử lý',
@@ -178,8 +178,8 @@ class InvoiceService:
                 else:
                     result.update({
                     'message': 'Nguyên liệu không đủ cho hóa đơn',
-                    'insufficient_ingredients': rs['insufficient_ingredients'],
-                    'effected_products' : rs['effected_products']    
+                    'insufficient_ingredients': rs['data']['insufficient_ingredients'],
+                    'effected_products' : rs['data']['effected_products']    
                     })
 
             elif new_status == InvoiceStatusEnum.COMPLETED:
