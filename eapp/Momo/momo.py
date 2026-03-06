@@ -15,8 +15,8 @@ ACCESS_KEY = os.getenv("ACCESS_KEY")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ENDPOINT = "https://test-payment.momo.vn/v2/gateway/api/create"
 
-RETURN_URL = "https://4fd8692d2a03.ngrok-free.app/momo/return"
-IPN_URL = "https://4fd8692d2a03.ngrok-free.app/momo/ipn"
+RETURN_URL = "https://570030a40052.ngrok-free.app/momo/return"
+IPN_URL = "https://570030a40052.ngrok-free.app/momo/ipn"
 
 
 def create_signature(data, secret):
