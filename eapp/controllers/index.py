@@ -1,4 +1,6 @@
 from flask import render_template, session, request, redirect, url_for
+from sqlalchemy.sql.functions import current_user
+
 from eapp import db
 from datetime import datetime
 
@@ -64,7 +66,7 @@ def load_menu():
 
 def load_profile():
     tab = request.args.get("tab", "profile")
-    return render_template("page/profile.html", tab=tab)
+    return render_template("page/profile.html", tab=tab, user=current_user)
 
 
 

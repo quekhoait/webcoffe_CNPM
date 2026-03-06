@@ -408,6 +408,5 @@ document.querySelectorAll(".btn_edit_cate").forEach(btn => {
         id_cate_click = this.dataset.id
         document.getElementById("inpNewCatName").value = this.dataset.name;
         document.getElementById("inpNewCatDes").value = this.dataset.desc;
-});
-
+    });
 });

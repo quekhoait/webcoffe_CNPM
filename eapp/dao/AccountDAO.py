@@ -21,7 +21,6 @@ def login_account(identifier, password):
                                  Account.password==password).first()
 
 def update_account_dao(user_id, username, phone, name, password, email, address, avatar):
-    print(user_id)
     user = Account.query.get(user_id)
     if not user:
         return None
@@ -121,4 +120,16 @@ def open_employee_dao(user_id):
 
         db.session.commit()
         return True
+    return False
+
+def update_password_dao(user_id, password):
+    hashed_pass = hashlib.md5(password.strip().encode('utf-8')).hexdigest()
+
+    user = Account.query.get(user_id)
+
+    if user:
+        user.password = hashed_pass
+        db.session.commit()
+        return True
+
     return False

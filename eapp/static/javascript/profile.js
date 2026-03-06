@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   togglePassword("current-password", "password-form-toggle-icon");
+ togglePassword("current-password-submit", "password-form-toggle-icon-submit");
 
   /** ----- Xác nhận mật khẩu trước khi mở edit ----- */
   const formConfirm = document.getElementById("form-confirm");
@@ -87,8 +88,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnUpdate = document.getElementById("btn_update");
   if (btnUpdate) {
     btnUpdate.addEventListener("click", () => {
-      document.getElementById("form_check_password").classList.remove("hidden");
-      document.body.classList.add("overflow-hidden");
+    console.log(document.getElementById("form_submit_password"))
+        if(window.current_user.email && window.current_user.password === "None"){
+             document.getElementById("form_submit_password").classList.remove("hidden");
+        }else{
+            document.getElementById("form_check_password").classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+        }
+
     });
   }
 
@@ -99,9 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("form_information_profile");
       const formData = new FormData(form);
       formData.append("id", current_user_id);
-
       showAlert("loading", "Đang lưu", "Vui lòng chờ...");
-
       try {
         const res = await fetch("/api/update_account", {
           method: "POST",
@@ -123,6 +128,49 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-
-
 });
+//form submit mật khẩu cho tài khoản mail
+
+  // Ẩn popup xác nhận mật khẩu
+  function cancel_form_submit() {
+    const formCheck = document.getElementById("form_submit_password");
+    if (formCheck) formCheck.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+   const btnCancelSubmit = document.getElementById("btn_cancel_submit");
+  if (btnCancelSubmit) {
+    btnCancelSubmit.addEventListener("click", cancel_form_submit);
+  }
+
+ const formSubmit = document.getElementById("form_submit");
+  if (formSubmit) {
+    formSubmit.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const currentPw = document.getElementById("current-password-submit").value.trim();
+      if (!currentPw) {
+        showAlert("warning", "Thiếu mật khẩu", "Vui lòng nhập mật khẩu bạn muốn đặt");
+        return;
+      }
+      if (currentPw.length<6) {
+        showAlert("warning", "Mật khẩu", "Mật khẩu ít nhất 6 kí tự");
+        return;
+      }
+      try {
+        const res = await fetch("/api/update_password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: currentPw })
+        });
+        const data = await res.json();
+        alert(data.status)
+        if (data.status === "success") {
+          showAlert("success", "Xác nhận thành công", "Bạn có thể tiếp tục cập nhật.");
+          cancel_form_submit();
+          window.reload()
+        }
+      } catch (err) {
+        console.error(err);
+        showAlert("error", "Lỗi server", "Đã có lỗi xảy ra, thử lại sau.");
+      }
+    });
+  }

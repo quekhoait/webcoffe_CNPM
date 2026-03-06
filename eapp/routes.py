@@ -32,6 +32,7 @@ app.add_url_rule('/logout','logout', AccountController.logout)
 app.add_url_rule('/profile','profile', index.load_profile)
 app.add_url_rule('/api/check_password','check_password', AccountController.check_password, methods=['POST'])
 app.add_url_rule('/api/update_account','update_account', AccountController.update_account, methods=['POST'])
+app.add_url_rule('/api/update_password','update_password', AccountController.update_password, methods=['POST'])
 
 # Load trang
 app.add_url_rule('/profile','profile', index.load_profile)

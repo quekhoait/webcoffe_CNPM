@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, jsonify, session, url_for
 from flask_login import login_user, logout_user, current_user, login_required
 from eapp import app, utils
 import math, re, hashlib, cloudinary.uploader
-from eapp.dao.AccountDAO import add_account, check_phone_exists, login_account, update_account_dao
+from eapp.dao.AccountDAO import add_account, check_phone_exists, login_account, update_account_dao, update_password_dao
 from werkzeug.security import check_password_hash
 from eapp.models.Account import Role
 
@@ -125,3 +125,19 @@ def update_account():
     except Exception as ex:
         app.logger.error(f"Lỗi khi cập nhật tài khoản: {ex}")
         return jsonify({"status": "error", "message": "Có lỗi xảy ra, thử lại sau!"})
+
+def update_password():
+    data = request.get_json()
+    password = data.get("password", "").strip()
+    if not password:
+        return jsonify({"status": "error", "message": "Vui lòng nhập mật khẩu."})
+    if len(password) < 6:
+        return jsonify({"status": "error", "message": "Mật khẩu it nhất 6 ký tự."})
+    updated_pass = update_password_dao(
+        user_id=current_user.id,
+        password = password
+    )
+    if updated_pass == None:
+        return jsonify({"status": "error", "message": "Không thể cập nhật tài khoản!"})
+
+    return jsonify({"status": "success", "message": "Cập nhật thành công!"})

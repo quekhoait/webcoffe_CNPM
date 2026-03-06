@@ -67,3 +67,14 @@
   </div>
 </div>
 {% endblock %}
+{% block scripts %}
+<script>
+window.current_user = {
+    id: "{{ current_user.id }}",
+    email: "{{ current_user.email }}",
+    password: "{{ current_user.password}}",
+};
+
+</script>
+ <script src="{{ url_for('static', filename='javascript/profile.js') }}"></script>
+{% endblock %}
