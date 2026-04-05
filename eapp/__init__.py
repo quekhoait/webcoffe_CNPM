@@ -11,10 +11,11 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = os.getenv("DB_NAME")
 app = Flask(__name__)
-app.secret_key = 'JKHJHJK786575ghjghjg78675HJGJHGF^&$%$^*%*&^%&^&*%^&'
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@localhost/{DB_NAME}"
+app.secret_key = os.getenv("SECRET")
+# app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@localhost/{DB_NAME}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
-print(app.config["SQLALCHEMY_DATABASE_URI"])
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///coffee_shop.db"
+
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app=app)
