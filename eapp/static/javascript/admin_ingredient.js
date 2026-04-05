@@ -9,7 +9,6 @@ async function saveIngredient() {
         alert("Vui lòng nhập đầy đủ thông tin!");
         return;
     }
-//    const url = id ? '/api/admin/employees/update' : '/api/admin/employees/add';
     const url = '/api/admin/ingredient/add'
     const data = {
         name: name,
