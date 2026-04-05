@@ -60,7 +60,6 @@ function getSelectedItems(cartItems) {
     let selectedItems = [];
     cartItems.forEach(item => {
         const checkbox = item.querySelector('.select-cart-component');
-        console.log("cb: ", checkbox)
         if (!checkbox || !checkbox.checked) return;
         selectedItems.push({
             product_id: item.dataset.productId || checkbox.dataset.productId,

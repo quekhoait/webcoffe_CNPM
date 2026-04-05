@@ -1,11 +1,7 @@
-{% extends 'page/cart.html' %}
-{% block cart_content %}
-
-{% if list_order %}
-  {% for order in list_order %}
-    {% set invoice = order.invoice %}
-    {% set payment = order.payment %}
-      <div
+{% extends 'page/cart.html' %} {% block cart_content %} {% if list_order %} {%
+for order in list_order %} {% set invoice = order.invoice %} {% set payment =
+order.payment %}
+<div
   class="border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 m-2"
 >
   <!-- HEADER -->
@@ -53,8 +49,7 @@
       Thanh toán ngay
     </button>
 
-    {% endif %}
-      {% if payment.status.value == 'success' and
+    {% endif %} {% if payment.status.value == 'success' and
     invoice.invoice_status.value == 'in_progress' %}
     <button
       type="button"
@@ -113,11 +108,8 @@
     </div>
   </div>
 </div>
-  {% endfor %}
-{% else %}
-  <div class="text-center py-20">
-    <p class="text-3xl text-gray-400">Không tìm thấy đơn hàng nào.</p>
-  </div>
-{% endif %}
-
-{% endblock %}
+{% endfor %} {% else %}
+<div class="text-center py-20">
+  <p class="text-3xl text-gray-400">Không tìm thấy đơn hàng nào.</p>
+</div>
+{% endif %} {% endblock %}

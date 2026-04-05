@@ -47,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const currentPw = document.getElementById("current-password").value.trim();
 
       if (!currentPw) {
-          alert(1)
         showAlert("warning", "Thiếu mật khẩu", "Vui lòng nhập mật khẩu để tiếp tục.");
         return;
       }

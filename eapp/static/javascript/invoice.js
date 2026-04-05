@@ -5,7 +5,6 @@ function loadDishes(params = {}) {
     fetch('/api/products?' + query)
         .then(res => res.text())
         .then(html => {
-            console.log(html);
             productList.innerHTML = html
         })
         .catch(err => console.error(err));
