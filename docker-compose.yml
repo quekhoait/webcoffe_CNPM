@@ -1,0 +1,45 @@
+services:
+  # Container Cơ sở dữ liệu MySQL
+  db:
+    image: mysql:8.0
+    container_name: coffee_mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      # Thống nhất tạo database tên là webcoffe_db
+      MYSQL_DATABASE: webcoffe_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  web:
+    build: .
+    container_name: coffee_flask_app
+    restart: always
+    command: python index.py
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_USER=root
+      - DB_PASSWORD=123456
+      - DB_NAME=webcoffe_db
+      # Chuỗi kết nối đồng bộ: user root, pass 123456, host db, port 3306, database webcoffe_db
+      - SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:123456@db:3306/webcoffe_db
+
+      # Thông tin CLOUDINARY
+      - CLOUD_NAME=ds11ggie4
+      - API_KEY=958334855172326
+      - API_SECRET=Wnp7m_2M7tOvT-oHv819TRitH1Y
+
+      # Thông tin momo
+      - ACCESS_KEY=F8BBA842ECF85
+      - SECRET_KEY=K951B6PE1waDMi640xX08PD3vg6EkVlz
+      - SECRET=JKHJHJK786575ghjghjg78675HJGJHGF^&$%$^*%*&^%&^&*%^&
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
